@@ -409,15 +409,21 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 
 ### Fase 0 · Cimientos
 
-- [ ] 0.1 Inicializar git, `.gitignore`, `LICENSE` (MIT) y `README.md`. Crear el repositorio público `altamarmx/idf-viewer` y activar Pages con fuente "GitHub Actions".
-- [ ] 0.2 Proyecto Vite + React + TypeScript con Biome y Vitest; `base: '/idf-viewer/'`.
-- [ ] 0.3 Flujo de GitHub Actions: pruebas → compilación → publicación en Pages.
-- [ ] 0.4 Herramientas de Python con uv: `fetch_idds.py` (27 IDD, §2), `idd2json.py` (esquemas y documentación por versión) y sus pruebas con pytest. Generar `public/schemas/`.
-- [ ] 0.5 Lector IDF (A2) con pruebas: comentarios, extensibles, codificaciones y números de línea.
-- [ ] 0.6 Carga de esquemas y resolución de versión (A3): exacta, versión menor, más cercana o sin esquema.
-- [ ] 0.7 Web Worker con barra de progreso (A4).
-- [ ] 0.8 Estructura de la interfaz (§3.5): carga de archivos (A1), tema claro y oscuro (K1) y textos en inglés (K3).
-- [ ] 0.9 Carpeta `examples/` con los 8 ejemplos, la licencia de EnergyPlus y el plugin que genera la lista. **Aquí agregas tu IDF de prueba.**
+- [x] 0.1 Inicializar git, `.gitignore`, `LICENSE` (MIT) y `README.md`. Crear el repositorio público `altamarmx/idf-viewer` y activar Pages con fuente "GitHub Actions".
+- [x] 0.2 Proyecto Vite + React + TypeScript con Biome y Vitest; `base: '/idf-viewer/'`.
+- [x] 0.3 Flujo de GitHub Actions: pruebas → compilación → publicación en Pages.
+- [x] 0.4 Herramientas de Python con uv: `fetch_idds.py` (27 IDD, §2), `idd2json.py` (esquemas y documentación por versión) y sus pruebas con pytest. Generar `public/schemas/`.
+- [x] 0.5 Lector IDF (A2) con pruebas: comentarios, extensibles, codificaciones y números de línea.
+- [x] 0.6 Carga de esquemas y resolución de versión (A3): exacta, versión menor, más cercana o sin esquema.
+- [x] 0.7 Web Worker con barra de progreso (A4).
+- [x] 0.8 Estructura de la interfaz (§3.5): carga de archivos (A1), tema claro y oscuro (K1) y textos en inglés (K3).
+- [x] 0.9 Carpeta `examples/` con los 8 ejemplos, la licencia de EnergyPlus y el plugin que genera la lista. **Aquí agregas tu IDF de prueba.**
+
+**Notas de la fase 0:**
+- Cada esquema pesa ~1.5 MB (~130 KB comprimido al descargarlo). Los objetos extensibles guardan solo el primer grupo de campos y una plantilla de nombre ("Vertex {n} X-coordinate").
+- Algunos IDD antiguos traen errores que `idd2json.py` corrige: `\begin-extensible` repetido (8.0 `Output:Table:SummaryReports`), puesto en el campo equivocado (8.0 `ZoneTerminalUnitList`) o tarde (`Site:SpectrumData`), y campos sin nombre (8.0 `Schedule:Day:List`).
+- Archivos de prueba de otras versiones: `1ZoneUncontrolled` de las etiquetas v8.2.0, v8.9.0 y v9.0.1 de EnergyPlus (no existe etiqueta v8.0.0 en GitHub).
+- Se adelantó una prueba básica en navegador (`npm run e2e`) con Playwright; la tarea 1.9 la amplía.
 
 **Listo cuando:**
 - el sitio publicado abre cualquiera de los ejemplos y un IDF arrastrado, y muestra la versión detectada, las clases y el número de objetos;

@@ -1,0 +1,34 @@
+{
+  "1ZoneUncontrolled.idf": {
+    "title": "One zone, uncontrolled",
+    "description": "The smallest example: a single zone without HVAC."
+  },
+  "4ZoneWithShading_Simple_1.idf": {
+    "title": "Four zones with shading",
+    "description": "Simplified geometry (Wall:Exterior, Window, Shading:Overhang)."
+  },
+  "5ZoneAirCooledWithSpaces.idf": {
+    "title": "Five zones with spaces",
+    "description": "Zones divided into Space objects (9.6+)."
+  },
+  "AirflowNetwork_MultiZone_House.idf": {
+    "title": "House with AirflowNetwork",
+    "description": "Natural ventilation and infiltration with the AirflowNetwork model."
+  },
+  "AirflowNetwork_MultiZone_SmallOffice.idf": {
+    "title": "Small office with AirflowNetwork",
+    "description": "Operable windows, cracks and wind pressure coefficients."
+  },
+  "ASHRAE901_ApartmentHighRise_STD2019_Denver.idf": {
+    "title": "High-rise apartment building",
+    "description": "ASHRAE 90.1-2019 prototype, Denver. Natural ventilation without AirflowNetwork."
+  },
+  "RefBldgMediumOfficeNew2004_Chicago.idf": {
+    "title": "Medium office (DOE reference)",
+    "description": "DOE commercial reference building, new construction, Chicago."
+  },
+  "HospitalLowEnergy.idf": {
+    "title": "Low-energy hospital",
+    "description": "A large file (4.6 MB) to test performance."
+  }
+}
