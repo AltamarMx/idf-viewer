@@ -17,7 +17,7 @@ interface OracleSurface {
   vertices?: number[][];
 }
 interface Oracle {
-  zones: Record<string, { volume: number; floorArea: number }>;
+  zones: Record<string, { volume: number; floorArea: number; ceilingHeight: number }>;
   surfaces: Record<string, OracleSurface>;
 }
 
@@ -89,6 +89,11 @@ describe.each(cases)('%s', (stem, idf) => {
       }
       if (!relClose(z.floorArea, ref.floorArea)) {
         problems.push(`zone ${z.name}: floor area ${z.floorArea.toFixed(3)} vs ${ref.floorArea}`);
+      }
+      if (!relClose(z.ceilingHeight, ref.ceilingHeight)) {
+        problems.push(
+          `zone ${z.name}: ceiling height ${z.ceilingHeight.toFixed(3)} vs ${ref.ceilingHeight}`,
+        );
       }
       if (!relClose(z.volume, ref.volume)) {
         problems.push(

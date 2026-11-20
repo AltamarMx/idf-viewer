@@ -62,3 +62,27 @@ test('the hospital opens, draws in 3D and lists its problems', async ({ page }) 
   await page.getByRole('tab', { name: /Problems/ }).click();
   await expect(page.locator('table.problems tr')).toHaveCount(4);
 });
+
+test('schedules: heat map, usage and zone subpanels', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'Medium office (DOE reference)');
+  await page.getByRole('tab', { name: 'Schedules' }).click();
+  await page.getByRole('button', { name: /^BLDG_OCC_SCH/ }).click();
+  await expect(page.locator('.chart canvas').first()).toBeVisible();
+  await expect(page.locator('.split-main')).toContainText('Number of People Schedule Name');
+
+  await page.getByRole('button', { name: 'By zone' }).click();
+  await page.locator('.zone-schedule button:not([disabled])').first().click();
+  await expect(page.locator('.subpanel')).toHaveCount(1);
+  await expect(page.locator('.subpanel canvas')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('loads: zone table, loads over time and occupancy peak', async ({ page }) => {
+  await openExample(page, 'Medium office (DOE reference)');
+  await page.getByRole('tab', { name: 'Loads' }).click();
+  await expect(page.locator('table.zones')).toContainText('Core_bottom');
+  await expect(page.locator('.chart canvas').first()).toBeVisible();
+  await expect(page.getByText('Peak in the building')).toBeVisible();
+});

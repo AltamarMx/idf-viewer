@@ -11,9 +11,14 @@ import {
   type ZoneGeometry,
 } from './geometry/build';
 import { triangulate } from './geometry/polygon';
+import { type LoadsResult, type LoadType, resolveLoads, zoneSeries } from './loads/loads';
+import { type OccupancyReport, occupancyReport, type ZoneRow, zoneRows } from './loads/report';
 import { type ClassSummary, IdfModel, objectName, summarizeClasses } from './model/model';
 import { buildReferences, type ReferenceIndex } from './model/references';
 import { decodeIdf, type IdfObject, type ParseWarning, parseIdf } from './parser/idf';
+import { buildCalendar, DAY_TYPES, type DayType, type YearCalendar } from './schedules/calendar';
+import { type ScheduleInfo, ScheduleSet } from './schedules/evaluate';
+import { ScheduleUsage, type ScheduleUse, type UseGroup } from './schedules/usage';
 import { fieldName, fieldSchema } from './schema/fields';
 import type { SchemaLoader } from './schema/load';
 import type { ClassDocs, Schema } from './schema/types';
@@ -144,6 +149,54 @@ export interface GeometryView {
 }
 
 const MAX_TABLE_COLUMNS = 300;
+
+export interface CalendarView {
+  year?: number;
+  leap: boolean;
+  jan1: DayType;
+  timestepsPerHour: number;
+  dates: [number, number][];
+  dayTypes: DayType[];
+  dst: boolean[];
+  assumptions: string[];
+}
+
+export interface ScheduleListItem extends ScheduleInfo {
+  uses: number;
+  groups: UseGroup[];
+}
+
+export interface ScheduleDetail {
+  info: ScheduleInfo;
+  hourly: Float32Array | null;
+  min: number;
+  max: number;
+  uses: ScheduleUse[];
+}
+
+export interface DayProfiles {
+  timestepsPerHour: number;
+  /** Timestep values of each day type on the chosen date's period. */
+  profiles: { dayType: DayType; values: number[] }[];
+}
+
+export interface ZoneScheduleEntry {
+  group: UseGroup;
+  schedule: string;
+  scheduleId: number;
+  evaluable: boolean;
+  uses: { objectId: number; className: string; objectName?: string; fieldName: string }[];
+}
+
+export interface ZoneLoadView {
+  /** null for the whole building (with zone multipliers). */
+  zone: string | null;
+  floorArea: number;
+  people: Float32Array;
+  watts: Record<LoadType, Float32Array>;
+  daylighting: boolean;
+  emsSchedules: string[];
+}
 
 export class Session {
   constructor(
@@ -322,6 +375,174 @@ export class Session {
     if (!this.loader || this.summary.resolution.kind === 'none') return null;
     const docs = await this.loader.docs(this.summary.resolution.schemaVersion);
     return docs.classes[classKey.toLowerCase()] ?? null;
+  }
+
+  // ---- Schedules and loads (phase 2a), computed on first use ----
+
+  private _calendar?: YearCalendar;
+  private _schedules?: ScheduleSet;
+  private _usage?: ScheduleUsage;
+  private _loads?: LoadsResult;
+  private _rows?: ZoneRow[];
+
+  get calendar(): YearCalendar {
+    this._calendar ??= buildCalendar(this.model, this.schema);
+    return this._calendar;
+  }
+
+  get schedules(): ScheduleSet {
+    this._schedules ??= new ScheduleSet(this.model, this.schema, this.calendar);
+    return this._schedules;
+  }
+
+  get usage(): ScheduleUsage {
+    this._usage ??= new ScheduleUsage(this.model, this.schema, this.references, this.geometry);
+    return this._usage;
+  }
+
+  get loads(): LoadsResult {
+    this._loads ??= resolveLoads(this.model, this.schema, this.geometry);
+    return this._loads;
+  }
+
+  calendarView(): CalendarView {
+    const c = this.calendar;
+    return {
+      year: c.year,
+      leap: c.leap,
+      jan1: DAY_TYPES[c.jan1] as DayType,
+      timestepsPerHour: c.timestepsPerHour,
+      dates: c.dates,
+      dayTypes: c.dayTypes,
+      dst: c.dst,
+      assumptions: c.assumptions,
+    };
+  }
+
+  scheduleList(): ScheduleListItem[] {
+    return this.schedules.list().map((info) => {
+      const uses = this.usage.usesOf(info.id);
+      return { ...info, uses: uses.length, groups: [...new Set(uses.map((u) => u.group))] };
+    });
+  }
+
+  scheduleDetail(name: string): ScheduleDetail | null {
+    const info = this.schedules.info(name);
+    if (!info) return null;
+    const hourly = this.schedules.hourly(name);
+    let min = 0;
+    let max = 0;
+    if (hourly?.length) {
+      min = Infinity;
+      max = -Infinity;
+      for (const v of hourly) {
+        if (v < min) min = v;
+        if (v > max) max = v;
+      }
+    }
+    return {
+      info,
+      hourly: hourly ? hourly.slice() : null,
+      min,
+      max,
+      uses: this.usage.usesOf(info.id),
+    };
+  }
+
+  dayProfiles(name: string, day: number): DayProfiles {
+    const present = new Set<DayType>(this.calendar.dayTypes);
+    const types = DAY_TYPES.filter(
+      (t) => DAY_TYPES.indexOf(t) < 8 || present.has(t) || t.endsWith('DesignDay'),
+    );
+    return {
+      timestepsPerHour: this.calendar.timestepsPerHour,
+      profiles: types.map((dayType) => ({
+        dayType,
+        values: Array.from(this.schedules.dayValues(name, day, dayType) ?? []),
+      })),
+    };
+  }
+
+  /** Schedules that affect a zone, grouped by what they control (F8). */
+  zoneSchedules(zone: string): ZoneScheduleEntry[] {
+    const wanted = zone.toLowerCase();
+    const entries = new Map<string, ZoneScheduleEntry>();
+    for (const info of this.schedules.list()) {
+      for (const use of this.usage.usesOf(info.id)) {
+        if (!use.zones.some((z) => z.toLowerCase() === wanted)) continue;
+        const key = `${use.group}|${info.name.toLowerCase()}`;
+        const entry = entries.get(key) ?? {
+          group: use.group,
+          schedule: info.name,
+          scheduleId: info.id,
+          evaluable: info.evaluable,
+          uses: [],
+        };
+        entry.uses.push({
+          objectId: use.objectId,
+          className: use.className,
+          objectName: use.objectName,
+          fieldName: use.fieldName,
+        });
+        entries.set(key, entry);
+      }
+    }
+    return [...entries.values()];
+  }
+
+  zoneTable(): ZoneRow[] {
+    this._rows ??= zoneRows(this.model, this.schema, this.geometry, this.loads);
+    return this._rows;
+  }
+
+  /** Hourly occupants and power of a zone, or of the building with multipliers (F9). */
+  zoneLoads(zone: string | null, discountLost: boolean): ZoneLoadView {
+    const zones = zone
+      ? this.loads.zones.filter((z) => z.name.toLowerCase() === zone.toLowerCase())
+      : this.loads.zones;
+    const hours = this.calendar.dayTypes.length * 24;
+    const sum = () => new Float32Array(hours);
+    const view: ZoneLoadView = {
+      zone,
+      floorArea: 0,
+      people: sum(),
+      watts: {
+        people: sum(),
+        lights: sum(),
+        electric: sum(),
+        gas: sum(),
+        hotwater: sum(),
+        steam: sum(),
+        other: sum(),
+      },
+      daylighting: false,
+      emsSchedules: [],
+    };
+    const rows = new Map(this.zoneTable().map((r) => [r.name.toLowerCase(), r]));
+    const ems = new Set<string>();
+    for (const z of zones) {
+      const factor = zone ? 1 : z.multiplier;
+      const row = rows.get(z.name.toLowerCase());
+      if (row?.partOfTotalArea !== false || zone) view.floorArea += z.floorArea * factor;
+      if (row?.daylighting) view.daylighting = true;
+      for (const i of z.instances)
+        if (this.schedules.info(i.schedule)?.emsActuators) ems.add(i.schedule);
+      const series = zoneSeries(z, this.schedules, discountLost);
+      for (let h = 0; h < hours; h++)
+        view.people[h] = (view.people[h] as number) + (series.people[h] as number) * factor;
+      for (const type of Object.keys(view.watts) as LoadType[]) {
+        const target = view.watts[type];
+        const source = series.watts[type];
+        for (let h = 0; h < hours; h++)
+          target[h] = (target[h] as number) + (source[h] as number) * factor;
+      }
+    }
+    view.emsSchedules = [...ems];
+    return view;
+  }
+
+  occupancy(): OccupancyReport {
+    return occupancyReport(this.loads, this.schedules, this.zoneTable());
   }
 }
 

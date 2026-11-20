@@ -20,13 +20,15 @@ import { useTheme } from './ui/useTheme';
 import { idf, openInWorker } from './worker/client';
 
 const Viewer3D = lazy(() => import('./features/viewer3d/Viewer3D'));
+const SchedulesTab = lazy(() => import('./features/schedules/SchedulesTab'));
+const LoadsTab = lazy(() => import('./features/loads/LoadsTab'));
 
 type State =
   | { status: 'idle'; error?: string }
   | { status: 'loading'; name: string; progress: LoadProgress }
   | { status: 'ready'; summary: FileSummary };
 
-type Tab = 'summary' | '3d' | 'table' | 'problems';
+type Tab = 'summary' | '3d' | 'table' | 'schedules' | 'loads' | 'problems';
 
 const STAGE_WEIGHT: Record<LoadProgress['stage'], [number, number]> = {
   reading: [0, 0.1],
@@ -222,6 +224,12 @@ export function App() {
               <TabButton id="table" current={tab} onSelect={setTab}>
                 Table
               </TabButton>
+              <TabButton id="schedules" current={tab} onSelect={setTab}>
+                Schedules
+              </TabButton>
+              <TabButton id="loads" current={tab} onSelect={setTab}>
+                Loads
+              </TabButton>
               <TabButton id="problems" current={tab} onSelect={setTab}>
                 Problems
                 {problems && problems.error + problems.warning > 0 && (
@@ -256,6 +264,23 @@ export function App() {
                 ) : (
                   <div className="content">Choose a class on the left.</div>
                 ))}
+              {(tab === 'schedules' || tab === 'loads') && (
+                <Suspense fallback={<div className="content count">Loading charts…</div>}>
+                  {tab === 'schedules' ? (
+                    <SchedulesTab
+                      key={summary.fileName}
+                      dark={theme === 'dark'}
+                      onSelect={setSelectedId}
+                    />
+                  ) : (
+                    <LoadsTab
+                      key={summary.fileName}
+                      dark={theme === 'dark'}
+                      onSelect={setSelectedId}
+                    />
+                  )}
+                </Suspense>
+              )}
               {tab === 'problems' && <ProblemsPanel onSelect={setSelectedId} />}
             </div>
           </Panel>

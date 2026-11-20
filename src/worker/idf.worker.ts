@@ -44,6 +44,34 @@ const api: WorkerApi = {
   async help(classKey) {
     return current().help(classKey);
   },
+  async calendar() {
+    return current().calendarView();
+  },
+  async scheduleList() {
+    return current().scheduleList();
+  },
+  async scheduleDetail(name) {
+    const detail = current().scheduleDetail(name);
+    return detail?.hourly ? transfer(detail, [detail.hourly.buffer as ArrayBuffer]) : detail;
+  },
+  async dayProfiles(name, day) {
+    return current().dayProfiles(name, day);
+  },
+  async zoneSchedules(zone) {
+    return current().zoneSchedules(zone);
+  },
+  async zoneTable() {
+    return current().zoneTable();
+  },
+  async zoneLoads(zone, discountLost) {
+    const view = current().zoneLoads(zone, discountLost);
+    const buffers = [view.people.buffer, ...Object.values(view.watts).map((a) => a.buffer)];
+    return transfer(view, buffers as ArrayBuffer[]);
+  },
+  async occupancy() {
+    const report = current().occupancy();
+    return transfer(report, [report.building.buffer as ArrayBuffer]);
+  },
 };
 
 expose(api);

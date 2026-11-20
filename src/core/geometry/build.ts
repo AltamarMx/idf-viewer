@@ -77,6 +77,9 @@ export interface ZoneGeometry {
   floorArea: number;
   floorAreaSource: 'input' | 'surfaces';
   volume: number;
+  /** Average ceiling height above the average floor, as EnergyPlus computes it. */
+  ceilingHeight: number;
+  ceilingHeightSource: 'input' | 'surfaces';
   /** "default": EnergyPlus uses 10 m³ when the volume cannot be calculated. */
   volumeSource: 'input' | 'enclosed' | 'estimated' | 'default';
   enclosed: boolean;
@@ -731,9 +734,31 @@ function zoneGeometry(model: IdfModel, schema: Schema, surfaces: Surface3D[]): Z
       volume = 10;
       volumeSource = 'default';
     }
+    // Ceiling height: area-weighted mean height of roofs/ceilings minus that of
+    // floors (vertex averages), or the zone's height when one of them is missing.
+    const mean = (kinds: SurfaceKind[]) => {
+      let area = 0;
+      let sum = 0;
+      for (const s of list) {
+        if (!kinds.includes(s.kind)) continue;
+        sum += s.area * (s.vertices.reduce((z, v) => z + v[2], 0) / s.vertices.length);
+        area += s.area;
+      }
+      return area > 0 ? sum / area : undefined;
+    };
+    const zs = list.flatMap((s) => s.vertices.map((v) => v[2]));
+    const span = zs.length ? Math.max(...zs) - Math.min(...zs) : 0;
+    const top = mean(['roof', 'ceiling']);
+    const bottom = mean(['floor']);
+    let height = top !== undefined && bottom !== undefined ? top - bottom : span;
+    if (height <= 0) height = span;
+    const inputHeight = r.num('Ceiling Height');
+
     return {
       id: obj.id,
       name,
+      ceilingHeight: inputHeight && inputHeight > 0 ? inputHeight : height,
+      ceilingHeightSource: inputHeight && inputHeight > 0 ? 'input' : 'surfaces',
       multiplier: r.numOr('Multiplier', 1),
       partOfTotalArea: r.str('Part of Total Floor Area').toLowerCase() !== 'no',
       floorArea,

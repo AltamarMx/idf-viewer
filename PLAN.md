@@ -1,6 +1,6 @@
 # IDF Viewer: plan
 
-> **Estado:** fases 0 y 1 terminadas (2026-11-20). Repositorio: https://github.com/AltamarMx/idf-viewer
+> **Estado:** fases 0, 1 y 2a terminadas (2026-11-20). Repositorio: https://github.com/AltamarMx/idf-viewer
 
 ---
 
@@ -463,16 +463,30 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 
 ### Fase 2a · Horarios, cargas y ocupación
 
-- [ ] 2a.1 Evaluador de horarios (F1): todas las variantes, `Interpolate` en sus dos sintaxis (8.x y 9.0+), días festivos, horario de verano y días de diseño.
-- [ ] 2a.2 Referencias de EnergyPlus para horarios: valor hora por hora de cada horario, ocupantes y potencias por zona.
-- [ ] 2a.3 Mapa de calor (F2) y perfiles (F3).
-- [ ] 2a.4 Rastreo de uso (F7) y subpaneles sincronizados por zona (F8).
-- [ ] 2a.5 Tabla de zonas (D3) y densidades de diseño (D4).
-- [ ] 2a.6 Cargas internas en el tiempo (F9) y verificación de la ocupación (F10).
+- [x] 2a.1 Evaluador de horarios (F1): todas las variantes, `Interpolate` en sus dos sintaxis (8.x y 9.0+), días festivos, horario de verano y días de diseño.
+- [x] 2a.2 Referencias de EnergyPlus para horarios: valor hora por hora de cada horario, ocupantes y potencias por zona.
+- [x] 2a.3 Mapa de calor (F2) y perfiles (F3).
+- [x] 2a.4 Rastreo de uso (F7) y subpaneles sincronizados por zona (F8).
+- [x] 2a.5 Tabla de zonas (D3) y densidades de diseño (D4).
+- [x] 2a.6 Cargas internas en el tiempo (F9) y verificación de la ocupación (F10).
 
 **Listo cuando:**
 - los horarios evaluados coinciden hora por hora con EnergyPlus en todos los ejemplos;
 - la ocupación y las potencias por zona coinciden con los valores de EnergyPlus.
+
+**Notas de la fase 2a:**
+- Referencias anuales (`make_oracles.py --annual`): EnergyPlus corre un año completo con un clima de la instalación (los valores comparados no dependen del clima). La copia usa un solo `RunPeriod` del 1 de enero al 31 de diciembre que conserva el día de la semana de cada fecha del archivo original. Se guardan el calendario (tipo de día y horario de verano de cada día), cada horario hora por hora, los días de diseño y, por zona, ocupantes y potencias.
+- Archivo de prueba `tests/fixtures/schedules/Schedules.idf`: todas las variantes de horario, las tres interpolaciones, festivos en todos los formatos de fecha, regla de fin de semana, horario de verano, `ZoneList` y los 7 tipos de carga con distintos métodos.
+- Coinciden hora por hora, todo el año, en los 8 ejemplos y en ese archivo: el calendario, cada horario, los días de diseño, y por zona los ocupantes, el calor de personas (ocupantes × actividad), la iluminación y los equipos eléctricos, de gas, agua caliente, vapor y otros. También coincide la altura de techo de cada zona.
+- Reglas de EnergyPlus confirmadas:
+  - con interpolación `Linear` se toma el valor de la rampa al final de cada timestep, no el promedio;
+  - con `Average` (o `Yes` en 8.0–8.8) se promedian los minutos del timestep;
+  - un festivo en sábado o domingo pasa al lunes si `Apply Weekend Holiday Rule` es `Yes`;
+  - con horario de verano, la hora h usa el valor de la hora h + 1;
+  - las superficies sin `Space Name` pertenecen al único espacio de su zona;
+  - `Other Equipment` reporta el calor descontando `Fraction Lost`, y los demás equipos reportan el consumo.
+- Lo que el visor no puede reproducir y por eso avisa en pantalla: horarios que cambia EMS durante la simulación (actuadores sobre `Schedule:*`), iluminación atenuada por `Daylighting:Controls`, y días de inicio, festivos u horario de verano que vienen del archivo de clima.
+- Pestañas nuevas: **Schedules** (por horario y por zona) y **Loads** (tabla de zonas, cargas en el tiempo y verificación de ocupación).
 
 ### Fase 2b · Ventanas, ventilación natural e infiltración
 
