@@ -1,0 +1,4691 @@
+{
+ "source": {
+  "file": "RefBldgMediumOfficeNew2004_Chicago.idf",
+  "energyplus": "26.2.0"
+ },
+ "zones": {
+  "CORE_BOTTOM": {
+   "volume": 2698.04,
+   "floorArea": 983.537,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 0.0,
+   "extNetWallArea": 0.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "CORE_MID": {
+   "volume": 2698.04,
+   "floorArea": 983.537,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 0.0,
+   "extNetWallArea": 0.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "CORE_TOP": {
+   "volume": 2698.04,
+   "floorArea": 983.537,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 0.0,
+   "extNetWallArea": 0.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "FIRSTFLOOR_PLENUM": {
+   "volume": 2024.76,
+   "floorArea": 1660.73,
+   "ceilingHeight": 1.2192,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": false,
+   "extGrossWallArea": 202.838,
+   "extNetWallArea": 202.838,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "MIDFLOOR_PLENUM": {
+   "volume": 2024.76,
+   "floorArea": 1660.73,
+   "ceilingHeight": 1.2192,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": false,
+   "extGrossWallArea": 202.838,
+   "extNetWallArea": 202.838,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_BOT_ZN_1": {
+   "volume": 568.77,
+   "floorArea": 207.338,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 136.916,
+   "extNetWallArea": 71.6336,
+   "extWindowArea": 65.2823,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_BOT_ZN_2": {
+   "volume": 360.078,
+   "floorArea": 131.262,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 91.2767,
+   "extNetWallArea": 47.7547,
+   "extWindowArea": 43.522,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_BOT_ZN_3": {
+   "volume": 568.77,
+   "floorArea": 207.338,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 136.916,
+   "extNetWallArea": 71.6336,
+   "extWindowArea": 65.2823,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_BOT_ZN_4": {
+   "volume": 360.055,
+   "floorArea": 131.254,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 91.2767,
+   "extNetWallArea": 47.7547,
+   "extWindowArea": 43.522,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_MID_ZN_1": {
+   "volume": 568.77,
+   "floorArea": 207.338,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 136.916,
+   "extNetWallArea": 71.6336,
+   "extWindowArea": 65.2823,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_MID_ZN_2": {
+   "volume": 360.078,
+   "floorArea": 131.262,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 91.2767,
+   "extNetWallArea": 47.7547,
+   "extWindowArea": 43.522,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_MID_ZN_3": {
+   "volume": 568.77,
+   "floorArea": 207.338,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 136.916,
+   "extNetWallArea": 71.6336,
+   "extWindowArea": 65.2823,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_MID_ZN_4": {
+   "volume": 360.055,
+   "floorArea": 131.254,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 91.2767,
+   "extNetWallArea": 47.7547,
+   "extWindowArea": 43.522,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_TOP_ZN_1": {
+   "volume": 568.77,
+   "floorArea": 207.338,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 136.916,
+   "extNetWallArea": 71.6336,
+   "extWindowArea": 65.2823,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_TOP_ZN_2": {
+   "volume": 360.078,
+   "floorArea": 131.262,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 91.2767,
+   "extNetWallArea": 47.7547,
+   "extWindowArea": 43.522,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_TOP_ZN_3": {
+   "volume": 568.77,
+   "floorArea": 207.338,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 136.916,
+   "extNetWallArea": 71.6336,
+   "extWindowArea": 65.2823,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PERIMETER_TOP_ZN_4": {
+   "volume": 360.055,
+   "floorArea": 131.254,
+   "ceilingHeight": 2.7432,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 91.2767,
+   "extNetWallArea": 47.7547,
+   "extWindowArea": 43.522,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "TOPFLOOR_PLENUM": {
+   "volume": 2024.76,
+   "floorArea": 1660.73,
+   "ceilingHeight": 1.2192,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": false,
+   "extGrossWallArea": 202.838,
+   "extNetWallArea": 202.838,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "surfaces": {
+  "CORE_BOT_ZN_5_WALL_EAST": {
+   "class": "Wall",
+   "zone": "CORE_BOTTOM",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     2.74
+    ],
+    [
+     45.34,
+     4.57,
+     0.0
+    ],
+    [
+     45.34,
+     28.7,
+     0.0
+    ],
+    [
+     45.34,
+     28.7,
+     2.74
+    ]
+   ]
+  },
+  "CORE_BOT_ZN_5_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "CORE_BOTTOM",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     2.74
+    ],
+    [
+     45.34,
+     28.7,
+     0.0
+    ],
+    [
+     4.57,
+     28.7,
+     0.0
+    ],
+    [
+     4.57,
+     28.7,
+     2.74
+    ]
+   ]
+  },
+  "CORE_BOT_ZN_5_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "CORE_BOTTOM",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     2.74
+    ],
+    [
+     4.57,
+     4.57,
+     0.0
+    ],
+    [
+     45.34,
+     4.57,
+     0.0
+    ],
+    [
+     45.34,
+     4.57,
+     2.74
+    ]
+   ]
+  },
+  "CORE_BOT_ZN_5_WALL_WEST": {
+   "class": "Wall",
+   "zone": "CORE_BOTTOM",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     2.74
+    ],
+    [
+     4.57,
+     28.7,
+     0.0
+    ],
+    [
+     4.57,
+     4.57,
+     0.0
+    ],
+    [
+     4.57,
+     4.57,
+     2.74
+    ]
+   ]
+  },
+  "CORE_BOT_ZN_5_FLOOR": {
+   "class": "Floor",
+   "zone": "CORE_BOTTOM",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     0.0
+    ],
+    [
+     45.34,
+     4.57,
+     0.0
+    ],
+    [
+     4.57,
+     4.57,
+     0.0
+    ],
+    [
+     4.57,
+     28.7,
+     0.0
+    ]
+   ]
+  },
+  "CORE_BOTTOM_CEILING": {
+   "class": "Roof",
+   "zone": "CORE_BOTTOM",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 0.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     2.74
+    ],
+    [
+     45.34,
+     28.7,
+     2.74
+    ],
+    [
+     4.57,
+     28.7,
+     2.74
+    ],
+    [
+     4.57,
+     4.57,
+     2.74
+    ]
+   ]
+  },
+  "CORE_BOTTOM INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "CORE_BOTTOM",
+   "grossArea": 1967.07,
+   "netArea": 1967.07,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "CORE_MID_ZN_5_WALL_EAST": {
+   "class": "Wall",
+   "zone": "CORE_MID",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     6.71
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     6.71
+    ]
+   ]
+  },
+  "CORE_MID_ZN_5_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "CORE_MID",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     6.71
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     6.71
+    ]
+   ]
+  },
+  "CORE_MID_ZN_5_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "CORE_MID",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     6.71
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     6.71
+    ]
+   ]
+  },
+  "CORE_MID_ZN_5_WALL_WEST": {
+   "class": "Wall",
+   "zone": "CORE_MID",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     6.71
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     6.71
+    ]
+   ]
+  },
+  "CORE_MID_ZN_5_FLOOR": {
+   "class": "Floor",
+   "zone": "CORE_MID",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ]
+   ]
+  },
+  "CORE_MID_CEILING": {
+   "class": "Roof",
+   "zone": "CORE_MID",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     6.71
+    ],
+    [
+     4.57,
+     4.57,
+     6.71
+    ],
+    [
+     45.34,
+     4.57,
+     6.71
+    ],
+    [
+     45.34,
+     28.7,
+     6.71
+    ]
+   ]
+  },
+  "CORE_MID INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "CORE_MID",
+   "grossArea": 1967.07,
+   "netArea": 1967.07,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "CORE_TOP_ZN_5_WALL_EAST": {
+   "class": "Wall",
+   "zone": "CORE_TOP",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     10.67
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     10.67
+    ]
+   ]
+  },
+  "CORE_TOP_ZN_5_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "CORE_TOP",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     10.67
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     10.67
+    ]
+   ]
+  },
+  "CORE_TOP_ZN_5_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "CORE_TOP",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     10.67
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "CORE_TOP_ZN_5_WALL_WEST": {
+   "class": "Wall",
+   "zone": "CORE_TOP",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     10.67
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "CORE_TOP_ZN_5_FLOOR": {
+   "class": "Floor",
+   "zone": "CORE_TOP",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ]
+   ]
+  },
+  "CORE_TOP_ZN_5_CEILING": {
+   "class": "Roof",
+   "zone": "CORE_TOP",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 0.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     10.67
+    ],
+    [
+     45.34,
+     28.7,
+     10.67
+    ],
+    [
+     4.57,
+     28.7,
+     10.67
+    ],
+    [
+     4.57,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "CORE_TOP INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "CORE_TOP",
+   "grossArea": 1967.07,
+   "netArea": 1967.07,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_BOT_PLENUM_WALL_EAST": {
+   "class": "Wall",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 40.5674,
+   "netArea": 40.5674,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     3.96
+    ],
+    [
+     49.91,
+     0.0,
+     2.74
+    ],
+    [
+     49.91,
+     33.27,
+     2.74
+    ],
+    [
+     49.91,
+     33.27,
+     3.96
+    ]
+   ]
+  },
+  "PERIMETER_BOT_PLENUM_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 60.8515,
+   "netArea": 60.8515,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     3.96
+    ],
+    [
+     49.91,
+     33.27,
+     2.74
+    ],
+    [
+     0.0,
+     33.27,
+     2.74
+    ],
+    [
+     0.0,
+     33.27,
+     3.96
+    ]
+   ]
+  },
+  "PERIMETER_BOT_PLENUM_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 60.8515,
+   "netArea": 60.8515,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     3.96
+    ],
+    [
+     0.0,
+     0.0,
+     2.74
+    ],
+    [
+     49.91,
+     0.0,
+     2.74
+    ],
+    [
+     49.91,
+     0.0,
+     3.96
+    ]
+   ]
+  },
+  "PERIMETER_BOT_PLENUM_WALL_WEST": {
+   "class": "Wall",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 40.5674,
+   "netArea": 40.5674,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     3.96
+    ],
+    [
+     0.0,
+     33.27,
+     2.74
+    ],
+    [
+     0.0,
+     0.0,
+     2.74
+    ],
+    [
+     0.0,
+     0.0,
+     3.96
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_FLOOR_1": {
+   "class": "Floor",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     2.74
+    ],
+    [
+     49.91,
+     0.0,
+     2.74
+    ],
+    [
+     0.0,
+     0.0,
+     2.74
+    ],
+    [
+     4.57,
+     4.57,
+     2.74
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_FLOOR_2": {
+   "class": "Floor",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 90.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     2.74
+    ],
+    [
+     45.34,
+     4.57,
+     2.74
+    ],
+    [
+     45.34,
+     28.7,
+     2.74
+    ],
+    [
+     49.91,
+     33.27,
+     2.74
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_FLOOR_3": {
+   "class": "Floor",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 315.002,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     2.74
+    ],
+    [
+     49.91,
+     33.27,
+     2.74
+    ],
+    [
+     45.34,
+     28.7,
+     2.74
+    ],
+    [
+     4.57,
+     28.7,
+     2.74
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_FLOOR_4": {
+   "class": "Floor",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 315.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     2.74
+    ],
+    [
+     4.57,
+     4.57,
+     2.74
+    ],
+    [
+     0.0,
+     0.0,
+     2.74
+    ],
+    [
+     0.0,
+     33.27,
+     2.74
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_FLOOR_5": {
+   "class": "Floor",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     2.74
+    ],
+    [
+     4.57,
+     28.7,
+     2.74
+    ],
+    [
+     45.34,
+     28.7,
+     2.74
+    ],
+    [
+     45.34,
+     4.57,
+     2.74
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_CEILING_1": {
+   "class": "Roof",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 44.9981,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     3.96
+    ],
+    [
+     49.91,
+     0.0,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_CEILING_2": {
+   "class": "Roof",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 315.002,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     3.96
+    ],
+    [
+     49.91,
+     33.27,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_CEILING_3": {
+   "class": "Roof",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     49.91,
+     33.27,
+     3.96
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_CEILING_4": {
+   "class": "Roof",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 270.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     0.0,
+     33.27,
+     3.96
+    ],
+    [
+     0.0,
+     0.0,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ]
+   ]
+  },
+  "FIRSTFLOOR_PLENUM_CEILING_5": {
+   "class": "Roof",
+   "zone": "FIRSTFLOOR_PLENUM",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 0.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ]
+   ]
+  },
+  "PERIMETER_MID_PLENUM_WALL_EAST": {
+   "class": "Wall",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 40.5674,
+   "netArea": 40.5674,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     7.92
+    ],
+    [
+     49.91,
+     0.0,
+     6.71
+    ],
+    [
+     49.91,
+     33.27,
+     6.71
+    ],
+    [
+     49.91,
+     33.27,
+     7.92
+    ]
+   ]
+  },
+  "PERIMETER_MID_PLENUM_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 60.8515,
+   "netArea": 60.8515,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     7.92
+    ],
+    [
+     49.91,
+     33.27,
+     6.71
+    ],
+    [
+     0.0,
+     33.27,
+     6.71
+    ],
+    [
+     0.0,
+     33.27,
+     7.92
+    ]
+   ]
+  },
+  "PERIMETER_MID_PLENUM_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 60.8515,
+   "netArea": 60.8515,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     7.92
+    ],
+    [
+     0.0,
+     0.0,
+     6.71
+    ],
+    [
+     49.91,
+     0.0,
+     6.71
+    ],
+    [
+     49.91,
+     0.0,
+     7.92
+    ]
+   ]
+  },
+  "PERIMETER_MID_PLENUM_WALL_WEST": {
+   "class": "Wall",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 40.5674,
+   "netArea": 40.5674,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     7.92
+    ],
+    [
+     0.0,
+     33.27,
+     6.71
+    ],
+    [
+     0.0,
+     0.0,
+     6.71
+    ],
+    [
+     0.0,
+     0.0,
+     7.92
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_FLOOR_1": {
+   "class": "Floor",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     6.71
+    ],
+    [
+     4.57,
+     4.57,
+     6.71
+    ],
+    [
+     45.34,
+     4.57,
+     6.71
+    ],
+    [
+     49.91,
+     0.0,
+     6.71
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_FLOOR_2": {
+   "class": "Floor",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 44.9981,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     6.71
+    ],
+    [
+     49.91,
+     0.0,
+     6.71
+    ],
+    [
+     45.34,
+     4.57,
+     6.71
+    ],
+    [
+     45.34,
+     28.7,
+     6.71
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_FLOOR_3": {
+   "class": "Floor",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     6.71
+    ],
+    [
+     45.34,
+     28.7,
+     6.71
+    ],
+    [
+     4.57,
+     28.7,
+     6.71
+    ],
+    [
+     0.0,
+     33.27,
+     6.71
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_FLOOR_4": {
+   "class": "Floor",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 270.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     6.71
+    ],
+    [
+     4.57,
+     28.7,
+     6.71
+    ],
+    [
+     4.57,
+     4.57,
+     6.71
+    ],
+    [
+     0.0,
+     0.0,
+     6.71
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_FLOOR_5": {
+   "class": "Floor",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     6.71
+    ],
+    [
+     45.34,
+     4.57,
+     6.71
+    ],
+    [
+     4.57,
+     4.57,
+     6.71
+    ],
+    [
+     4.57,
+     28.7,
+     6.71
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_CEILING_1": {
+   "class": "Roof",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 0.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     0.0,
+     0.0,
+     7.92
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_CEILING_2": {
+   "class": "Roof",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 270.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     49.91,
+     0.0,
+     7.92
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_CEILING_3": {
+   "class": "Roof",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 225.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     7.92
+    ],
+    [
+     0.0,
+     33.27,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_CEILING_4": {
+   "class": "Roof",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 45.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     0.0,
+     33.27,
+     7.92
+    ],
+    [
+     0.0,
+     0.0,
+     7.92
+    ]
+   ]
+  },
+  "MIDFLOOR_PLENUM_CEILING_5": {
+   "class": "Roof",
+   "zone": "MIDFLOOR_PLENUM",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 0.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_1_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_1",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 44.9981,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     2.74
+    ],
+    [
+     49.91,
+     0.0,
+     0.0
+    ],
+    [
+     45.34,
+     4.57,
+     0.0
+    ],
+    [
+     45.34,
+     4.57,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_1_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_1",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     2.74
+    ],
+    [
+     45.34,
+     4.57,
+     0.0
+    ],
+    [
+     4.57,
+     4.57,
+     0.0
+    ],
+    [
+     4.57,
+     4.57,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_1_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_1",
+   "grossArea": 136.916,
+   "netArea": 71.6336,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     2.74
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     49.91,
+     0.0,
+     0.0
+    ],
+    [
+     49.91,
+     0.0,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_1_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_1",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 315.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     2.74
+    ],
+    [
+     4.57,
+     4.57,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_1_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_BOT_ZN_1",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     4.57,
+     4.57,
+     0.0
+    ],
+    [
+     45.34,
+     4.57,
+     0.0
+    ],
+    [
+     49.91,
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_1_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_BOT_ZN_1",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 0.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     2.74
+    ],
+    [
+     45.34,
+     4.57,
+     2.74
+    ],
+    [
+     4.57,
+     4.57,
+     2.74
+    ],
+    [
+     0.0,
+     0.0,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_1 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_BOT_ZN_1",
+   "grossArea": 414.676,
+   "netArea": 414.676,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_BOT_ZN_1_WALL_SOUTH_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_BOT_ZN_1",
+   "grossArea": 65.2823,
+   "netArea": 65.2823,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     2.33
+    ],
+    [
+     0.0,
+     0.0,
+     1.02
+    ],
+    [
+     49.91,
+     0.0,
+     1.02
+    ],
+    [
+     49.91,
+     0.0,
+     2.33
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_2_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_2",
+   "grossArea": 91.2767,
+   "netArea": 47.7547,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     2.74
+    ],
+    [
+     49.91,
+     0.0,
+     0.0
+    ],
+    [
+     49.91,
+     33.27,
+     0.0
+    ],
+    [
+     49.91,
+     33.27,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_2_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_2",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 315.002,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     2.74
+    ],
+    [
+     49.91,
+     33.27,
+     0.0
+    ],
+    [
+     45.34,
+     28.7,
+     0.0
+    ],
+    [
+     45.34,
+     28.7,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_2_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_2",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 224.998,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     2.74
+    ],
+    [
+     45.34,
+     4.57,
+     0.0
+    ],
+    [
+     49.91,
+     0.0,
+     0.0
+    ],
+    [
+     49.91,
+     0.0,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_2_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_2",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     2.74
+    ],
+    [
+     45.34,
+     28.7,
+     0.0
+    ],
+    [
+     45.34,
+     4.57,
+     0.0
+    ],
+    [
+     45.34,
+     4.57,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_2_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_BOT_ZN_2",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 90.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     0.0
+    ],
+    [
+     45.34,
+     4.57,
+     0.0
+    ],
+    [
+     45.34,
+     28.7,
+     0.0
+    ],
+    [
+     49.91,
+     33.27,
+     0.0
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_2_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_BOT_ZN_2",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 224.998,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     2.74
+    ],
+    [
+     45.34,
+     4.57,
+     2.74
+    ],
+    [
+     49.91,
+     0.0,
+     2.74
+    ],
+    [
+     49.91,
+     33.27,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_2 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_BOT_ZN_2",
+   "grossArea": 262.524,
+   "netArea": 262.524,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_BOT_ZN_2_WALL_EAST_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_BOT_ZN_2",
+   "grossArea": 43.522,
+   "netArea": 43.522,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     2.33
+    ],
+    [
+     49.91,
+     0.0,
+     1.02
+    ],
+    [
+     49.91,
+     33.27,
+     1.02
+    ],
+    [
+     49.91,
+     33.27,
+     2.33
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_3_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_3",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 135.002,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     2.74
+    ],
+    [
+     45.34,
+     28.7,
+     0.0
+    ],
+    [
+     49.91,
+     33.27,
+     0.0
+    ],
+    [
+     49.91,
+     33.27,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_3_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_3",
+   "grossArea": 136.916,
+   "netArea": 71.6336,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     2.74
+    ],
+    [
+     49.91,
+     33.27,
+     0.0
+    ],
+    [
+     0.0,
+     33.27,
+     0.0
+    ],
+    [
+     0.0,
+     33.27,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_3_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_3",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     2.74
+    ],
+    [
+     4.57,
+     28.7,
+     0.0
+    ],
+    [
+     45.34,
+     28.7,
+     0.0
+    ],
+    [
+     45.34,
+     28.7,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_3_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_3",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 225.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     2.74
+    ],
+    [
+     0.0,
+     33.27,
+     0.0
+    ],
+    [
+     4.57,
+     28.7,
+     0.0
+    ],
+    [
+     4.57,
+     28.7,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_3_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_BOT_ZN_3",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     0.0
+    ],
+    [
+     45.34,
+     28.7,
+     0.0
+    ],
+    [
+     4.57,
+     28.7,
+     0.0
+    ],
+    [
+     0.0,
+     33.27,
+     0.0
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_3_CEILILNG": {
+   "class": "Roof",
+   "zone": "PERIMETER_BOT_ZN_3",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     2.74
+    ],
+    [
+     4.57,
+     28.7,
+     2.74
+    ],
+    [
+     45.34,
+     28.7,
+     2.74
+    ],
+    [
+     49.91,
+     33.27,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_3 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_BOT_ZN_3",
+   "grossArea": 414.676,
+   "netArea": 414.676,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_BOT_ZN_3_WALL_NORTH_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_BOT_ZN_3",
+   "grossArea": 65.2823,
+   "netArea": 65.2823,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     2.33
+    ],
+    [
+     49.91,
+     33.27,
+     1.02
+    ],
+    [
+     0.0,
+     33.27,
+     1.02
+    ],
+    [
+     0.0,
+     33.27,
+     2.33
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_4_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_4",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     2.74
+    ],
+    [
+     4.57,
+     4.57,
+     0.0
+    ],
+    [
+     4.57,
+     28.7,
+     0.0
+    ],
+    [
+     4.57,
+     28.7,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_4_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_4",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 45.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     2.74
+    ],
+    [
+     4.57,
+     28.7,
+     0.0
+    ],
+    [
+     0.0,
+     33.27,
+     0.0
+    ],
+    [
+     0.0,
+     33.27,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_4_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_4",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 135.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     2.74
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     4.57,
+     4.57,
+     0.0
+    ],
+    [
+     4.57,
+     4.57,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_4_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_BOT_ZN_4",
+   "grossArea": 91.2767,
+   "netArea": 47.7547,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     2.74
+    ],
+    [
+     0.0,
+     33.27,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_4_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_BOT_ZN_4",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 270.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     0.0
+    ],
+    [
+     4.57,
+     28.7,
+     0.0
+    ],
+    [
+     4.57,
+     4.57,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_4_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_BOT_ZN_4",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 90.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     2.74
+    ],
+    [
+     4.57,
+     4.57,
+     2.74
+    ],
+    [
+     4.57,
+     28.7,
+     2.74
+    ],
+    [
+     0.0,
+     33.27,
+     2.74
+    ]
+   ]
+  },
+  "PERIMETER_BOT_ZN_4 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_BOT_ZN_4",
+   "grossArea": 262.507,
+   "netArea": 262.507,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_BOT_ZN_4_WALL_WEST_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_BOT_ZN_4",
+   "grossArea": 43.522,
+   "netArea": 43.522,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     2.33
+    ],
+    [
+     0.0,
+     33.27,
+     1.02
+    ],
+    [
+     0.0,
+     0.0,
+     1.02
+    ],
+    [
+     0.0,
+     0.0,
+     2.33
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_1_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_1",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 44.9981,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     6.71
+    ],
+    [
+     49.91,
+     0.0,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_1_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_1",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     6.71
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_1_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_1",
+   "grossArea": 136.916,
+   "netArea": 71.6336,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     6.71
+    ],
+    [
+     0.0,
+     0.0,
+     3.96
+    ],
+    [
+     49.91,
+     0.0,
+     3.96
+    ],
+    [
+     49.91,
+     0.0,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_1_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_1",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 315.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     6.71
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ],
+    [
+     0.0,
+     0.0,
+     3.96
+    ],
+    [
+     0.0,
+     0.0,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_1_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_MID_ZN_1",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     49.91,
+     0.0,
+     3.96
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_1_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_MID_ZN_1",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 0.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     6.71
+    ],
+    [
+     45.34,
+     4.57,
+     6.71
+    ],
+    [
+     4.57,
+     4.57,
+     6.71
+    ],
+    [
+     0.0,
+     0.0,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_1 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_MID_ZN_1",
+   "grossArea": 414.676,
+   "netArea": 414.676,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_MID_ZN_1_WALL_SOUTH_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_MID_ZN_1",
+   "grossArea": 65.2823,
+   "netArea": 65.2823,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     6.29
+    ],
+    [
+     0.0,
+     0.0,
+     4.98
+    ],
+    [
+     49.91,
+     0.0,
+     4.98
+    ],
+    [
+     49.91,
+     0.0,
+     6.29
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_2_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_2",
+   "grossArea": 91.2767,
+   "netArea": 47.7547,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     6.71
+    ],
+    [
+     49.91,
+     0.0,
+     3.96
+    ],
+    [
+     49.91,
+     33.27,
+     3.96
+    ],
+    [
+     49.91,
+     33.27,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_2_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_2",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 315.002,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     6.71
+    ],
+    [
+     49.91,
+     33.27,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_2_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_2",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 224.998,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     6.71
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     49.91,
+     0.0,
+     3.96
+    ],
+    [
+     49.91,
+     0.0,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_2_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_2",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     6.71
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_2_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_MID_ZN_2",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 90.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     3.96
+    ],
+    [
+     45.34,
+     4.57,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     49.91,
+     33.27,
+     3.96
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_2_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_MID_ZN_2",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 270.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     6.71
+    ],
+    [
+     45.34,
+     28.7,
+     6.71
+    ],
+    [
+     45.34,
+     4.57,
+     6.71
+    ],
+    [
+     49.91,
+     0.0,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_2 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_MID_ZN_2",
+   "grossArea": 262.524,
+   "netArea": 262.524,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_MID_ZN_2_WALL_EAST_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_MID_ZN_2",
+   "grossArea": 43.522,
+   "netArea": 43.522,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     6.29
+    ],
+    [
+     49.91,
+     0.0,
+     4.98
+    ],
+    [
+     49.91,
+     33.27,
+     4.98
+    ],
+    [
+     49.91,
+     33.27,
+     6.29
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_3_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_3",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 135.002,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     6.71
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     49.91,
+     33.27,
+     3.96
+    ],
+    [
+     49.91,
+     33.27,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_3_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_3",
+   "grossArea": 136.916,
+   "netArea": 71.6336,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     6.71
+    ],
+    [
+     49.91,
+     33.27,
+     3.96
+    ],
+    [
+     0.0,
+     33.27,
+     3.96
+    ],
+    [
+     0.0,
+     33.27,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_3_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_3",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     6.71
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_3_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_3",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 225.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     6.71
+    ],
+    [
+     0.0,
+     33.27,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_3_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_MID_ZN_3",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     3.96
+    ],
+    [
+     45.34,
+     28.7,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     0.0,
+     33.27,
+     3.96
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_3_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_MID_ZN_3",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     6.71
+    ],
+    [
+     4.57,
+     28.7,
+     6.71
+    ],
+    [
+     45.34,
+     28.7,
+     6.71
+    ],
+    [
+     49.91,
+     33.27,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_3 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_MID_ZN_3",
+   "grossArea": 414.676,
+   "netArea": 414.676,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_MID_ZN_3_WALL_NORTH_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_MID_ZN_3",
+   "grossArea": 65.2823,
+   "netArea": 65.2823,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     6.29
+    ],
+    [
+     49.91,
+     33.27,
+     4.98
+    ],
+    [
+     0.0,
+     33.27,
+     4.98
+    ],
+    [
+     0.0,
+     33.27,
+     6.29
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_4_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_4",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     6.71
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_4_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_4",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 45.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     6.71
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     0.0,
+     33.27,
+     3.96
+    ],
+    [
+     0.0,
+     33.27,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_4_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_4",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 135.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     6.71
+    ],
+    [
+     0.0,
+     0.0,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_4_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_MID_ZN_4",
+   "grossArea": 91.2767,
+   "netArea": 47.7547,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     6.71
+    ],
+    [
+     0.0,
+     33.27,
+     3.96
+    ],
+    [
+     0.0,
+     0.0,
+     3.96
+    ],
+    [
+     0.0,
+     0.0,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_4_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_MID_ZN_4",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 270.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     3.96
+    ],
+    [
+     4.57,
+     28.7,
+     3.96
+    ],
+    [
+     4.57,
+     4.57,
+     3.96
+    ],
+    [
+     0.0,
+     0.0,
+     3.96
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_4_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_MID_ZN_4",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 90.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     6.71
+    ],
+    [
+     4.57,
+     4.57,
+     6.71
+    ],
+    [
+     4.57,
+     28.7,
+     6.71
+    ],
+    [
+     0.0,
+     33.27,
+     6.71
+    ]
+   ]
+  },
+  "PERIMETER_MID_ZN_4 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_MID_ZN_4",
+   "grossArea": 262.507,
+   "netArea": 262.507,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_MID_ZN_4_WALL_WEST_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_MID_ZN_4",
+   "grossArea": 43.522,
+   "netArea": 43.522,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     6.29
+    ],
+    [
+     0.0,
+     33.27,
+     4.98
+    ],
+    [
+     0.0,
+     0.0,
+     4.98
+    ],
+    [
+     0.0,
+     0.0,
+     6.29
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_1_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_1",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 44.9981,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     10.67
+    ],
+    [
+     49.91,
+     0.0,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_1_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_1",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     10.67
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_1_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_1",
+   "grossArea": 136.916,
+   "netArea": 71.6336,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     10.67
+    ],
+    [
+     0.0,
+     0.0,
+     7.92
+    ],
+    [
+     49.91,
+     0.0,
+     7.92
+    ],
+    [
+     49.91,
+     0.0,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_1_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_1",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 315.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     10.67
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     0.0,
+     0.0,
+     7.92
+    ],
+    [
+     0.0,
+     0.0,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_1_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_TOP_ZN_1",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     49.91,
+     0.0,
+     7.92
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_1_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_TOP_ZN_1",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 44.9981,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     10.67
+    ],
+    [
+     49.91,
+     0.0,
+     10.67
+    ],
+    [
+     45.34,
+     4.57,
+     10.67
+    ],
+    [
+     4.57,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_1 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_TOP_ZN_1",
+   "grossArea": 414.676,
+   "netArea": 414.676,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_TOP_ZN_1_WALL_SOUTH_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_TOP_ZN_1",
+   "grossArea": 65.2823,
+   "netArea": 65.2823,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     10.25
+    ],
+    [
+     0.0,
+     0.0,
+     8.95
+    ],
+    [
+     49.91,
+     0.0,
+     8.95
+    ],
+    [
+     49.91,
+     0.0,
+     10.25
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_2_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_2",
+   "grossArea": 91.2767,
+   "netArea": 47.7547,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     10.67
+    ],
+    [
+     49.91,
+     0.0,
+     7.92
+    ],
+    [
+     49.91,
+     33.27,
+     7.92
+    ],
+    [
+     49.91,
+     33.27,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_2_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_2",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 315.002,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     10.67
+    ],
+    [
+     49.91,
+     33.27,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_2_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_2",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 224.998,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     4.57,
+     10.67
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     49.91,
+     0.0,
+     7.92
+    ],
+    [
+     49.91,
+     0.0,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_2_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_2",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     10.67
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_2_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_TOP_ZN_2",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 90.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     7.92
+    ],
+    [
+     45.34,
+     4.57,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     49.91,
+     33.27,
+     7.92
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_2_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_TOP_ZN_2",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 315.002,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     10.67
+    ],
+    [
+     49.91,
+     33.27,
+     10.67
+    ],
+    [
+     45.34,
+     28.7,
+     10.67
+    ],
+    [
+     45.34,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_2 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_TOP_ZN_2",
+   "grossArea": 262.524,
+   "netArea": 262.524,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_TOP_ZN_2_WALL_EAST_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_TOP_ZN_2",
+   "grossArea": 43.522,
+   "netArea": 43.522,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     10.25
+    ],
+    [
+     49.91,
+     0.0,
+     8.95
+    ],
+    [
+     49.91,
+     33.27,
+     8.95
+    ],
+    [
+     49.91,
+     33.27,
+     10.25
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_3_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_3",
+   "grossArea": 17.7422,
+   "netArea": 17.7422,
+   "azimuth": 135.002,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     45.34,
+     28.7,
+     10.67
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     49.91,
+     33.27,
+     7.92
+    ],
+    [
+     49.91,
+     33.27,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_3_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_3",
+   "grossArea": 136.916,
+   "netArea": 71.6336,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     10.67
+    ],
+    [
+     49.91,
+     33.27,
+     7.92
+    ],
+    [
+     0.0,
+     33.27,
+     7.92
+    ],
+    [
+     0.0,
+     33.27,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_3_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_3",
+   "grossArea": 111.825,
+   "netArea": 111.825,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     10.67
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_3_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_3",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 225.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     10.67
+    ],
+    [
+     0.0,
+     33.27,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_3_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_TOP_ZN_3",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     7.92
+    ],
+    [
+     45.34,
+     28.7,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     0.0,
+     33.27,
+     7.92
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_3_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_TOP_ZN_3",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 225.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     10.67
+    ],
+    [
+     0.0,
+     33.27,
+     10.67
+    ],
+    [
+     4.57,
+     28.7,
+     10.67
+    ],
+    [
+     45.34,
+     28.7,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_3 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_TOP_ZN_3",
+   "grossArea": 414.676,
+   "netArea": 414.676,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_TOP_ZN_3_WALL_NORTH_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_TOP_ZN_3",
+   "grossArea": 65.2823,
+   "netArea": 65.2823,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     10.25
+    ],
+    [
+     49.91,
+     33.27,
+     8.95
+    ],
+    [
+     0.0,
+     33.27,
+     8.95
+    ],
+    [
+     0.0,
+     33.27,
+     10.25
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_4_WALL_EAST": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_4",
+   "grossArea": 66.1863,
+   "netArea": 66.1863,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     4.57,
+     10.67
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_4_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_4",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 45.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     10.67
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     0.0,
+     33.27,
+     7.92
+    ],
+    [
+     0.0,
+     33.27,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_4_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_4",
+   "grossArea": 17.7416,
+   "netArea": 17.7416,
+   "azimuth": 135.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     10.67
+    ],
+    [
+     0.0,
+     0.0,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_4_WALL_WEST": {
+   "class": "Wall",
+   "zone": "PERIMETER_TOP_ZN_4",
+   "grossArea": 91.2767,
+   "netArea": 47.7547,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     10.67
+    ],
+    [
+     0.0,
+     33.27,
+     7.92
+    ],
+    [
+     0.0,
+     0.0,
+     7.92
+    ],
+    [
+     0.0,
+     0.0,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_4_FLOOR": {
+   "class": "Floor",
+   "zone": "PERIMETER_TOP_ZN_4",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 270.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     7.92
+    ],
+    [
+     4.57,
+     28.7,
+     7.92
+    ],
+    [
+     4.57,
+     4.57,
+     7.92
+    ],
+    [
+     0.0,
+     0.0,
+     7.92
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_4_CEILING": {
+   "class": "Roof",
+   "zone": "PERIMETER_TOP_ZN_4",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 135.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     10.67
+    ],
+    [
+     0.0,
+     0.0,
+     10.67
+    ],
+    [
+     4.57,
+     4.57,
+     10.67
+    ],
+    [
+     4.57,
+     28.7,
+     10.67
+    ]
+   ]
+  },
+  "PERIMETER_TOP_ZN_4 INTERNAL MASS": {
+   "class": "Internal Mass",
+   "zone": "PERIMETER_TOP_ZN_4",
+   "grossArea": 262.507,
+   "netArea": 262.507,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": []
+  },
+  "PERIMETER_TOP_ZN_4_WALL_WEST_WINDOW": {
+   "class": "Window",
+   "zone": "PERIMETER_TOP_ZN_4",
+   "grossArea": 43.522,
+   "netArea": 43.522,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     10.25
+    ],
+    [
+     0.0,
+     33.27,
+     8.95
+    ],
+    [
+     0.0,
+     0.0,
+     8.95
+    ],
+    [
+     0.0,
+     0.0,
+     10.25
+    ]
+   ]
+  },
+  "PERIMETER_TOP_PLENUM_WALL_EAST": {
+   "class": "Wall",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 40.5674,
+   "netArea": 40.5674,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     11.89
+    ],
+    [
+     49.91,
+     0.0,
+     10.67
+    ],
+    [
+     49.91,
+     33.27,
+     10.67
+    ],
+    [
+     49.91,
+     33.27,
+     11.89
+    ]
+   ]
+  },
+  "PERIMETER_TOP_PLENUM_WALL_NORTH": {
+   "class": "Wall",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 60.8515,
+   "netArea": 60.8515,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     49.91,
+     33.27,
+     11.89
+    ],
+    [
+     49.91,
+     33.27,
+     10.67
+    ],
+    [
+     0.0,
+     33.27,
+     10.67
+    ],
+    [
+     0.0,
+     33.27,
+     11.89
+    ]
+   ]
+  },
+  "PERIMETER_TOP_PLENUM_WALL_SOUTH": {
+   "class": "Wall",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 60.8515,
+   "netArea": 60.8515,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     11.89
+    ],
+    [
+     0.0,
+     0.0,
+     10.67
+    ],
+    [
+     49.91,
+     0.0,
+     10.67
+    ],
+    [
+     49.91,
+     0.0,
+     11.89
+    ]
+   ]
+  },
+  "PERIMETER_TOP_PLENUM_WALL_WEST": {
+   "class": "Wall",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 40.5674,
+   "netArea": 40.5674,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     11.89
+    ],
+    [
+     0.0,
+     33.27,
+     10.67
+    ],
+    [
+     0.0,
+     0.0,
+     10.67
+    ],
+    [
+     0.0,
+     0.0,
+     11.89
+    ]
+   ]
+  },
+  "TOPFLOOR_PLENUM_FLOOR_1": {
+   "class": "Floor",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     10.67
+    ],
+    [
+     4.57,
+     4.57,
+     10.67
+    ],
+    [
+     45.34,
+     4.57,
+     10.67
+    ],
+    [
+     49.91,
+     0.0,
+     10.67
+    ]
+   ]
+  },
+  "TOPFLOOR_PLENUM_FLOOR_2": {
+   "class": "Floor",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 131.262,
+   "netArea": 131.262,
+   "azimuth": 90.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     10.67
+    ],
+    [
+     45.34,
+     4.57,
+     10.67
+    ],
+    [
+     45.34,
+     28.7,
+     10.67
+    ],
+    [
+     49.91,
+     33.27,
+     10.67
+    ]
+   ]
+  },
+  "TOPFLOOR_PLENUM_FLOOR_3": {
+   "class": "Floor",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 207.338,
+   "netArea": 207.338,
+   "azimuth": 315.002,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     33.27,
+     10.67
+    ],
+    [
+     49.91,
+     33.27,
+     10.67
+    ],
+    [
+     45.34,
+     28.7,
+     10.67
+    ],
+    [
+     4.57,
+     28.7,
+     10.67
+    ]
+   ]
+  },
+  "TOPFLOOR_PLENUM_FLOOR_4": {
+   "class": "Floor",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 131.254,
+   "netArea": 131.254,
+   "azimuth": 225.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     10.67
+    ],
+    [
+     0.0,
+     33.27,
+     10.67
+    ],
+    [
+     4.57,
+     28.7,
+     10.67
+    ],
+    [
+     4.57,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "TOPFLOOR_PLENUM_FLOOR_5": {
+   "class": "Floor",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 983.537,
+   "netArea": 983.537,
+   "azimuth": 270.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     4.57,
+     28.7,
+     10.67
+    ],
+    [
+     45.34,
+     28.7,
+     10.67
+    ],
+    [
+     45.34,
+     4.57,
+     10.67
+    ],
+    [
+     4.57,
+     4.57,
+     10.67
+    ]
+   ]
+  },
+  "BUILDING_ROOF": {
+   "class": "Roof",
+   "zone": "TOPFLOOR_PLENUM",
+   "grossArea": 1660.73,
+   "netArea": 1660.73,
+   "azimuth": 0.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     49.91,
+     0.0,
+     11.89
+    ],
+    [
+     49.91,
+     33.27,
+     11.89
+    ],
+    [
+     0.0,
+     33.27,
+     11.89
+    ],
+    [
+     0.0,
+     0.0,
+     11.89
+    ]
+   ]
+  }
+ },
+ "building": {
+  "area": {},
+  "windowWallRatio": {
+   "Gross Wall Area": {
+    "Total": 1977.67,
+    "North (315 to 45 deg)": 593.3,
+    "East (45 to 135 deg)": 395.53,
+    "South (135 to 225 deg)": 593.3,
+    "West (225 to 315 deg)": 395.53
+   },
+   "Above Ground Wall Area": {
+    "Total": 1977.67,
+    "North (315 to 45 deg)": 593.3,
+    "East (45 to 135 deg)": 395.53,
+    "South (135 to 225 deg)": 593.3,
+    "West (225 to 315 deg)": 395.53
+   },
+   "Window Opening Area": {
+    "Total": 652.83,
+    "North (315 to 45 deg)": 195.85,
+    "East (45 to 135 deg)": 130.57,
+    "South (135 to 225 deg)": 195.85,
+    "West (225 to 315 deg)": 130.57
+   },
+   "Gross Window-Wall Ratio": {
+    "Total": 33.01,
+    "North (315 to 45 deg)": 33.01,
+    "East (45 to 135 deg)": 33.01,
+    "South (135 to 225 deg)": 33.01,
+    "West (225 to 315 deg)": 33.01
+   },
+   "Above Ground Window-Wall Ratio": {
+    "Total": 33.01,
+    "North (315 to 45 deg)": 33.01,
+    "East (45 to 135 deg)": 33.01,
+    "South (135 to 225 deg)": 33.01,
+    "West (225 to 315 deg)": 33.01
+   }
+  }
+ }
+}

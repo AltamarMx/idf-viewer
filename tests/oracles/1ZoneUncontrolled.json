@@ -1,0 +1,247 @@
+{
+ "source": {
+  "file": "1ZoneUncontrolled.idf",
+  "energyplus": "26.2.0"
+ },
+ "zones": {
+  "ZONE ONE": {
+   "volume": 1061.88,
+   "floorArea": 232.258,
+   "ceilingHeight": 4.572,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 278.709,
+   "extNetWallArea": 278.709,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "surfaces": {
+  "ZN001:WALL001": {
+   "class": "Wall",
+   "zone": "ZONE ONE",
+   "grossArea": 69.6773,
+   "netArea": 69.6773,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     4.57
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     15.24,
+     0.0,
+     0.0
+    ],
+    [
+     15.24,
+     0.0,
+     4.57
+    ]
+   ]
+  },
+  "ZN001:WALL002": {
+   "class": "Wall",
+   "zone": "ZONE ONE",
+   "grossArea": 69.6773,
+   "netArea": 69.6773,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     15.24,
+     0.0,
+     4.57
+    ],
+    [
+     15.24,
+     0.0,
+     0.0
+    ],
+    [
+     15.24,
+     15.24,
+     0.0
+    ],
+    [
+     15.24,
+     15.24,
+     4.57
+    ]
+   ]
+  },
+  "ZN001:WALL003": {
+   "class": "Wall",
+   "zone": "ZONE ONE",
+   "grossArea": 69.6773,
+   "netArea": 69.6773,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     15.24,
+     15.24,
+     4.57
+    ],
+    [
+     15.24,
+     15.24,
+     0.0
+    ],
+    [
+     0.0,
+     15.24,
+     0.0
+    ],
+    [
+     0.0,
+     15.24,
+     4.57
+    ]
+   ]
+  },
+  "ZN001:WALL004": {
+   "class": "Wall",
+   "zone": "ZONE ONE",
+   "grossArea": 69.6773,
+   "netArea": 69.6773,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     15.24,
+     4.57
+    ],
+    [
+     0.0,
+     15.24,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     4.57
+    ]
+   ]
+  },
+  "ZN001:FLR001": {
+   "class": "Floor",
+   "zone": "ZONE ONE",
+   "grossArea": 232.258,
+   "netArea": 232.258,
+   "azimuth": 90.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     15.24,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     15.24,
+     0.0
+    ],
+    [
+     15.24,
+     15.24,
+     0.0
+    ]
+   ]
+  },
+  "ZN001:ROOF001": {
+   "class": "Roof",
+   "zone": "ZONE ONE",
+   "grossArea": 232.258,
+   "netArea": 232.258,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     15.24,
+     4.57
+    ],
+    [
+     0.0,
+     0.0,
+     4.57
+    ],
+    [
+     15.24,
+     0.0,
+     4.57
+    ],
+    [
+     15.24,
+     15.24,
+     4.57
+    ]
+   ]
+  }
+ },
+ "building": {
+  "area": {},
+  "windowWallRatio": {
+   "Gross Wall Area": {
+    "Total": 278.71,
+    "North (315 to 45 deg)": 69.68,
+    "East (45 to 135 deg)": 69.68,
+    "South (135 to 225 deg)": 69.68,
+    "West (225 to 315 deg)": 69.68
+   },
+   "Above Ground Wall Area": {
+    "Total": 278.71,
+    "North (315 to 45 deg)": 69.68,
+    "East (45 to 135 deg)": 69.68,
+    "South (135 to 225 deg)": 69.68,
+    "West (225 to 315 deg)": 69.68
+   },
+   "Window Opening Area": {
+    "Total": 0.0,
+    "North (315 to 45 deg)": 0.0,
+    "East (45 to 135 deg)": 0.0,
+    "South (135 to 225 deg)": 0.0,
+    "West (225 to 315 deg)": 0.0
+   },
+   "Gross Window-Wall Ratio": {
+    "Total": 0.0,
+    "North (315 to 45 deg)": 0.0,
+    "East (45 to 135 deg)": 0.0,
+    "South (135 to 225 deg)": 0.0,
+    "West (225 to 315 deg)": 0.0
+   },
+   "Above Ground Window-Wall Ratio": {
+    "Total": 0.0,
+    "North (315 to 45 deg)": 0.0,
+    "East (45 to 135 deg)": 0.0,
+    "South (135 to 225 deg)": 0.0,
+    "West (225 to 315 deg)": 0.0
+   }
+  }
+ }
+}

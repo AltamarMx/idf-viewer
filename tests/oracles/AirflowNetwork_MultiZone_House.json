@@ -1,0 +1,951 @@
+{
+ "source": {
+  "file": "AirflowNetwork_MultiZone_House.idf",
+  "energyplus": "26.2.0"
+ },
+ "zones": {
+  "LIVING ZONE": {
+   "volume": 453.138,
+   "floorArea": 185.834,
+   "ceilingHeight": 2.4384,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 119.776,
+   "extNetWallArea": 91.9049,
+   "extWindowArea": 27.8709,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "GARAGE ZONE": {
+   "volume": 102.881,
+   "floorArea": 42.1921,
+   "ceilingHeight": 2.4384,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 46.61,
+   "extNetWallArea": 46.61,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "ATTIC ZONE": {
+   "volume": 244.848,
+   "floorArea": 228.026,
+   "ceilingHeight": 1.04835,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 29.1895,
+   "extNetWallArea": 29.1895,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "surfaces": {
+  "LIVING:NORTH": {
+   "class": "Wall",
+   "zone": "LIVING ZONE",
+   "grossArea": 25.1716,
+   "netArea": 18.2039,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     10.32,
+     10.78,
+     2.44
+    ],
+    [
+     10.32,
+     10.78,
+     0.0
+    ],
+    [
+     0.0,
+     10.78,
+     0.0
+    ],
+    [
+     0.0,
+     10.78,
+     2.44
+    ]
+   ]
+  },
+  "LIVING:EAST": {
+   "class": "Wall",
+   "zone": "LIVING ZONE",
+   "grossArea": 26.2811,
+   "netArea": 19.3133,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     17.24,
+     0.0,
+     2.44
+    ],
+    [
+     17.24,
+     0.0,
+     0.0
+    ],
+    [
+     17.24,
+     10.78,
+     0.0
+    ],
+    [
+     17.24,
+     10.78,
+     2.44
+    ]
+   ]
+  },
+  "LIVING:SOUTH": {
+   "class": "Wall",
+   "zone": "LIVING ZONE",
+   "grossArea": 42.042,
+   "netArea": 35.0743,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     2.44
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     17.24,
+     0.0,
+     0.0
+    ],
+    [
+     17.24,
+     0.0,
+     2.44
+    ]
+   ]
+  },
+  "LIVING:WEST": {
+   "class": "Wall",
+   "zone": "LIVING ZONE",
+   "grossArea": 26.2811,
+   "netArea": 19.3133,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     10.78,
+     2.44
+    ],
+    [
+     0.0,
+     10.78,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     2.44
+    ]
+   ]
+  },
+  "LIVING:INTERIOR": {
+   "class": "Wall",
+   "zone": "LIVING ZONE",
+   "grossArea": 16.8713,
+   "netArea": 16.8713,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     17.24,
+     10.78,
+     2.44
+    ],
+    [
+     17.24,
+     10.78,
+     0.0
+    ],
+    [
+     10.32,
+     10.78,
+     0.0
+    ],
+    [
+     10.32,
+     10.78,
+     2.44
+    ]
+   ]
+  },
+  "LIVING:FLOOR": {
+   "class": "Floor",
+   "zone": "LIVING ZONE",
+   "grossArea": 185.834,
+   "netArea": 185.834,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     10.78,
+     0.0
+    ],
+    [
+     17.24,
+     10.78,
+     0.0
+    ],
+    [
+     17.24,
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  "LIVING:CEILING": {
+   "class": "Roof",
+   "zone": "LIVING ZONE",
+   "grossArea": 185.834,
+   "netArea": 185.834,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     10.78,
+     2.44
+    ],
+    [
+     0.0,
+     0.0,
+     2.44
+    ],
+    [
+     17.24,
+     0.0,
+     2.44
+    ],
+    [
+     17.24,
+     10.78,
+     2.44
+    ]
+   ]
+  },
+  "NORTHWINDOW": {
+   "class": "Window",
+   "zone": "LIVING ZONE",
+   "grossArea": 6.96773,
+   "netArea": 6.96773,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     6.57,
+     10.78,
+     2.13
+    ],
+    [
+     6.57,
+     10.78,
+     0.61
+    ],
+    [
+     2.0,
+     10.78,
+     0.61
+    ],
+    [
+     2.0,
+     10.78,
+     2.13
+    ]
+   ]
+  },
+  "EASTWINDOW": {
+   "class": "Window",
+   "zone": "LIVING ZONE",
+   "grossArea": 6.96773,
+   "netArea": 6.96773,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     17.24,
+     2.0,
+     2.13
+    ],
+    [
+     17.24,
+     2.0,
+     0.61
+    ],
+    [
+     17.24,
+     6.57,
+     0.61
+    ],
+    [
+     17.24,
+     6.57,
+     2.13
+    ]
+   ]
+  },
+  "SOUTHWINDOW": {
+   "class": "Window",
+   "zone": "LIVING ZONE",
+   "grossArea": 6.96773,
+   "netArea": 6.96773,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     2.0,
+     0.0,
+     2.13
+    ],
+    [
+     2.0,
+     0.0,
+     0.61
+    ],
+    [
+     6.57,
+     0.0,
+     0.61
+    ],
+    [
+     6.57,
+     0.0,
+     2.13
+    ]
+   ]
+  },
+  "WESTWINDOW": {
+   "class": "Window",
+   "zone": "LIVING ZONE",
+   "grossArea": 6.96773,
+   "netArea": 6.96773,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     6.57,
+     2.13
+    ],
+    [
+     0.0,
+     6.57,
+     0.61
+    ],
+    [
+     0.0,
+     2.0,
+     0.61
+    ],
+    [
+     0.0,
+     2.0,
+     2.13
+    ]
+   ]
+  },
+  "GARAGE:INTERIOR": {
+   "class": "Wall",
+   "zone": "GARAGE ZONE",
+   "grossArea": 16.8713,
+   "netArea": 16.8713,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     10.32,
+     10.78,
+     2.44
+    ],
+    [
+     10.32,
+     10.78,
+     0.0
+    ],
+    [
+     17.24,
+     10.78,
+     0.0
+    ],
+    [
+     17.24,
+     10.78,
+     2.44
+    ]
+   ]
+  },
+  "GARAGE:EASTWALL": {
+   "class": "Wall",
+   "zone": "GARAGE ZONE",
+   "grossArea": 14.8694,
+   "netArea": 14.8694,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     17.24,
+     10.78,
+     2.44
+    ],
+    [
+     17.24,
+     10.78,
+     0.0
+    ],
+    [
+     17.24,
+     16.88,
+     0.0
+    ],
+    [
+     17.24,
+     16.88,
+     2.44
+    ]
+   ]
+  },
+  "GARAGE:WESTWALL": {
+   "class": "Wall",
+   "zone": "GARAGE ZONE",
+   "grossArea": 14.8694,
+   "netArea": 14.8694,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     10.32,
+     16.88,
+     2.44
+    ],
+    [
+     10.32,
+     16.88,
+     0.0
+    ],
+    [
+     10.32,
+     10.78,
+     0.0
+    ],
+    [
+     10.32,
+     10.78,
+     2.44
+    ]
+   ]
+  },
+  "GARAGE:FRONTDOOR": {
+   "class": "Wall",
+   "zone": "GARAGE ZONE",
+   "grossArea": 16.8713,
+   "netArea": 16.8713,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     17.24,
+     16.88,
+     2.44
+    ],
+    [
+     17.24,
+     16.88,
+     0.0
+    ],
+    [
+     10.32,
+     16.88,
+     0.0
+    ],
+    [
+     10.32,
+     16.88,
+     2.44
+    ]
+   ]
+  },
+  "GARAGE:FLOOR": {
+   "class": "Floor",
+   "zone": "GARAGE ZONE",
+   "grossArea": 42.1921,
+   "netArea": 42.1921,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     10.32,
+     10.78,
+     0.0
+    ],
+    [
+     10.32,
+     16.88,
+     0.0
+    ],
+    [
+     17.24,
+     16.88,
+     0.0
+    ],
+    [
+     17.24,
+     10.78,
+     0.0
+    ]
+   ]
+  },
+  "GARAGE:CEILING": {
+   "class": "Roof",
+   "zone": "GARAGE ZONE",
+   "grossArea": 42.1921,
+   "netArea": 42.1921,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     10.32,
+     16.88,
+     2.44
+    ],
+    [
+     10.32,
+     10.78,
+     2.44
+    ],
+    [
+     17.24,
+     10.78,
+     2.44
+    ],
+    [
+     17.24,
+     16.88,
+     2.44
+    ]
+   ]
+  },
+  "EASTGABLE": {
+   "class": "Wall",
+   "zone": "ATTIC ZONE",
+   "grossArea": 12.1005,
+   "netArea": 12.1005,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     17.24,
+     5.39,
+     4.68
+    ],
+    [
+     17.24,
+     0.0,
+     2.44
+    ],
+    [
+     17.24,
+     10.78,
+     2.44
+    ]
+   ]
+  },
+  "WESTGABLE": {
+   "class": "Wall",
+   "zone": "ATTIC ZONE",
+   "grossArea": 12.1005,
+   "netArea": 12.1005,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     0.0,
+     5.39,
+     4.68
+    ],
+    [
+     0.0,
+     10.78,
+     2.44
+    ],
+    [
+     0.0,
+     0.0,
+     2.44
+    ]
+   ]
+  },
+  "ATTIC:NORTHGABLE": {
+   "class": "Wall",
+   "zone": "ATTIC ZONE",
+   "grossArea": 4.9886,
+   "netArea": 4.9886,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     13.78,
+     16.88,
+     3.88
+    ],
+    [
+     17.24,
+     16.88,
+     2.44
+    ],
+    [
+     10.32,
+     16.88,
+     2.44
+    ]
+   ]
+  },
+  "ATTIC:LIVINGFLOOR": {
+   "class": "Floor",
+   "zone": "ATTIC ZONE",
+   "grossArea": 185.834,
+   "netArea": 185.834,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     0.0,
+     0.0,
+     2.44
+    ],
+    [
+     0.0,
+     10.78,
+     2.44
+    ],
+    [
+     17.24,
+     10.78,
+     2.44
+    ],
+    [
+     17.24,
+     0.0,
+     2.44
+    ]
+   ]
+  },
+  "ATTIC:GARAGEFLOOR": {
+   "class": "Floor",
+   "zone": "ATTIC ZONE",
+   "grossArea": 42.1921,
+   "netArea": 42.1921,
+   "azimuth": 180.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     10.32,
+     10.78,
+     2.44
+    ],
+    [
+     10.32,
+     16.88,
+     2.44
+    ],
+    [
+     17.24,
+     16.88,
+     2.44
+    ],
+    [
+     17.24,
+     10.78,
+     2.44
+    ]
+   ]
+  },
+  "NORTHROOF1": {
+   "class": "Roof",
+   "zone": "ATTIC ZONE",
+   "grossArea": 28.7889,
+   "netArea": 28.7889,
+   "azimuth": 0.0,
+   "tilt": 22.6194,
+   "vertices": [
+    [
+     13.78,
+     5.39,
+     4.68
+    ],
+    [
+     13.78,
+     7.32,
+     3.88
+    ],
+    [
+     0.0,
+     7.32,
+     3.88
+    ],
+    [
+     0.0,
+     5.39,
+     4.68
+    ]
+   ]
+  },
+  "SOUTHROOF": {
+   "class": "Roof",
+   "zone": "ATTIC ZONE",
+   "grossArea": 100.66,
+   "netArea": 100.66,
+   "azimuth": 180.0,
+   "tilt": 22.6197,
+   "vertices": [
+    [
+     0.0,
+     5.39,
+     4.68
+    ],
+    [
+     0.0,
+     0.0,
+     2.44
+    ],
+    [
+     17.24,
+     0.0,
+     2.44
+    ],
+    [
+     17.24,
+     5.39,
+     4.68
+    ]
+   ]
+  },
+  "NORTHROOF2": {
+   "class": "Roof",
+   "zone": "ATTIC ZONE",
+   "grossArea": 45.2041,
+   "netArea": 45.2041,
+   "azimuth": 0.0,
+   "tilt": 22.6199,
+   "vertices": [
+    [
+     13.78,
+     7.32,
+     3.88
+    ],
+    [
+     10.33,
+     10.78,
+     2.44
+    ],
+    [
+     0.0,
+     10.78,
+     2.44
+    ],
+    [
+     0.0,
+     7.32,
+     3.88
+    ]
+   ]
+  },
+  "NORTHROOF3": {
+   "class": "Roof",
+   "zone": "ATTIC ZONE",
+   "grossArea": 7.22751,
+   "netArea": 7.22751,
+   "azimuth": 0.0,
+   "tilt": 22.6194,
+   "vertices": [
+    [
+     17.24,
+     5.39,
+     4.68
+    ],
+    [
+     17.24,
+     7.32,
+     3.88
+    ],
+    [
+     13.78,
+     7.32,
+     3.88
+    ],
+    [
+     13.78,
+     5.39,
+     4.68
+    ]
+   ]
+  },
+  "NORTHROOF4": {
+   "class": "Roof",
+   "zone": "ATTIC ZONE",
+   "grossArea": 6.48612,
+   "netArea": 6.48612,
+   "azimuth": 0.0,
+   "tilt": 22.6199,
+   "vertices": [
+    [
+     17.24,
+     7.32,
+     3.88
+    ],
+    [
+     17.24,
+     10.78,
+     2.44
+    ],
+    [
+     13.78,
+     7.32,
+     3.88
+    ]
+   ]
+  },
+  "EASTROOF": {
+   "class": "Roof",
+   "zone": "ATTIC ZONE",
+   "grossArea": 29.3445,
+   "netArea": 29.3445,
+   "azimuth": 90.0,
+   "tilt": 22.6246,
+   "vertices": [
+    [
+     13.78,
+     16.88,
+     3.88
+    ],
+    [
+     13.78,
+     7.32,
+     3.88
+    ],
+    [
+     17.24,
+     10.78,
+     2.44
+    ],
+    [
+     17.24,
+     16.88,
+     2.44
+    ]
+   ]
+  },
+  "WESTROOF": {
+   "class": "Roof",
+   "zone": "ATTIC ZONE",
+   "grossArea": 29.3372,
+   "netArea": 29.3372,
+   "azimuth": 270.0,
+   "tilt": 22.6304,
+   "vertices": [
+    [
+     10.32,
+     16.88,
+     2.44
+    ],
+    [
+     10.32,
+     10.78,
+     2.44
+    ],
+    [
+     13.78,
+     7.32,
+     3.88
+    ],
+    [
+     13.78,
+     16.88,
+     3.88
+    ]
+   ]
+  }
+ },
+ "building": {
+  "area": {},
+  "windowWallRatio": {
+   "Gross Wall Area": {
+    "Total": 195.58,
+    "North (315 to 45 deg)": 47.03,
+    "East (45 to 135 deg)": 53.25,
+    "South (135 to 225 deg)": 42.04,
+    "West (225 to 315 deg)": 53.25
+   },
+   "Above Ground Wall Area": {
+    "Total": 195.58,
+    "North (315 to 45 deg)": 47.03,
+    "East (45 to 135 deg)": 53.25,
+    "South (135 to 225 deg)": 42.04,
+    "West (225 to 315 deg)": 53.25
+   },
+   "Window Opening Area": {
+    "Total": 27.87,
+    "North (315 to 45 deg)": 6.97,
+    "East (45 to 135 deg)": 6.97,
+    "South (135 to 225 deg)": 6.97,
+    "West (225 to 315 deg)": 6.97
+   },
+   "Gross Window-Wall Ratio": {
+    "Total": 14.25,
+    "North (315 to 45 deg)": 14.82,
+    "East (45 to 135 deg)": 13.08,
+    "South (135 to 225 deg)": 16.57,
+    "West (225 to 315 deg)": 13.08
+   },
+   "Above Ground Window-Wall Ratio": {
+    "Total": 14.25,
+    "North (315 to 45 deg)": 14.82,
+    "East (45 to 135 deg)": 13.08,
+    "South (135 to 225 deg)": 16.57,
+    "West (225 to 315 deg)": 13.08
+   }
+  }
+ }
+}

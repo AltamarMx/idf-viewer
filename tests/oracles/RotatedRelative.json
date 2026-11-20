@@ -1,0 +1,984 @@
+{
+ "source": {
+  "file": "RotatedRelative.idf",
+  "energyplus": "26.2.0"
+ },
+ "zones": {
+  "ZONE ONE": {
+   "volume": 1061.88,
+   "floorArea": 232.258,
+   "ceilingHeight": 4.572,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 278.709,
+   "extNetWallArea": 278.709,
+   "extWindowArea": 0.0,
+   "relNorth": 15.0,
+   "origin": [
+    10.0,
+    5.0,
+    1.0
+   ]
+  },
+  "ZONE TWO": {
+   "volume": 72.0,
+   "floorArea": 24.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 60.0,
+   "extNetWallArea": 55.71,
+   "extWindowArea": 2.4,
+   "relNorth": -20.0,
+   "origin": [
+    30.0,
+    0.0,
+    0.5
+   ]
+  }
+ },
+ "surfaces": {
+  "SITE CANOPY": {
+   "class": "Detached Shading:Fixed",
+   "zone": null,
+   "grossArea": 50.0,
+   "netArea": 50.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     0.0,
+     -20.0,
+     6.0
+    ],
+    [
+     0.0,
+     -25.0,
+     6.0
+    ],
+    [
+     10.0,
+     -25.0,
+     6.0
+    ],
+    [
+     10.0,
+     -20.0,
+     6.0
+    ]
+   ]
+  },
+  "Mir-SITE CANOPY": {
+   "class": "Detached Shading:Fixed",
+   "zone": null,
+   "grossArea": 50.0,
+   "netArea": 50.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     10.0,
+     -20.0,
+     6.0
+    ],
+    [
+     10.0,
+     -25.0,
+     6.0
+    ],
+    [
+     0.0,
+     -25.0,
+     6.0
+    ],
+    [
+     0.0,
+     -20.0,
+     6.0
+    ]
+   ]
+  },
+  "BUILDING CANOPY": {
+   "class": "Detached Shading:Building",
+   "zone": null,
+   "grossArea": 12.0,
+   "netArea": 12.0,
+   "azimuth": 210.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     24.98,
+     -16.73,
+     4.0
+    ],
+    [
+     23.98,
+     -18.46,
+     4.0
+    ],
+    [
+     29.18,
+     -21.46,
+     4.0
+    ],
+    [
+     30.18,
+     -19.73,
+     4.0
+    ]
+   ]
+  },
+  "Mir-BUILDING CANOPY": {
+   "class": "Detached Shading:Building",
+   "zone": null,
+   "grossArea": 12.0,
+   "netArea": 12.0,
+   "azimuth": 30.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     30.18,
+     -19.73,
+     4.0
+    ],
+    [
+     29.18,
+     -21.46,
+     4.0
+    ],
+    [
+     23.98,
+     -18.46,
+     4.0
+    ],
+    [
+     24.98,
+     -16.73,
+     4.0
+    ]
+   ]
+  },
+  "SITE WALL": {
+   "class": "Detached Shading:Fixed",
+   "zone": null,
+   "grossArea": 200.0,
+   "netArea": 200.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     -0.0,
+     -10.0,
+     5.0
+    ],
+    [
+     0.0,
+     -10.0,
+     0.0
+    ],
+    [
+     40.0,
+     -10.0,
+     0.0
+    ],
+    [
+     40.0,
+     -10.0,
+     5.0
+    ]
+   ]
+  },
+  "Mir-SITE WALL": {
+   "class": "Detached Shading:Fixed",
+   "zone": null,
+   "grossArea": 200.0,
+   "netArea": 200.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     40.0,
+     -10.0,
+     5.0
+    ],
+    [
+     40.0,
+     -10.0,
+     0.0
+    ],
+    [
+     0.0,
+     -10.0,
+     0.0
+    ],
+    [
+     -0.0,
+     -10.0,
+     5.0
+    ]
+   ]
+  },
+  "BUILDING WALL": {
+   "class": "Detached Shading:Building",
+   "zone": null,
+   "grossArea": 40.0,
+   "netArea": 40.0,
+   "azimuth": 120.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     43.3,
+     -25.0,
+     4.0
+    ],
+    [
+     43.3,
+     -25.0,
+     0.0
+    ],
+    [
+     48.3,
+     -16.34,
+     0.0
+    ],
+    [
+     48.3,
+     -16.34,
+     4.0
+    ]
+   ]
+  },
+  "Mir-BUILDING WALL": {
+   "class": "Detached Shading:Building",
+   "zone": null,
+   "grossArea": 40.0,
+   "netArea": 40.0,
+   "azimuth": 300.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     48.3,
+     -16.34,
+     4.0
+    ],
+    [
+     48.3,
+     -16.34,
+     0.0
+    ],
+    [
+     43.3,
+     -25.0,
+     0.0
+    ],
+    [
+     43.3,
+     -25.0,
+     4.0
+    ]
+   ]
+  },
+  "Z2 OVERHANG": {
+   "class": "Shading",
+   "zone": null,
+   "grossArea": 2.08,
+   "netArea": 2.08,
+   "azimuth": 190.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     26.53,
+     -15.91,
+     2.8
+    ],
+    [
+     26.67,
+     -15.12,
+     2.8
+    ],
+    [
+     29.23,
+     -15.57,
+     2.8
+    ],
+    [
+     29.09,
+     -16.36,
+     2.8
+    ]
+   ]
+  },
+  "Mir-Z2 OVERHANG": {
+   "class": "Shading",
+   "zone": null,
+   "grossArea": 2.08,
+   "netArea": 2.08,
+   "azimuth": 10.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     29.09,
+     -16.36,
+     2.8
+    ],
+    [
+     29.23,
+     -15.57,
+     2.8
+    ],
+    [
+     26.67,
+     -15.12,
+     2.8
+    ],
+    [
+     26.53,
+     -15.91,
+     2.8
+    ]
+   ]
+  },
+  "Z2 DOOR OVERHANG": {
+   "class": "Shading",
+   "zone": null,
+   "grossArea": 0.63,
+   "netArea": 0.63,
+   "azimuth": 100.0,
+   "tilt": 165.0,
+   "vertices": [
+    [
+     32.53,
+     -15.34,
+     2.84
+    ],
+    [
+     32.03,
+     -15.25,
+     2.7
+    ],
+    [
+     32.24,
+     -14.07,
+     2.7
+    ],
+    [
+     32.74,
+     -14.16,
+     2.84
+    ]
+   ]
+  },
+  "Mir-Z2 DOOR OVERHANG": {
+   "class": "Shading",
+   "zone": null,
+   "grossArea": 0.63,
+   "netArea": 0.63,
+   "azimuth": 280.0,
+   "tilt": 15.0,
+   "vertices": [
+    [
+     32.74,
+     -14.16,
+     2.84
+    ],
+    [
+     32.24,
+     -14.07,
+     2.7
+    ],
+    [
+     32.03,
+     -15.25,
+     2.7
+    ],
+    [
+     32.53,
+     -15.34,
+     2.84
+    ]
+   ]
+  },
+  "Z2 FINS Left": {
+   "class": "Shading",
+   "zone": null,
+   "grossArea": 0.7,
+   "netArea": 0.7,
+   "azimuth": 260.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     26.87,
+     -15.16,
+     2.7
+    ],
+    [
+     26.87,
+     -15.16,
+     1.3
+    ],
+    [
+     26.95,
+     -15.65,
+     1.3
+    ],
+    [
+     26.95,
+     -15.65,
+     2.7
+    ]
+   ]
+  },
+  "Mir-Z2 FINS Left": {
+   "class": "Shading",
+   "zone": null,
+   "grossArea": 0.7,
+   "netArea": 0.7,
+   "azimuth": 80.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     26.95,
+     -15.65,
+     2.7
+    ],
+    [
+     26.95,
+     -15.65,
+     1.3
+    ],
+    [
+     26.87,
+     -15.16,
+     1.3
+    ],
+    [
+     26.87,
+     -15.16,
+     2.7
+    ]
+   ]
+  },
+  "Z2 FINS Right": {
+   "class": "Shading",
+   "zone": null,
+   "grossArea": 0.62,
+   "netArea": 0.62,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     29.03,
+     -15.54,
+     2.8
+    ],
+    [
+     29.03,
+     -15.54,
+     1.25
+    ],
+    [
+     29.03,
+     -15.94,
+     1.25
+    ],
+    [
+     29.03,
+     -15.94,
+     2.8
+    ]
+   ]
+  },
+  "Mir-Z2 FINS Right": {
+   "class": "Shading",
+   "zone": null,
+   "grossArea": 0.62,
+   "netArea": 0.62,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     29.03,
+     -15.94,
+     2.8
+    ],
+    [
+     29.03,
+     -15.94,
+     1.25
+    ],
+    [
+     29.03,
+     -15.54,
+     1.25
+    ],
+    [
+     29.03,
+     -15.54,
+     2.8
+    ]
+   ]
+  },
+  "ZN001:WALL001": {
+   "class": "Wall",
+   "zone": "ZONE ONE",
+   "grossArea": 69.6773,
+   "netArea": 69.6773,
+   "azimuth": 225.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     11.16,
+     -0.67,
+     5.57
+    ],
+    [
+     11.16,
+     -0.67,
+     1.0
+    ],
+    [
+     21.94,
+     -11.45,
+     1.0
+    ],
+    [
+     21.94,
+     -11.45,
+     5.57
+    ]
+   ]
+  },
+  "ZN001:WALL002": {
+   "class": "Wall",
+   "zone": "ZONE ONE",
+   "grossArea": 69.6773,
+   "netArea": 69.6773,
+   "azimuth": 135.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     21.94,
+     -11.45,
+     5.57
+    ],
+    [
+     21.94,
+     -11.45,
+     1.0
+    ],
+    [
+     32.71,
+     -0.67,
+     1.0
+    ],
+    [
+     32.71,
+     -0.67,
+     5.57
+    ]
+   ]
+  },
+  "ZN001:WALL003": {
+   "class": "Wall",
+   "zone": "ZONE ONE",
+   "grossArea": 69.6773,
+   "netArea": 69.6773,
+   "azimuth": 45.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     32.71,
+     -0.67,
+     5.57
+    ],
+    [
+     32.71,
+     -0.67,
+     1.0
+    ],
+    [
+     21.94,
+     10.11,
+     1.0
+    ],
+    [
+     21.94,
+     10.11,
+     5.57
+    ]
+   ]
+  },
+  "ZN001:WALL004": {
+   "class": "Wall",
+   "zone": "ZONE ONE",
+   "grossArea": 69.6773,
+   "netArea": 69.6773,
+   "azimuth": 315.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     21.94,
+     10.11,
+     5.57
+    ],
+    [
+     21.94,
+     10.11,
+     1.0
+    ],
+    [
+     11.16,
+     -0.67,
+     1.0
+    ],
+    [
+     11.16,
+     -0.67,
+     5.57
+    ]
+   ]
+  },
+  "ZN001:FLR001": {
+   "class": "Floor",
+   "zone": "ZONE ONE",
+   "grossArea": 232.258,
+   "netArea": 232.258,
+   "azimuth": 135.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     21.94,
+     -11.45,
+     1.0
+    ],
+    [
+     11.16,
+     -0.67,
+     1.0
+    ],
+    [
+     21.94,
+     10.11,
+     1.0
+    ],
+    [
+     32.71,
+     -0.67,
+     1.0
+    ]
+   ]
+  },
+  "ZN001:ROOF001": {
+   "class": "Roof",
+   "zone": "ZONE ONE",
+   "grossArea": 232.258,
+   "netArea": 232.258,
+   "azimuth": 225.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     21.94,
+     10.11,
+     5.57
+    ],
+    [
+     11.16,
+     -0.67,
+     5.57
+    ],
+    [
+     21.94,
+     -11.45,
+     5.57
+    ],
+    [
+     32.71,
+     -0.67,
+     5.57
+    ]
+   ]
+  },
+  "Z2 SOUTH WALL": {
+   "class": "Wall",
+   "zone": "ZONE TWO",
+   "grossArea": 18.0,
+   "netArea": 15.6,
+   "azimuth": 190.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     25.98,
+     -15.0,
+     3.5
+    ],
+    [
+     25.98,
+     -15.0,
+     0.5
+    ],
+    [
+     31.89,
+     -16.04,
+     0.5
+    ],
+    [
+     31.89,
+     -16.04,
+     3.5
+    ]
+   ]
+  },
+  "Z2 EAST WALL": {
+   "class": "Wall",
+   "zone": "ZONE TWO",
+   "grossArea": 12.0,
+   "netArea": 10.11,
+   "azimuth": 100.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     31.89,
+     -16.04,
+     3.5
+    ],
+    [
+     31.89,
+     -16.04,
+     0.5
+    ],
+    [
+     32.58,
+     -12.1,
+     0.5
+    ],
+    [
+     32.58,
+     -12.1,
+     3.5
+    ]
+   ]
+  },
+  "Z2 NORTH WALL": {
+   "class": "Wall",
+   "zone": "ZONE TWO",
+   "grossArea": 18.0,
+   "netArea": 18.0,
+   "azimuth": 10.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     32.58,
+     -12.1,
+     3.5
+    ],
+    [
+     32.58,
+     -12.1,
+     0.5
+    ],
+    [
+     26.68,
+     -11.06,
+     0.5
+    ],
+    [
+     26.68,
+     -11.06,
+     3.5
+    ]
+   ]
+  },
+  "Z2 WEST WALL": {
+   "class": "Wall",
+   "zone": "ZONE TWO",
+   "grossArea": 12.0,
+   "netArea": 12.0,
+   "azimuth": 280.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     26.68,
+     -11.06,
+     3.5
+    ],
+    [
+     26.68,
+     -11.06,
+     0.5
+    ],
+    [
+     25.98,
+     -15.0,
+     0.5
+    ],
+    [
+     25.98,
+     -15.0,
+     3.5
+    ]
+   ]
+  },
+  "Z2 FLOOR": {
+   "class": "Floor",
+   "zone": "ZONE TWO",
+   "grossArea": 24.0,
+   "netArea": 24.0,
+   "azimuth": 10.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     32.58,
+     -12.1,
+     0.5
+    ],
+    [
+     31.89,
+     -16.04,
+     0.5
+    ],
+    [
+     25.98,
+     -15.0,
+     0.5
+    ],
+    [
+     26.68,
+     -11.06,
+     0.5
+    ]
+   ]
+  },
+  "Z2 ROOF": {
+   "class": "Roof",
+   "zone": "ZONE TWO",
+   "grossArea": 24.0,
+   "netArea": 24.0,
+   "azimuth": 190.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     26.68,
+     -11.06,
+     3.5
+    ],
+    [
+     25.98,
+     -15.0,
+     3.5
+    ],
+    [
+     31.89,
+     -16.04,
+     3.5
+    ],
+    [
+     32.58,
+     -12.1,
+     3.5
+    ]
+   ]
+  },
+  "Z2 EAST DOOR": {
+   "class": "Door",
+   "zone": "ZONE TWO",
+   "grossArea": 1.89,
+   "netArea": 1.89,
+   "azimuth": 100.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     32.06,
+     -15.06,
+     2.6
+    ],
+    [
+     32.06,
+     -15.06,
+     0.5
+    ],
+    [
+     32.22,
+     -14.17,
+     0.5
+    ],
+    [
+     32.22,
+     -14.17,
+     2.6
+    ]
+   ]
+  },
+  "Z2 SOUTH WINDOW": {
+   "class": "Window",
+   "zone": "ZONE TWO",
+   "grossArea": 2.4,
+   "netArea": 2.4,
+   "azimuth": 190.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     26.97,
+     -15.17,
+     2.6
+    ],
+    [
+     26.97,
+     -15.17,
+     1.4
+    ],
+    [
+     28.94,
+     -15.52,
+     1.4
+    ],
+    [
+     28.94,
+     -15.52,
+     2.6
+    ]
+   ]
+  }
+ },
+ "building": {
+  "area": {},
+  "windowWallRatio": {
+   "Gross Wall Area": {
+    "Total": 338.71,
+    "North (315 to 45 deg)": 87.68,
+    "East (45 to 135 deg)": 81.68,
+    "South (135 to 225 deg)": 87.68,
+    "West (225 to 315 deg)": 81.68
+   },
+   "Above Ground Wall Area": {
+    "Total": 338.71,
+    "North (315 to 45 deg)": 87.68,
+    "East (45 to 135 deg)": 81.68,
+    "South (135 to 225 deg)": 87.68,
+    "West (225 to 315 deg)": 81.68
+   },
+   "Window Opening Area": {
+    "Total": 2.4,
+    "North (315 to 45 deg)": 0.0,
+    "East (45 to 135 deg)": 0.0,
+    "South (135 to 225 deg)": 2.4,
+    "West (225 to 315 deg)": 0.0
+   },
+   "Gross Window-Wall Ratio": {
+    "Total": 0.71,
+    "North (315 to 45 deg)": 0.0,
+    "East (45 to 135 deg)": 0.0,
+    "South (135 to 225 deg)": 2.74,
+    "West (225 to 315 deg)": 0.0
+   },
+   "Above Ground Window-Wall Ratio": {
+    "Total": 0.71,
+    "North (315 to 45 deg)": 0.0,
+    "East (45 to 135 deg)": 0.0,
+    "South (135 to 225 deg)": 2.74,
+    "West (225 to 315 deg)": 0.0
+   }
+  }
+ }
+}
