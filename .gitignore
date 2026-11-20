@@ -1,0 +1,27 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Downloaded IDDs (regenerate with tools/fetch_idds.py)
+idd/
+
+# EnergyPlus runs used to build oracles
+tools/.runs/
+
+# Editors and OS
+.DS_Store
+.vscode/
+.idea/
