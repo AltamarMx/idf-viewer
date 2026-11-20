@@ -37,3 +37,24 @@ def test_read_eio_surfaces(tmp_path):
 
 def test_rounded_keeps_six_significant_digits():
     assert make_oracles.rounded({"a": [1.23456789, 1061.8834]}) == {"a": [1.23457, 1061.88]}
+
+
+def test_prepare_annual_input_keeps_start_day_and_makes_a_full_year():
+    text = (
+        "Version,26.2;\n"
+        "RunPeriod, Jan, 1, 14, , 1, 14, , Tuesday, Yes, Yes, No, Yes, Yes;\n"
+        "RunPeriod, Jul, 7, 7, , 7, 7, , Tuesday;\n"
+        "Output:Variable, *, Zone Mean Air Temperature, Timestep;\n"
+        "Zone, Z1;\n"
+    )
+    prepared = make_oracles.prepare_annual_input(text)
+    assert "Jul" not in prepared
+    assert "Zone Mean Air Temperature" not in prepared
+    # January 14 was a Tuesday, so January 1 is a Wednesday.
+    assert "RunPeriod,\n  Jan,\n  1,\n  1,\n  ,\n  12,\n  31,\n  ,\n  Wednesday,\n  Yes," in prepared
+    assert "Output:Variable, *, Schedule Value, Hourly;" in prepared
+
+
+def test_compress_keeps_distinct_days():
+    values = [0.0] * 24 + [1.0] * 24 + [0.0] * 24
+    assert make_oracles.compress(values) == {"profiles": [[0.0] * 24, [1.0] * 24], "days": [0, 1, 0]}
