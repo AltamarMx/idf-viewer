@@ -8,6 +8,8 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4173/idf-viewer/',
     channel: process.env.PW_CHANNEL || undefined,
+    // WebGL without a GPU (CI) uses SwiftShader.
+    launchOptions: { args: ['--enable-unsafe-swiftshader'] },
   },
   webServer: {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',

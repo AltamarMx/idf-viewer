@@ -1,6 +1,6 @@
 # IDF Viewer: plan
 
-> **Estado:** fase 0 en curso (2026-11-20). Repositorio: https://github.com/AltamarMx/idf-viewer
+> **Estado:** fases 0 y 1 terminadas (2026-11-20). Repositorio: https://github.com/AltamarMx/idf-viewer
 
 ---
 
@@ -432,20 +432,34 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 
 ### Fase 1 · Primera versión publicada
 
-- [ ] 1.1 Índice de referencias, "usa / usado por" (B5), y referencias rotas y nombres duplicados (H1).
-- [ ] 1.2 Árbol de clases (B1), inspector (B2), tabla por clase (B3) y búsqueda (B4).
-- [ ] 1.3 Geometría en `core/`: reglas globales, origen y rotación de zonas, norte, normales, áreas y triangulación (C2).
-- [ ] 1.4 `make_oracles.py`: corre EnergyPlus 26.2 sobre los ejemplos y guarda áreas, volúmenes y vértices de referencia.
-- [ ] 1.5 Vista 3D: superficies detalladas (C1), navegación (C3), colores (C4), selección vinculada (C5) y condiciones de frontera con la paleta de OpenStudio (C12).
-- [ ] 1.6 Tablero resumen (D1) y envolvente por orientación (D2).
-- [ ] 1.7 Panel de problemas (H2) con los hallazgos de H1.
-- [ ] 1.8 Galería en la pantalla de inicio (A7).
-- [ ] 1.9 Prueba en navegador con Playwright.
+- [x] 1.1 Índice de referencias, "usa / usado por" (B5), y referencias rotas y nombres duplicados (H1).
+- [x] 1.2 Árbol de clases (B1), inspector (B2), tabla por clase (B3) y búsqueda (B4).
+- [x] 1.3 Geometría en `core/`: reglas globales, origen y rotación de zonas, norte, normales, áreas y triangulación (C2).
+- [x] 1.4 `make_oracles.py`: corre EnergyPlus 26.2 sobre los ejemplos y guarda áreas, volúmenes y vértices de referencia.
+- [x] 1.5 Vista 3D: superficies detalladas (C1), navegación (C3), colores (C4), selección vinculada (C5) y condiciones de frontera con la paleta de OpenStudio (C12).
+- [x] 1.5b Geometría simplificada (C6), adelantada desde la fase 2b porque `4ZoneWithShading_Simple_1` la usa.
+- [x] 1.6 Tablero resumen (D1) y envolvente por orientación (D2).
+- [x] 1.7 Panel de problemas (H2) con los hallazgos de H1.
+- [x] 1.8 Galería en la pantalla de inicio (A7).
+- [x] 1.9 Prueba en navegador con Playwright.
 
 **Listo cuando:**
 - los 8 ejemplos y tu IDF se ven en 3D con sus condiciones de frontera;
 - las áreas y los volúmenes coinciden con EnergyPlus (tolerancia de 0.5 %);
 - las referencias se pueden navegar en ambos sentidos.
+
+**Notas de la fase 1:**
+- Las referencias de EnergyPlus (`tests/oracles/`) cubren los 8 ejemplos y dos archivos de prueba en `tests/fixtures/geometry/`: norte del edificio girado, coordenadas relativas, zonas con origen y rotación, vértices en sentido horario desde la esquina inferior izquierda, y geometría simplificada con ventanas, puertas, aleros y aletas. Coinciden los vértices (±1.5 cm, mismo orden), las áreas, el azimut, la inclinación, el volumen y el área de piso de cada zona, y la tabla ventana-muro por orientación.
+- Reglas de EnergyPlus confirmadas con esas referencias:
+  - con coordenadas "World" se ignoran el norte del edificio y el origen de las zonas;
+  - la geometría simplificada usa su propio sistema ("Rectangular Surface Coordinate System"), pero su azimut solo gira si el sistema principal es relativo;
+  - `Shading:Site` nunca gira y `Shading:Building` gira con el edificio;
+  - dos puntos son el mismo si están a menos de 1.27 cm (para saber si una zona está cerrada);
+  - si el volumen no se puede calcular, EnergyPlus usa 10 m³;
+  - el área de ventana de la tabla ventana-muro incluye el marco (`WindowProperty:FrameAndDivider`).
+- Los colores de condición de frontera y de tipo de superficie se tomaron de `src/utilities/geometry/ThreeJS.cpp` de OpenStudio. "Zone" y "Space" no existen en OpenStudio y usan verdes claros.
+- Única referencia rota real en los ejemplos: 4 `Refrigeration:Case` de `HospitalLowEnergy.idf` apuntan a una curva de deshielo que no existe.
+- Para la tabla por clase basta TanStack Virtual (orden y filtro son propios); no se usa TanStack Table.
 
 ### Fase 2a · Horarios, cargas y ocupación
 
@@ -462,7 +476,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 
 ### Fase 2b · Ventanas, ventilación natural e infiltración
 
-- [ ] 2b.1 Geometría simplificada (C6), comparada contra los vértices que genera EnergyPlus.
+- [x] 2b.1 Geometría simplificada (C6): hecha en la fase 1.
 - [ ] 2b.2 Inventario de ventanas (L1) y ventanas en 3D por operabilidad (L2).
 - [ ] 2b.3 Resumen del AFN (L3), ficha de apertura (L4) y diagrama de apertura (L5).
 - [ ] 2b.4 Reglas de apertura (L6).

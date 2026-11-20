@@ -1,33 +1,51 @@
-import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, type ReactNode, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Group, Panel, Separator } from 'react-resizable-panels';
-import type { FileSource, FileSummary, LoadProgress } from './core/session';
-import { ClassObjects } from './features/explorer/ClassObjects';
+import type {
+  FileSource,
+  FileSummary,
+  GeometryView,
+  LoadProgress,
+  ObjectDetail,
+  ObjectRef,
+} from './core/session';
 import { ClassTree } from './features/explorer/ClassTree';
 import { Landing } from './features/gallery/Landing';
+import { Inspector } from './features/inspector/Inspector';
+import { ProblemsPanel } from './features/problems/ProblemsPanel';
+import { SearchDialog } from './features/search/SearchDialog';
 import { FileOverview } from './features/summary/FileOverview';
+import { ClassTableView } from './features/table/ClassTableView';
 import { formatInt } from './ui/format';
 import { useTheme } from './ui/useTheme';
-import { openInWorker } from './worker/client';
+import { idf, openInWorker } from './worker/client';
+
+const Viewer3D = lazy(() => import('./features/viewer3d/Viewer3D'));
 
 type State =
   | { status: 'idle'; error?: string }
   | { status: 'loading'; name: string; progress: LoadProgress }
   | { status: 'ready'; summary: FileSummary };
 
-type Tab = 'summary' | 'objects';
+type Tab = 'summary' | '3d' | 'table' | 'problems';
 
 const STAGE_WEIGHT: Record<LoadProgress['stage'], [number, number]> = {
   reading: [0, 0.1],
-  parsing: [0.1, 0.8],
-  schema: [0.8, 0.95],
-  indexing: [0.95, 1],
+  parsing: [0.1, 0.75],
+  schema: [0.75, 0.85],
+  indexing: [0.85, 1],
 };
+
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
 
 export function App() {
   const [theme, toggleTheme] = useTheme();
   const [state, setState] = useState<State>({ status: 'idle' });
   const [selectedClass, setSelectedClass] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selection, setSelection] = useState<ObjectRef | null>(null);
   const [tab, setTab] = useState<Tab>('summary');
+  const [geometry, setGeometry] = useState<GeometryView | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const loadId = useRef(0);
@@ -41,6 +59,9 @@ export function App() {
       });
       if (id !== loadId.current) return;
       setSelectedClass(null);
+      setSelectedId(null);
+      setSelection(null);
+      setGeometry(null);
       setTab('summary');
       setState({ status: 'ready', summary });
     } catch (error) {
@@ -57,6 +78,32 @@ export function App() {
       ),
     [open],
   );
+
+  const summary = state.status === 'ready' ? state.summary : null;
+
+  // Geometry is computed in the worker the first time the 3D tab opens.
+  useEffect(() => {
+    if (tab !== '3d' || geometry || !summary) return;
+    let cancelled = false;
+    idf.geometry().then((g) => {
+      if (!cancelled) setGeometry(g);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [tab, geometry, summary]);
+
+  // Ctrl/⌘+K opens the search (B4).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k' && summary) {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [summary]);
 
   // Drop a file anywhere in the window (A1).
   useEffect(() => {
@@ -94,7 +141,12 @@ export function App() {
     };
   }, [openLocalFile]);
 
-  const summary = state.status === 'ready' ? state.summary : null;
+  const onLoaded = useCallback((detail: ObjectDetail | null) => {
+    setSelection(detail ? { id: detail.id, className: detail.className, name: detail.name } : null);
+    if (detail) setSelectedClass(detail.classKey);
+  }, []);
+
+  const problems = summary?.problemCounts;
 
   return (
     <div className="app">
@@ -115,6 +167,11 @@ export function App() {
           </span>
         )}
         <div className="header-actions">
+          {summary && (
+            <button type="button" className="btn search-button" onClick={() => setSearchOpen(true)}>
+              Search <kbd>{isMac ? '⌘' : 'Ctrl+'}K</kbd>
+            </button>
+          )}
           <button type="button" className="btn" onClick={() => inputRef.current?.click()}>
             Open file
           </button>
@@ -143,37 +200,68 @@ export function App() {
 
       {summary ? (
         <Group orientation="horizontal" className="main">
-          <Panel defaultSize="24" minSize={180} className="pane">
+          <Panel defaultSize="20" minSize={160} className="pane">
             <ClassTree
               classes={summary.classes}
               selected={selectedClass}
               onSelect={(key) => {
                 setSelectedClass(key);
-                setTab('objects');
+                setTab('table');
               }}
             />
           </Panel>
           <Separator className="separator" />
-          <Panel className="pane">
+          <Panel minSize={300} className="pane center">
             <div className="tabs" role="tablist">
               <TabButton id="summary" current={tab} onSelect={setTab}>
                 Summary
               </TabButton>
-              <TabButton id="objects" current={tab} onSelect={setTab}>
-                Objects
+              <TabButton id="3d" current={tab} onSelect={setTab}>
+                3D
+              </TabButton>
+              <TabButton id="table" current={tab} onSelect={setTab}>
+                Table
+              </TabButton>
+              <TabButton id="problems" current={tab} onSelect={setTab}>
+                Problems
+                {problems && problems.error + problems.warning > 0 && (
+                  <span className={`badge ${problems.error ? 'error' : 'warning'}`}>
+                    {formatInt(problems.error + problems.warning)}
+                  </span>
+                )}
               </TabButton>
             </div>
-            {tab === 'summary' && <FileOverview summary={summary} />}
-            {tab === 'objects' &&
-              (selectedClass ? (
-                <ClassObjects
-                  key={`${summary.fileName}:${selectedClass}`}
-                  classKey={selectedClass}
-                  summary={summary}
-                />
-              ) : (
-                <div className="content">Choose a class on the left.</div>
-              ))}
+            <div className="tab-body">
+              {tab === 'summary' && <FileOverview summary={summary} />}
+              {tab === '3d' &&
+                (geometry ? (
+                  <Suspense fallback={<div className="content count">Loading 3D…</div>}>
+                    <Viewer3D
+                      geometry={geometry}
+                      selection={selection}
+                      onSelect={setSelectedId}
+                      dark={theme === 'dark'}
+                    />
+                  </Suspense>
+                ) : (
+                  <div className="content count">Building geometry…</div>
+                ))}
+              {tab === 'table' &&
+                (selectedClass ? (
+                  <ClassTableView
+                    classKey={selectedClass}
+                    selectedId={selectedId}
+                    onSelect={setSelectedId}
+                  />
+                ) : (
+                  <div className="content">Choose a class on the left.</div>
+                ))}
+              {tab === 'problems' && <ProblemsPanel onSelect={setSelectedId} />}
+            </div>
+          </Panel>
+          <Separator className="separator" />
+          <Panel defaultSize="28" minSize={220} className="pane">
+            <Inspector id={selectedId} onSelect={setSelectedId} onLoaded={onLoaded} />
           </Panel>
         </Group>
       ) : (
@@ -195,6 +283,11 @@ export function App() {
         </div>
       )}
 
+      <SearchDialog
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onSelect={setSelectedId}
+      />
       {state.status === 'loading' && <LoadingOverlay name={state.name} progress={state.progress} />}
       {dragging && <div className="drop-hint">Drop the IDF file to open it</div>}
     </div>

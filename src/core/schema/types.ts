@@ -52,3 +52,14 @@ export interface Schema {
 export interface SchemaIndex {
   versions: string[];
 }
+
+export interface ClassDocs {
+  memo?: string;
+  /** Notes by field index (first extensible group only). */
+  notes?: Record<string, string>;
+}
+
+export interface SchemaDocs {
+  version: string;
+  classes: Record<string, ClassDocs>;
+}
