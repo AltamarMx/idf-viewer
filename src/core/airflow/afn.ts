@@ -110,25 +110,41 @@ export interface AfnModel {
 }
 
 /**
- * Discharge coefficient of a DetailedOpening at an opening factor. EnergyPlus
- * interpolates linearly between the opening factor sets.
+ * Values of a DetailedOpening at an opening factor. EnergyPlus interpolates the
+ * discharge coefficient and the width, height and start height factors linearly
+ * between the opening factor sets.
  */
-export function interpolateCd(sets: OpeningFactorSet[], factor: number): number | undefined {
+export function interpolateSet(
+  sets: OpeningFactorSet[],
+  factor: number,
+): OpeningFactorSet | undefined {
   if (sets.length === 0) return undefined;
   const sorted = [...sets].sort((a, b) => a.openingFactor - b.openingFactor);
   const first = sorted[0] as OpeningFactorSet;
   const last = sorted[sorted.length - 1] as OpeningFactorSet;
-  if (factor <= first.openingFactor) return first.cd;
-  if (factor >= last.openingFactor) return last.cd;
+  if (factor <= first.openingFactor) return { ...first, openingFactor: factor };
+  if (factor >= last.openingFactor) return { ...last, openingFactor: factor };
   for (let i = 1; i < sorted.length; i++) {
     const a = sorted[i - 1] as OpeningFactorSet;
     const b = sorted[i] as OpeningFactorSet;
-    if (factor <= b.openingFactor) {
-      const span = b.openingFactor - a.openingFactor;
-      return span > 0 ? a.cd + ((b.cd - a.cd) * (factor - a.openingFactor)) / span : b.cd;
-    }
+    if (factor > b.openingFactor) continue;
+    const span = b.openingFactor - a.openingFactor;
+    const t = span > 0 ? (factor - a.openingFactor) / span : 1;
+    const mix = (x: number, y: number) => x + (y - x) * t;
+    return {
+      openingFactor: factor,
+      cd: mix(a.cd, b.cd),
+      widthFactor: mix(a.widthFactor, b.widthFactor),
+      heightFactor: mix(a.heightFactor, b.heightFactor),
+      startHeightFactor: mix(a.startHeightFactor, b.startHeightFactor),
+    };
   }
-  return last.cd;
+  return { ...last, openingFactor: factor };
+}
+
+/** Discharge coefficient of a DetailedOpening at an opening factor. */
+export function interpolateCd(sets: OpeningFactorSet[], factor: number): number | undefined {
+  return interpolateSet(sets, factor)?.cd;
 }
 
 export function openingFactorSets(r: FieldReader): OpeningFactorSet[] {

@@ -87,11 +87,13 @@ test('loads: zone table, loads over time and occupancy peak', async ({ page }) =
   await expect(page.getByText('Peak in the building')).toBeVisible();
 });
 
-test('windows tab lists openings with their AFN role and shows them in 3D', async ({ page }) => {
+test('ventilation tab lists openings with their AFN role and shows them in 3D', async ({
+  page,
+}) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await openExample(page, 'Small office with AirflowNetwork');
-  await page.getByRole('tab', { name: 'Windows' }).click();
+  await page.getByRole('tab', { name: 'Ventilation' }).click();
   await expect(page.locator('.windows-notice')).toContainText('AirflowNetwork is on');
   const row = page.locator('.table-row', { hasText: 'Zn001:Wall001:Win001' });
   await expect(row).toContainText('Detailed opening');
@@ -103,5 +105,28 @@ test('windows tab lists openings with their AFN role and shows them in 3D', asyn
   await page.getByLabel('Color by').selectOption('afn');
   await expect(page.locator('.legend')).toContainText('Detailed opening (operable)');
   await expect(page.locator('.legend')).toContainText('Crack (leakage only)');
+  expect(errors).toEqual([]);
+});
+
+test('airflow network: summary and opening card with ZoneLevel values', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'Small office with AirflowNetwork');
+  await page.getByRole('tab', { name: 'Ventilation' }).click();
+  await page
+    .locator('.table-row', { hasText: 'Zn001:Wall001:Win001' })
+    .getByRole('button', { name: 'WiOpen1' })
+    .click();
+  await expect(page.getByRole('tab', { name: 'Airflow network' })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
+  await expect(page.locator('.afn-main')).toContainText('MultizoneWithDistribution');
+  const card = page.locator('.afn-card');
+  await expect(card).toContainText('Zn001:Wall001:Win001');
+  await expect(card).toContainText('WindowVentSched');
+  await expect(card.locator('.tag.zone').first()).toBeVisible();
+  await expect(card.locator('.opening-diagram')).toHaveCount(3);
+  await expect(card.locator('canvas')).toBeVisible();
   expect(errors).toEqual([]);
 });

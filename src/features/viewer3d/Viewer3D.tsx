@@ -15,6 +15,7 @@ interface Props {
   geometry: GeometryView;
   selection: ObjectRef | null;
   onSelect: (id: number) => void;
+  onClear: () => void;
   dark: boolean;
 }
 
@@ -79,7 +80,7 @@ function partnerOf(surfaces: SurfaceView[], selected: number[]): PartnerState {
   };
 }
 
-export default function Viewer3D({ geometry, selection, onSelect, dark }: Props) {
+export default function Viewer3D({ geometry, selection, onSelect, onClear, dark }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const compassRef = useRef<SVGSVGElement>(null);
   const viewRef = useRef<SceneView | null>(null);
@@ -271,6 +272,24 @@ export default function Viewer3D({ geometry, selection, onSelect, dark }: Props)
             );
           })}
         </ul>
+        {selected.length > 0 && (
+          <div className="legend-selected">
+            <span className="swatch" style={{ background: HIGHLIGHT }} />
+            <span className="label">
+              Selected: {selection?.name ?? selection?.className}
+              {selected.length > 1 ? ` (${formatInt(selected.length)} surfaces)` : ''}
+            </span>
+            <button type="button" className="link" onClick={onClear}>
+              Clear
+            </button>
+          </div>
+        )}
+        {partner.status === 'ok' || partner.status === 'one-way' ? (
+          <div className="legend-selected">
+            <span className="swatch" style={{ background: PARTNER }} />
+            <span className="label">Other side of the selected surface</span>
+          </div>
+        ) : null}
         {mode !== 'type' && !AFN_MODES.has(mode) && (
           <div className="count legend-note">Windows are drawn lighter and see-through.</div>
         )}

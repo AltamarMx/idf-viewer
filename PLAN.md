@@ -492,7 +492,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 
 - [x] 2b.1 Geometría simplificada (C6): hecha en la fase 1.
 - [x] 2b.2 Inventario de ventanas (L1) y ventanas en 3D por operabilidad (L2).
-- [ ] 2b.3 Resumen del AFN (L3), ficha de apertura (L4) y diagrama de apertura (L5).
+- [x] 2b.3 Resumen del AFN (L3), ficha de apertura (L4) y diagrama de apertura (L5).
 - [ ] 2b.4 Reglas de apertura (L6).
 - [ ] 2b.5 Infiltración (L7) y ventilación sin AFN (L8).
 - [ ] 2b.6 Validaciones de ventilación (L12), probadas con IDF que tienen errores a propósito.
@@ -512,6 +512,18 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - antes de 9.0 cada ventana nombra su `WindowProperty:ShadingControl`; desde 9.0 `WindowShadingControl` lista las ventanas.
 - Comprobado contra EnergyPlus: el área total de ventanas por orientación coincide con la tabla ventana-muro en los 8 ejemplos.
 - Archivos de prueba nuevos: `tests/fixtures/windows/Windows.idf` (26.2) y `Windows-8.9.idf`.
+- 2b.3: la pestaña se llama ahora **Ventilation** y tiene dos secciones. "Windows and doors" es el inventario. "Airflow network" tiene:
+  - el resumen del AFN: control, origen de los Cp, zonas con su modo de ventilación, superficies, componentes, nodos externos y condiciones de referencia de grietas;
+  - la ficha de cada superficie, con superficie AFN, control de ventilación, componente y nodo externo con su tabla de Cp. Cada valor indica si viene de la superficie o de la zona, si es el valor por omisión del IDD y si el modo de control lo usa;
+  - en un `DetailedOpening`, la tabla de juegos de factor de apertura, el dibujo del área abierta en cada juego y en el factor máximo, y la gráfica de Cd y de Cd × área abierta contra el factor de apertura.
+- Reglas usadas en 2b.3 (de la documentación de EnergyPlus, pendientes de confirmar):
+  - con `ZoneLevel` se toman de `AirflowNetwork:MultiZone:Zone` el modo, el horario de setpoint, el factor mínimo, los límites de ΔT y Δh, el horario de disponibilidad y el control por ocupantes; el factor de apertura sigue siendo el de la superficie;
+  - en un par interzona, la zona que manda es la del lado declarado en el AFN;
+  - qué valores usa cada modo: `Temperature` usa setpoint, factor mínimo y ΔT; `Enthalpy` usa setpoint, factor mínimo y Δh; `Constant` y los adaptativos solo la disponibilidad; `NoVent` ninguno;
+  - un horario de disponibilidad en blanco significa siempre disponible;
+  - área abierta de un `DetailedOpening` no pivotado = ancho × alto × factor de ancho × factor de alto (interpolados); de `SimpleOpening` y `HorizontalOpening` = factor de apertura × área;
+  - una abertura no rectangular usa un rectángulo equivalente de la misma área: `PolygonHeight` (alto del polígono), `BaseSurfaceAspectRatio` o `UserDefinedAspectRatio`;
+  - el tipo de edificio, el eje largo y la relación de anchos solo se usan cuando EnergyPlus calcula los Cp (`SurfaceAverageCalculation`).
 - **Pendiente:** `make_oracles.py` ya pide la tabla "Exterior Fenestration" de EnergyPlus y la prueba que la compara está lista, pero falta correrlo con EnergyPlus 26.2, que no está instalado en esta computadora.
 
 ### Fase 2c · Construcciones, validación y complementos
@@ -559,7 +571,7 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 **Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Schedules, Loads y Problems. Último commit de código: `d0c5ec9` (fase 2a).
 
-**En curso:** fase 2b (ventanas, ventilación natural e infiltración). La tarea 2b.2 está hecha, sin commit todavía; sigue la 2b.3 (resumen del AFN y ficha de apertura). Para regenerar las referencias hace falta instalar EnergyPlus 26.2 en esta computadora.
+**En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2 y 2b.3 están hechas; sigue la 2b.4 (reglas de apertura). Para regenerar las referencias hace falta instalar EnergyPlus 26.2 en esta computadora.
 
 **Pendiente suelto:** tu IDF de prueba todavía no está en `examples/`. Para que aparezca en la galería, cópialo ahí y, si quieres, dale título en `examples/examples.json`. Para que las pruebas también lo comparen contra EnergyPlus, hay que correr `make_oracles.py` sobre él (normal y con `--annual`).
 

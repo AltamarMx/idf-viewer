@@ -9,6 +9,13 @@ interface Props {
   selectedId: number | null;
   onSelect: (id: number) => void;
   onShow3D: (id: number) => void;
+  /** Opens the AirflowNetwork card of a surface (L4). */
+  onOpenCard: (surface: string) => void;
+}
+
+interface Actions {
+  select: (id: number) => void;
+  openCard: (surface: string) => void;
 }
 
 const ROW_HEIGHT = 28;
@@ -34,7 +41,7 @@ interface Column {
   numeric?: boolean;
   title?: string;
   sort: (r: WindowRow) => string | number | undefined;
-  render: (r: WindowRow, select: (id: number) => void) => ReactNode;
+  render: (r: WindowRow, actions: Actions) => ReactNode;
 }
 
 function ref(name: string | undefined, id: number | undefined, select: (id: number) => void) {
@@ -67,7 +74,7 @@ const COLUMNS: Column[] = [
     label: 'Host surface',
     width: 170,
     sort: (r) => r.base,
-    render: (r, select) => ref(r.base, r.baseId, select),
+    render: (r, { select }) => ref(r.base, r.baseId, select),
   },
   {
     key: 'facing',
@@ -153,7 +160,7 @@ const COLUMNS: Column[] = [
     label: 'Construction',
     width: 190,
     sort: (r) => r.construction,
-    render: (r, select) => ref(r.construction, r.constructionId, select),
+    render: (r, { select }) => ref(r.construction, r.constructionId, select),
   },
   {
     key: 'u',
@@ -187,14 +194,14 @@ const COLUMNS: Column[] = [
     label: 'Frame and divider',
     width: 150,
     sort: (r) => r.frame,
-    render: (r, select) => ref(r.frame, r.frameId, select),
+    render: (r, { select }) => ref(r.frame, r.frameId, select),
   },
   {
     key: 'shading',
     label: 'Shading control',
     width: 220,
     sort: (r) => r.shading[0]?.name,
-    render: (r, select) =>
+    render: (r, { select }) =>
       r.shading.map((c, i) => (
         <span key={c.id}>
           {i > 0 ? ', ' : ''}
@@ -210,16 +217,17 @@ const COLUMNS: Column[] = [
     label: 'AFN component',
     width: 190,
     sort: (r) => r.afn?.type,
-    render: (r, select) =>
+    render: (r, { openCard }) =>
       r.afn ? (
         <>
-          {r.afn.type === 'missing' ? (
-            <span className="warn-text" title="Component not found">
-              {r.afn.component}
-            </span>
-          ) : (
-            ref(r.afn.component, r.afn.componentId, select)
-          )}{' '}
+          <button
+            type="button"
+            className={`ref${r.afn.type === 'missing' ? ' warn-text' : ''}`}
+            onClick={() => openCard(r.name)}
+            title="Open the AirflowNetwork card"
+          >
+            {r.afn.component}
+          </button>{' '}
           <span className="count">
             {r.afn.type === 'missing' ? 'missing' : AFN_COMPONENTS[r.afn.type].label}
           </span>
@@ -282,7 +290,7 @@ function compare(a: string | number | undefined, b: string | number | undefined)
 }
 
 /** Windows and doors (L1): sortable, filterable, linked to the inspector and the 3D view. */
-export default function WindowsTab({ selectedId, onSelect, onShow3D }: Props) {
+export function WindowsTable({ selectedId, onSelect, onShow3D, onOpenCard }: Props) {
   const [inventory, setInventory] = useState<WindowInventory | null>(null);
   const [kind, setKind] = useState<OpeningKind | 'all'>('all');
   const [zone, setZone] = useState('');
@@ -496,7 +504,7 @@ export default function WindowsTab({ selectedId, onSelect, onShow3D }: Props) {
                 </span>
                 {columns.map((c) => (
                   <span key={c.key} className={`cell${c.numeric ? ' num' : ''}`}>
-                    {c.render(row, onSelect)}
+                    {c.render(row, { select: onSelect, openCard: onOpenCard })}
                   </span>
                 ))}
               </div>

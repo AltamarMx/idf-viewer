@@ -1,3 +1,4 @@
+import type { AfnCard, AfnOverview } from '../core/airflow/card';
 import type { OccupancyReport, ZoneRow } from '../core/loads/report';
 import type { WindowInventory } from '../core/openings/windows';
 import type { ClassDocs } from '../core/schema/types';
@@ -43,4 +44,6 @@ export interface WorkerApi {
   zoneLoads(zone: string | null, discountLost: boolean): Promise<ZoneLoadView>;
   occupancy(): Promise<OccupancyReport>;
   windows(): Promise<WindowInventory>;
+  afnOverview(): Promise<AfnOverview>;
+  afnCard(surface: string): Promise<AfnCard | null>;
 }

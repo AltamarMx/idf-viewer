@@ -21,6 +21,25 @@ export class FieldReader {
     return this.index.has(name.toLowerCase());
   }
 
+  /** Position of a field in this version's schema. */
+  indexOf(name: string): number | undefined {
+    return this.index.get(name.toLowerCase());
+  }
+
+  /**
+   * Name of the first field that matches, for fields whose name changed between
+   * versions (e.g. "…for Minimun Venting Open Factor" in 8.0, "Minimum" later).
+   */
+  find(pattern: RegExp): string | undefined {
+    return this.cls?.fields.find((f) => pattern.test(f.name))?.name;
+  }
+
+  /** Units of a field, from the schema. */
+  units(name: string): string | undefined {
+    const i = this.index.get(name.toLowerCase());
+    return i === undefined ? undefined : this.cls?.fields[i]?.units;
+  }
+
   /** Raw value, trimmed; "" when blank or when the field does not exist in this version. */
   str(name: string): string {
     const i = this.index.get(name.toLowerCase());

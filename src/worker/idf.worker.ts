@@ -75,6 +75,12 @@ const api: WorkerApi = {
   async windows() {
     return current().windows();
   },
+  async afnOverview() {
+    return current().afnOverview();
+  },
+  async afnCard(surface) {
+    return current().afnCard(surface);
+  },
 };
 
 expose(api);

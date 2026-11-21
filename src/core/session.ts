@@ -10,6 +10,7 @@ import {
   type AfnSurfaceInfo,
   readAfn,
 } from './airflow/afn';
+import { type AfnCard, AfnInput, type AfnOverview } from './airflow/card';
 import {
   buildGeometry,
   type GeometryResult,
@@ -408,6 +409,29 @@ export class Session {
       this._afn = readAfn(this.model, this.schema, info);
     }
     return this._afn;
+  }
+
+  private _afnInput?: AfnInput;
+
+  private get afnInput(): AfnInput {
+    this._afnInput ??= new AfnInput(
+      this.model,
+      this.schema,
+      this.geometry,
+      this.references,
+      this.afn,
+    );
+    return this._afnInput;
+  }
+
+  /** AirflowNetwork summary (L3). */
+  afnOverview(): AfnOverview {
+    return this.afnInput.overview();
+  }
+
+  /** Opening card of one AirflowNetwork surface (L4, L5). */
+  afnCard(surface: string): AfnCard | null {
+    return this.afnInput.card(surface);
   }
 
   /** Windows and doors with their host, size, construction and AFN role (L1). */

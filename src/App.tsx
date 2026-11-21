@@ -22,14 +22,14 @@ import { idf, openInWorker } from './worker/client';
 const Viewer3D = lazy(() => import('./features/viewer3d/Viewer3D'));
 const SchedulesTab = lazy(() => import('./features/schedules/SchedulesTab'));
 const LoadsTab = lazy(() => import('./features/loads/LoadsTab'));
-const WindowsTab = lazy(() => import('./features/windows/WindowsTab'));
+const VentilationTab = lazy(() => import('./features/ventilation/VentilationTab'));
 
 type State =
   | { status: 'idle'; error?: string }
   | { status: 'loading'; name: string; progress: LoadProgress }
   | { status: 'ready'; summary: FileSummary };
 
-type Tab = 'summary' | '3d' | 'table' | 'windows' | 'schedules' | 'loads' | 'problems';
+type Tab = 'summary' | '3d' | 'table' | 'ventilation' | 'schedules' | 'loads' | 'problems';
 
 const STAGE_WEIGHT: Record<LoadProgress['stage'], [number, number]> = {
   reading: [0, 0.1],
@@ -225,8 +225,8 @@ export function App() {
               <TabButton id="table" current={tab} onSelect={setTab}>
                 Table
               </TabButton>
-              <TabButton id="windows" current={tab} onSelect={setTab}>
-                Windows
+              <TabButton id="ventilation" current={tab} onSelect={setTab}>
+                Ventilation
               </TabButton>
               <TabButton id="schedules" current={tab} onSelect={setTab}>
                 Schedules
@@ -252,6 +252,7 @@ export function App() {
                       geometry={geometry}
                       selection={selection}
                       onSelect={setSelectedId}
+                      onClear={() => setSelectedId(null)}
                       dark={theme === 'dark'}
                     />
                   </Suspense>
@@ -268,9 +269,9 @@ export function App() {
                 ) : (
                   <div className="content">Choose a class on the left.</div>
                 ))}
-              {tab === 'windows' && (
+              {tab === 'ventilation' && (
                 <Suspense fallback={<div className="content count">Loading…</div>}>
-                  <WindowsTab
+                  <VentilationTab
                     key={summary.fileName}
                     selectedId={selectedId}
                     onSelect={setSelectedId}
@@ -278,6 +279,7 @@ export function App() {
                       setSelectedId(id);
                       setTab('3d');
                     }}
+                    dark={theme === 'dark'}
                   />
                 </Suspense>
               )}

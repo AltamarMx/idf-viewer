@@ -188,7 +188,9 @@ describe('window areas match the EnergyPlus window-wall ratio table', () => {
   } as const;
   const stems = readdirSync(resolve(ROOT, 'examples'))
     .filter((f) => f.endsWith('.idf'))
-    .map((f) => f.replace(/\.idf$/, ''));
+    .map((f) => f.replace(/\.idf$/, ''))
+    // Examples without EnergyPlus references yet (make_oracles.py) are skipped.
+    .filter((stem) => existsSync(resolve(ROOT, `tests/oracles/${stem}.json`)));
 
   it.each(stems)('%s', async (stem) => {
     const oracle = JSON.parse(readFileSync(resolve(ROOT, `tests/oracles/${stem}.json`), 'utf8'));
