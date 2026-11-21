@@ -1,6 +1,6 @@
 # IDF Viewer: plan
 
-> **Estado:** fases 0, 1 y 2a terminadas (2026-11-20). Repositorio: https://github.com/AltamarMx/idf-viewer
+> **Estado:** fases 0, 1 y 2a terminadas (2026-11-20). Siguiente: fase 2b (ver §9). Repositorio: https://github.com/AltamarMx/idf-viewer
 
 ---
 
@@ -543,10 +543,32 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 - …
 
-## 9. Siguiente paso
+## 9. Dónde vamos (2026-11-20)
 
-Para empezar la fase 0 necesito:
+**Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Schedules, Loads y Problems. Último commit de código: `d0c5ec9` (fase 2a).
 
-1. **Tu visto bueno a este plan.**
-2. **El repositorio en GitHub:** que crees `altamarmx/idf-viewer` (público y vacío) o que me autorices a crearlo con `gh`, si tienes sesión iniciada. Además hay que activar Pages en *Settings → Pages → Source: GitHub Actions*.
-3. **Tu IDF de prueba**, cuando exista la carpeta `examples/` (tarea 0.9).
+**Siguiente:** fase 2b (ventanas, ventilación natural e infiltración), empezando por la tarea 2b.2. Se arranca cuando des el visto bueno.
+
+**Pendiente suelto:** tu IDF de prueba todavía no está en `examples/`. Para que aparezca en la galería, cópialo ahí y, si quieres, dale título en `examples/examples.json`. Para que las pruebas también lo comparen contra EnergyPlus, hay que correr `make_oracles.py` sobre él (normal y con `--annual`).
+
+### Cómo seguir en otra computadora
+
+1. Instala git, Node.js 22 o más nuevo (GitHub usa la 24) y [uv](https://docs.astral.sh/uv/).
+2. Descarga el proyecto:
+   ```sh
+   git clone https://github.com/AltamarMx/idf-viewer.git
+   cd idf-viewer
+   npm ci      # librerías del visor
+   uv sync     # Python para las herramientas de desarrollo
+   ```
+3. Revisa que todo pasa, igual que en GitHub:
+   ```sh
+   npm run lint && npm run typecheck && npm test && uv run pytest
+   PW_CHANNEL=chrome npm run e2e   # pruebas en navegador con tu Chrome
+   ```
+   Sin Chrome instalado: `npx playwright install chromium` y luego `npm run e2e`.
+4. `npm run dev` abre el visor en tu computadora.
+
+No hace falta descargar nada de EnergyPlus para trabajar: los esquemas (`public/schemas/`) y las referencias (`tests/oracles/`) ya están en el repositorio. **EnergyPlus 26.2** solo se necesita para regenerar referencias (`tools/make_oracles.py`) o esquemas (`tools/fetch_idds.py` y `tools/idd2json.py`). Los scripts lo buscan en `/Applications/EnergyPlus-*`; en otra ubicación se indica con `--energyplus`.
+
+La conversación con Claude y sus notas se quedan en la computadora anterior. Lo necesario para continuar está en este archivo y en `CLAUDE.md`, que Claude Code lee al abrir la carpeta. Para retomar, abre Claude Code en la carpeta del proyecto y pide seguir con la fase 2b.

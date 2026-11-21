@@ -5,5 +5,10 @@ from `examples/*.idf` and `tests/fixtures/geometry/*.idf`. The unit tests compar
 viewer's own calculations (vertices, areas, azimuth, tilt, zone volume and floor area,
 window-wall ratio by orientation) against these files.
 
+`*.annual.json` files come from `uv run tools/make_oracles.py --annual`: a whole-year run
+(Chicago weather from the EnergyPlus install) with the calendar, every schedule hour by hour,
+the design days and, per zone, occupants and internal gains. Hourly series are stored as the
+distinct day profiles plus the profile used on each day.
+
 The viewer never reads simulation results; these files are only used by the tests.
 Regenerate them after adding an example or a fixture.
