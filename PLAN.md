@@ -493,7 +493,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 - [x] 2b.1 Geometría simplificada (C6): hecha en la fase 1.
 - [x] 2b.2 Inventario de ventanas (L1) y ventanas en 3D por operabilidad (L2).
 - [x] 2b.3 Resumen del AFN (L3), ficha de apertura (L4) y diagrama de apertura (L5).
-- [ ] 2b.4 Reglas de apertura (L6).
+- [x] 2b.4 Reglas de apertura (L6).
 - [ ] 2b.5 Infiltración (L7) y ventilación sin AFN (L8).
 - [ ] 2b.6 Validaciones de ventilación (L12), probadas con IDF que tienen errores a propósito.
 
@@ -524,6 +524,13 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - área abierta de un `DetailedOpening` no pivotado = ancho × alto × factor de ancho × factor de alto (interpolados); de `SimpleOpening` y `HorizontalOpening` = factor de apertura × área;
   - una abertura no rectangular usa un rectángulo equivalente de la misma área: `PolygonHeight` (alto del polígono), `BaseSurfaceAspectRatio` o `UserDefinedAspectRatio`;
   - el tipo de edificio, el eje largo y la relación de anchos solo se usan cuando EnergyPlus calcula los Cp (`SurfaceAverageCalculation`).
+- 2b.4: la ficha de cada abertura operable dice, en orden, qué condiciones deben cumplirse para que abra según su modo de control. También dice cuántas horas del año está disponible (su horario evaluado con el evaluador de la fase 2a) y, con `Temperature` o `Enthalpy`, grafica el factor de apertura contra ΔT o Δh entre los dos límites. La gráfica de juegos de factor de apertura (L5) ahora explica cada línea, llama "área efectiva" a Cd × área abierta y dice qué porcentaje del área efectiva queda a media apertura.
+- Reglas usadas en 2b.4 (de la documentación de EnergyPlus, pendientes de confirmar):
+  - `Temperature`: abre si hay disponibilidad, si la zona está más caliente que el exterior y si está por arriba del setpoint; con ΔT ≤ límite inferior abre al factor máximo, con ΔT ≥ límite superior al factor máximo × factor mínimo, y entre ambos cambia en línea recta. `Enthalpy` es igual con Δh y la entalpía. Los modos "Adjacent" comparan con la zona vecina;
+  - `Constant`: abre al factor máximo siempre que haya disponibilidad;
+  - `ASHRAE55Adaptive` y `CEN15251Adaptive`: abren al factor máximo cuando la temperatura operativa supera la temperatura de confort adaptativo y la zona está más caliente que el exterior;
+  - `NoVent`: siempre cerrada;
+  - si el límite superior no es mayor que el inferior, EnergyPlus marca error de entrada.
 - **Pendiente:** `make_oracles.py` ya pide la tabla "Exterior Fenestration" de EnergyPlus y la prueba que la compara está lista, pero falta correrlo con EnergyPlus 26.2, que no está instalado en esta computadora.
 
 ### Fase 2c · Construcciones, validación y complementos
@@ -571,7 +578,7 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 **Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Schedules, Loads y Problems. Último commit de código: `d0c5ec9` (fase 2a).
 
-**En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2 y 2b.3 están hechas; sigue la 2b.4 (reglas de apertura). Para regenerar las referencias hace falta instalar EnergyPlus 26.2 en esta computadora.
+**En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2, 2b.3 y 2b.4 están hechas; sigue la 2b.5 (infiltración y ventilación sin AFN). Para regenerar las referencias hace falta instalar EnergyPlus 26.2 en esta computadora.
 
 **Pendiente suelto:** tu IDF de prueba todavía no está en `examples/`. Para que aparezca en la galería, cópialo ahí y, si quieres, dale título en `examples/examples.json`. Para que las pruebas también lo comparen contra EnergyPlus, hay que correr `make_oracles.py` sobre él (normal y con `--annual`).
 

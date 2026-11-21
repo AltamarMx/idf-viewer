@@ -431,7 +431,18 @@ export class Session {
 
   /** Opening card of one AirflowNetwork surface (L4, L5). */
   afnCard(surface: string): AfnCard | null {
-    return this.afnInput.card(surface);
+    const card = this.afnInput.card(surface);
+    const schedule =
+      card?.control.find((f) => f.label === 'Venting availability schedule')?.value || undefined;
+    if (card?.rule && card.rule.kind !== 'closed') {
+      // Hours the opening may open: the availability schedule above zero.
+      const hourly = schedule ? this.schedules.hourly(schedule) : null;
+      const total = this.calendar.dayTypes.length * 24;
+      let hours = schedule ? 0 : total;
+      if (hourly) for (const v of hourly) if (v > 0) hours++;
+      card.availability = { schedule, hours, total, evaluable: !schedule || Boolean(hourly) };
+    }
+    return card;
   }
 
   /** Windows and doors with their host, size, construction and AFN role (L1). */

@@ -118,3 +118,58 @@ describe('Windows.idf', () => {
     expect(session.afnCard('Door:West')?.control).toEqual([]);
   });
 });
+
+describe('opening rules (L6)', () => {
+  it('modulates the opening linearly between the ΔT limits', async () => {
+    const { modulatedFactor, openingRule } = await import('../src/core/airflow/rules');
+    const rule = openingRule({
+      mode: 'Temperature',
+      maxFactor: 0.8,
+      minFactor: 0.25,
+      deltaT: [5, 15],
+      deltaH: [0, 300000],
+    });
+    expect(rule).toMatchObject({ kind: 'modulated', variable: 'ΔT', lower: 5, upper: 15 });
+    expect(modulatedFactor(rule, -1)).toBe(0);
+    expect(modulatedFactor(rule, 3)).toBeCloseTo(0.8);
+    expect(modulatedFactor(rule, 10)).toBeCloseTo(0.8 * (1 - 0.5 * 0.75));
+    expect(modulatedFactor(rule, 20)).toBeCloseTo(0.2);
+    expect(
+      openingRule({ ...rule, mode: 'Enthalpy', deltaT: [0, 100], deltaH: [10, 5] }),
+    ).toMatchObject({
+      variable: 'Δh',
+      invalid: true,
+    });
+    expect(openingRule({ ...rule, mode: 'NoVent', deltaT: [0, 100], deltaH: [0, 1] }).kind).toBe(
+      'closed',
+    );
+  });
+
+  it('builds the rule from the zone with ZoneLevel and counts available hours', async () => {
+    const session = await open('examples/AirflowNetwork_MultiZone_SmallOffice.idf');
+    const card = session.afnCard('Zn001:Wall001:Win001');
+    expect(card?.rule).toMatchObject({
+      kind: 'modulated',
+      maxFactor: 0.5,
+      minFactor: 0.3,
+      lower: 5,
+      upper: 10,
+    });
+    expect(card?.rule?.conditions.join(' ')).toContain('WindowVentSched');
+    const availability = card?.availability;
+    expect(availability).toMatchObject({ schedule: 'VentingSched', evaluable: true });
+    expect(availability?.hours).toBeGreaterThan(0);
+    expect(availability?.hours).toBeLessThanOrEqual(availability?.total ?? 0);
+  });
+
+  it('a Constant opening without schedule is always available', async () => {
+    const session = await open('tests/fixtures/windows/Windows.idf');
+    const card = session.afnCard('GlassDoor:North');
+    expect(card?.rule?.kind).toBe('constant');
+    expect(card?.availability).toMatchObject({ hours: 8760, total: 8760 });
+    // ZoneLevel resolves to NoVent here: closed, no availability.
+    const east = session.afnCard('Win:East');
+    expect(east?.rule?.kind).toBe('closed');
+    expect(east?.availability).toBeUndefined();
+  });
+});

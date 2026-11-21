@@ -1461,3 +1461,17 @@ table.grid.afn-surfaces td,
 table.grid.afn-surfaces th {
   white-space: nowrap;
 }
+
+.opening-rule ol {
+  margin: 4px 0 8px;
+  padding-left: 20px;
+}
+
+.chart-caption {
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+ul.insight {
+  margin: 6px 0 10px;
+}

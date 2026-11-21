@@ -21,6 +21,7 @@ import {
   type OpeningFactorSet,
   openingFactorSets,
 } from './afn';
+import { type OpeningRule, openingRule } from './rules';
 
 export interface AfnField {
   label: string;
@@ -141,6 +142,10 @@ export interface AfnCard {
     cp?: AfnCp;
   };
   notes: AfnNote[];
+  /** When and how much the opening opens (L6), for operable openings. */
+  rule?: OpeningRule;
+  /** Hours of the year the venting availability schedule is above zero. */
+  availability?: { schedule?: string; hours: number; total: number; evaluable: boolean };
 }
 
 type ControlUse = 'setpoint' | 'minimum' | 'deltaT' | 'deltaH' | 'availability' | 'occupant';
@@ -430,6 +435,7 @@ export class AfnInput {
     const zoneObj =
       zoneLevel && listedZone ? this.afnZones.get(listedZone.toLowerCase()) : undefined;
     const control: AfnField[] = [];
+    let rule: OpeningRule | undefined;
     if (link.role === 'operable') {
       control.push({
         label: 'Ventilation control mode',
@@ -451,6 +457,30 @@ export class AfnInput {
               blank: spec.blank,
             });
         }
+      }
+      if (source) {
+        const sr = this.reader(source);
+        const num = (pattern: RegExp, fallback: number) => {
+          const name = sr.find(pattern);
+          return name ? sr.numOr(name, fallback) : fallback;
+        };
+        const text = (pattern: RegExp) => sr.str(sr.find(pattern) ?? '') || undefined;
+        rule = openingRule({
+          mode: link.controlMode,
+          maxFactor: link.factor,
+          minFactor: num(/^Minimum Venting Open Factor$/, 0),
+          deltaT: [
+            num(/Temperature Difference Lower Limit/, 0),
+            num(/Temperature Difference Upper Limit/, 100),
+          ],
+          deltaH: [
+            num(/Enthalpy Difference Lower Limit/, 0),
+            num(/Enthalpy Difference Upper Limit/, 300000),
+          ],
+          setpointSchedule: text(/^Ventilation Control Zone Temperature Setpoint Schedule Name$/),
+          availabilitySchedule: text(/^Venting Availability Schedule Name$/),
+          occupantControl: text(/^Occupant Ventilation Control Name$/),
+        });
       }
       if (zoneLevel && !zoneObj)
         warn(
@@ -515,6 +545,7 @@ export class AfnInput {
       component,
       node,
       notes,
+      rule,
     };
   }
 

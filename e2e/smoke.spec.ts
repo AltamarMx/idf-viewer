@@ -127,6 +127,7 @@ test('airflow network: summary and opening card with ZoneLevel values', async ({
   await expect(card).toContainText('WindowVentSched');
   await expect(card.locator('.tag.zone').first()).toBeVisible();
   await expect(card.locator('.opening-diagram')).toHaveCount(3);
-  await expect(card.locator('canvas')).toBeVisible();
+  await expect(card).toContainText('VentingSched is above zero');
+  await expect(card.locator('canvas')).toHaveCount(2);
   expect(errors).toEqual([]);
 });

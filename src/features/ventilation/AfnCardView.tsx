@@ -4,6 +4,7 @@ import type { AfnCard } from '../../core/airflow/card';
 import { formatNumber } from '../../ui/format';
 import { Chart, type ChartOption } from '../charts/Chart';
 import { FieldValue } from './AfnPanel';
+import { OpeningRuleView } from './OpeningRuleView';
 
 interface Props {
   card: AfnCard;
@@ -12,23 +13,6 @@ interface Props {
   onClose: () => void;
   dark: boolean;
 }
-
-/** One line per ventilation control mode (the full rules come with L6). */
-const MODE_TEXT: Record<string, string> = {
-  temperature:
-    'Opens when the zone is warmer than outdoors and than the setpoint; the opening goes from the maximum factor to the minimum venting open factor between the ΔT limits.',
-  enthalpy:
-    'Opens when the zone enthalpy is higher than outdoors and the zone is warmer than the setpoint; the opening is modulated between the Δh limits.',
-  adjacenttemperature: 'Like Temperature, but compares with the adjacent zone (interior openings).',
-  adjacententhalpy: 'Like Enthalpy, but compares with the adjacent zone (interior openings).',
-  constant:
-    'Open at the maximum opening factor whenever the venting availability schedule is above zero.',
-  ashrae55adaptive:
-    'Opens when the zone operative temperature is above the ASHRAE 55 adaptive comfort temperature and the zone is warmer than outdoors.',
-  cen15251adaptive:
-    'Opens when the zone operative temperature is above the CEN 15251 adaptive comfort temperature and the zone is warmer than outdoors.',
-  novent: 'Always closed: only the leakage of the closed opening applies.',
-};
 
 const KIND_LABELS: Record<string, string> = {
   wall: 'wall',
@@ -48,7 +32,6 @@ export function AfnCardView({ card, onSelect, onShow3D, onClose, dark }: Props) 
     surface.width !== undefined && surface.height !== undefined
       ? surface.width * surface.height
       : undefined;
-  const modeText = MODE_TEXT[link.controlMode.toLowerCase()];
 
   return (
     <div className="afn-card">
@@ -114,7 +97,9 @@ export function AfnCardView({ card, onSelect, onShow3D, onClose, dark }: Props) 
       {card.control.length > 0 && (
         <>
           <h3>Ventilation control</h3>
-          {modeText && <p className="count">{modeText}</p>}
+          {card.rule && (
+            <OpeningRuleView rule={card.rule} availability={card.availability} dark={dark} />
+          )}
           <table className="grid afn-fields">
             <tbody>
               {card.control.map((f) => (
@@ -181,7 +166,7 @@ export function AfnCardView({ card, onSelect, onShow3D, onClose, dark }: Props) 
       {component.openArea !== undefined && (
         <p>
           At the maximum opening factor ({formatNumber(link.factor)}): open area{' '}
-          <strong>{formatNumber(component.openArea)} m²</strong>, Cd × area{' '}
+          <strong>{formatNumber(component.openArea)} m²</strong>, effective area (Cd × open area){' '}
           <strong>{formatNumber(component.effectiveArea ?? 0)} m²</strong>
           {component.sets ? '' : ' (open area = opening factor × area of the opening)'}.
         </p>
@@ -296,7 +281,7 @@ function OpeningSets(props: {
     return {
       tooltip: { trigger: 'axis', valueFormatter: (v: number) => formatNumber(v) },
       legend: { bottom: 0 },
-      grid: { left: 44, right: 52, top: 28, bottom: 64 },
+      grid: { left: 44, right: 52, top: 30, bottom: 64 },
       xAxis: {
         type: 'value',
         min: 0,
@@ -317,12 +302,21 @@ function OpeningSets(props: {
           data: cd,
           markLine: {
             symbol: 'none',
-            label: { formatter: `max ${formatNumber(link.factor)}`, position: 'insideEndTop' },
+            lineStyle: { type: 'dashed' },
+            label: { show: false },
             data: [{ xAxis: link.factor }],
           },
         },
         ...(eff.length
-          ? [{ name: 'Cd × open area', type: 'line', yAxisIndex: 1, showSymbol: false, data: eff }]
+          ? [
+              {
+                name: 'Effective area (Cd × open area)',
+                type: 'line',
+                yAxisIndex: 1,
+                showSymbol: false,
+                data: eff,
+              },
+            ]
           : []),
       ],
     };
@@ -374,8 +368,54 @@ function OpeningSets(props: {
             ))}
         </div>
       )}
-      <Chart option={option} height={250} dark={dark} />
+      <Chart option={option} height={260} dark={dark} />
+      <p className="count chart-caption">
+        How the opening behaves as it opens (opening factor 0 = closed, 1 = the opening of the last
+        set). Blue, left axis: discharge coefficient Cd. Green, right axis: effective area, Cd ×
+        open area, which is what sets the airflow. EnergyPlus interpolates Cd and the width and
+        height factors linearly between the sets, and never opens beyond the dashed line (the
+        surface's maximum opening factor).
+      </p>
+      <Insight card={card} sets={sets} area={area} pivoted={pivoted} />
     </>
+  );
+}
+
+/** What the sets mean in practice for this surface. */
+function Insight(props: {
+  card: AfnCard;
+  sets: OpeningFactorSet[];
+  area?: number;
+  pivoted: boolean;
+}) {
+  const { card, sets, area, pivoted } = props;
+  const max = card.link.factor;
+  const effective = (f: number) => {
+    const s = interpolateSet(sets, f);
+    const a = s && openAreaOf(s, area, pivoted);
+    return s && a !== undefined ? a * s.cd : undefined;
+  };
+  const full = effective(max);
+  const half = effective(max / 2);
+  const notes: string[] = [];
+  if (full && half !== undefined) {
+    const ratio = half / full;
+    notes.push(
+      `At half of the maximum opening (${formatNumber(max / 2)}) the effective area is ${formatNumber(100 * ratio)} % of its value at the maximum${ratio < 0.3 ? ': Cd, width and height all shrink together, so a half-open window lets through much less than half' : ''}.`,
+    );
+  }
+  const mode = card.link.controlMode.toLowerCase();
+  if (mode === 'constant' || mode === 'ashrae55adaptive' || mode === 'cen15251adaptive')
+    notes.push(
+      `With ${card.link.controlMode} control the opening is either closed or at its maximum, so only the value at the dashed line is used.`,
+    );
+  if (notes.length === 0) return null;
+  return (
+    <ul className="plain insight">
+      {notes.map((n) => (
+        <li key={n}>{n}</li>
+      ))}
+    </ul>
   );
 }
 
@@ -427,8 +467,9 @@ function OpeningDiagram(props: {
         )}
       </svg>
       <figcaption>
-        {current ? 'max ' : ''}
-        {formatNumber(set.openingFactor)} · Cd {formatNumber(set.cd)}
+        {current ? 'maximum · ' : ''}factor {formatNumber(set.openingFactor)}
+        <br />
+        Cd {formatNumber(set.cd)}
       </figcaption>
     </figure>
   );
