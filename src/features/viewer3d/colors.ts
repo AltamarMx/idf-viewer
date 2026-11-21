@@ -8,14 +8,27 @@
  */
 import type { SurfaceView } from '../../core/session';
 
-export type ColorMode = 'boundary' | 'type' | 'zone' | 'construction';
+export type ColorMode =
+  | 'boundary'
+  | 'type'
+  | 'zone'
+  | 'construction'
+  | 'afn'
+  | 'openingFactor'
+  | 'cd';
 
-export const COLOR_MODES: { id: ColorMode; label: string }[] = [
+export const COLOR_MODES: { id: ColorMode; label: string; afn?: boolean }[] = [
   { id: 'boundary', label: 'Boundary condition' },
   { id: 'type', label: 'Surface type' },
   { id: 'zone', label: 'Zone' },
   { id: 'construction', label: 'Construction' },
+  { id: 'afn', label: 'Airflow network role', afn: true },
+  { id: 'openingFactor', label: 'Maximum opening factor', afn: true },
+  { id: 'cd', label: 'Discharge coefficient (Cd)', afn: true },
 ];
+
+/** Modes that only color part of the surfaces: the rest are drawn in neutral gray. */
+export const AFN_MODES = new Set<ColorMode>(['afn', 'openingFactor', 'cd']);
 
 export interface Category {
   key: string;
@@ -121,11 +134,97 @@ function paletteColor(index: number): string {
   return `hsl(${hue.toFixed(1)}, 55%, ${index % 2 ? 62 : 52}%)`;
 }
 
+/** L2: what each surface does in the AirflowNetwork. */
+export const AFN_COLORS: Category[] = [
+  { key: 'detailedopening', label: 'Detailed opening (operable)', color: '#1b9e77' },
+  { key: 'simpleopening', label: 'Simple opening (operable)', color: '#66c2a5' },
+  { key: 'horizontalopening', label: 'Horizontal opening (operable)', color: '#2b8cbe' },
+  { key: 'crack', label: 'Crack (leakage only)', color: '#e6863b' },
+  { key: 'ela', label: 'Effective leakage area (leakage only)', color: '#c8553d' },
+  { key: 'exhaustfan', label: 'Zone exhaust fan', color: '#7b5ea7' },
+  { key: 'specifiedflow', label: 'Specified flow rate', color: '#a6a23a' },
+  { key: 'missing', label: 'AFN component not found', color: '#e7298a' },
+  { key: 'fixed', label: 'Window or door not in the AFN (fixed)', color: '#3f5468' },
+  { key: 'other', label: 'Other surface, not in the AFN', color: '#c9ced3' },
+];
+const AFN_BY_KEY = new Map(AFN_COLORS.map((c) => [c.key, c]));
+
+const isOpening = (s: SurfaceView) => isGlazed(s) || s.kind === 'door';
+
+/** Sequential ramp (viridis stops) for values from 0 to 1. */
+const RAMP = ['#440154', '#3b528b', '#21918c', '#5ec962', '#fde725'];
+function rampColor(t: number): string {
+  const x = Math.min(1, Math.max(0, t)) * (RAMP.length - 1);
+  const i = Math.min(RAMP.length - 2, Math.floor(x));
+  const f = x - i;
+  const a = RAMP[i] as string;
+  const b = RAMP[i + 1] as string;
+  const channel = (k: number) =>
+    Math.round(
+      Number.parseInt(a.slice(k, k + 2), 16) * (1 - f) + Number.parseInt(b.slice(k, k + 2), 16) * f,
+    );
+  return rgb(channel(1), channel(3), channel(5));
+}
+
+function afnCategory(s: SurfaceView): Category {
+  if (s.afn) return AFN_BY_KEY.get(s.afn.type) as Category;
+  return AFN_BY_KEY.get(isOpening(s) ? 'fixed' : 'other') as Category;
+}
+
+/** One category per distinct value of the opening factor or Cd of operable openings. */
+function valueCategories(surfaces: SurfaceView[], mode: 'openingFactor' | 'cd') {
+  const afnValue = (s: SurfaceView) => {
+    if (s.afn?.role !== 'operable') return undefined;
+    return mode === 'openingFactor' ? s.afn.factor : s.afn.cd;
+  };
+  const values = [
+    ...new Set(
+      surfaces
+        .map(afnValue)
+        .filter((v): v is number => v !== undefined)
+        .map((v) => round(v)),
+    ),
+  ].sort((a, b) => a - b);
+  // Opening factors are always 0–1; Cd spreads over the range found.
+  const lo = mode === 'openingFactor' ? 0 : Math.min(...values, 1);
+  const hi = mode === 'openingFactor' ? 1 : Math.max(...values, 0);
+  const byValue = new Map(
+    values.map((v) => [
+      v,
+      {
+        key: String(v),
+        label: mode === 'openingFactor' ? `Opening factor ${v}` : `Cd ${v}`,
+        color: rampColor(hi > lo ? (v - lo) / (hi - lo) : 1),
+      },
+    ]),
+  );
+  const none: Category = {
+    key: 'none',
+    label: 'Not an operable opening',
+    color: AFN_BY_KEY.get('other')?.color as string,
+  };
+  const of = surfaces.map((s) => {
+    const v = afnValue(s);
+    return v === undefined ? none : (byValue.get(round(v)) ?? none);
+  });
+  const legend = [...byValue.values()];
+  if (of.includes(none)) legend.push(none);
+  return { of, legend };
+}
+
+const round = (v: number) => Math.round(v * 1000) / 1000;
+
 /** Category of each surface for a color mode, plus the legend in display order. */
 export function categorize(
   surfaces: SurfaceView[],
   mode: ColorMode,
 ): { of: Category[]; legend: Category[] } {
+  if (mode === 'afn') {
+    const of = surfaces.map(afnCategory);
+    const present = new Set(of.map((c) => c.key));
+    return { of, legend: AFN_COLORS.filter((c) => present.has(c.key)) };
+  }
+  if (mode === 'openingFactor' || mode === 'cd') return valueCategories(surfaces, mode);
   if (mode === 'boundary' || mode === 'type') {
     const of = surfaces.map((s) => {
       if (mode === 'type' || s.kind === 'shading') return typeCategory(s);

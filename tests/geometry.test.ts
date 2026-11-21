@@ -27,7 +27,7 @@ const cases = readdirSync(oracleDir)
   .filter((f) => f.endsWith('.json'))
   .map((f) => f.replace(/\.json$/, ''))
   .map((stem) => {
-    const idf = ['examples', 'tests/fixtures/geometry']
+    const idf = ['examples', 'tests/fixtures/geometry', 'tests/fixtures/windows']
       .map((dir) => `${dir}/${stem}.idf`)
       .find((p) => existsSync(resolve(ROOT, p)));
     return [stem, idf] as const;

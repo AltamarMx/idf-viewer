@@ -72,6 +72,9 @@ const api: WorkerApi = {
     const report = current().occupancy();
     return transfer(report, [report.building.buffer as ArrayBuffer]);
   },
+  async windows() {
+    return current().windows();
+  },
 };
 
 expose(api);

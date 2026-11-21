@@ -1,4 +1,5 @@
 import type { OccupancyReport, ZoneRow } from '../core/loads/report';
+import type { WindowInventory } from '../core/openings/windows';
 import type { ClassDocs } from '../core/schema/types';
 import type { SearchHit } from '../core/search';
 import type {
@@ -41,4 +42,5 @@ export interface WorkerApi {
   zoneTable(): Promise<ZoneRow[]>;
   zoneLoads(zone: string | null, discountLost: boolean): Promise<ZoneLoadView>;
   occupancy(): Promise<OccupancyReport>;
+  windows(): Promise<WindowInventory>;
 }

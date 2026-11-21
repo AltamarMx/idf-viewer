@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { GeometryView, ObjectRef, SurfaceView } from '../../core/session';
-import { formatArea, formatInt } from '../../ui/format';
-import { type Category, COLOR_MODES, type ColorMode, categorize, isGlazed } from './colors';
+import { formatArea, formatInt, formatNumber } from '../../ui/format';
+import {
+  AFN_MODES,
+  type Category,
+  COLOR_MODES,
+  type ColorMode,
+  categorize,
+  isGlazed,
+} from './colors';
 import { SceneView, type ViewName } from './scene';
 
 interface Props {
@@ -96,6 +103,8 @@ export default function Viewer3D({ geometry, selection, onSelect, dark }: Props)
     return map;
   }, [surfaces, of]);
 
+  const hasAfn = geometry.afn.present || surfaces.some((s) => s.afn);
+  const modes = COLOR_MODES.filter((m) => !m.afn || hasAfn);
   const selected = useMemo(() => [...highlighted(surfaces, selection)], [surfaces, selection]);
   const partner = useMemo(() => partnerOf(surfaces, selected), [surfaces, selected]);
 
@@ -140,7 +149,7 @@ export default function Viewer3D({ geometry, selection, onSelect, dark }: Props)
   // biome-ignore lint/correctness/useExhaustiveDependencies: re-apply after the scene is rebuilt for new geometry
   useEffect(() => {
     const colors = of.map((c) => c.color);
-    const lighter = surfaces.map((s) => isGlazed(s) && mode !== 'type');
+    const lighter = surfaces.map((s) => isGlazed(s) && mode !== 'type' && !AFN_MODES.has(mode));
     for (const i of selected) {
       colors[i] = HIGHLIGHT;
       lighter[i] = false;
@@ -188,7 +197,7 @@ export default function Viewer3D({ geometry, selection, onSelect, dark }: Props)
               setHidden(new Set());
             }}
           >
-            {COLOR_MODES.map((m) => (
+            {modes.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.label}
               </option>
@@ -262,8 +271,26 @@ export default function Viewer3D({ geometry, selection, onSelect, dark }: Props)
             );
           })}
         </ul>
-        {mode !== 'type' && (
+        {mode !== 'type' && !AFN_MODES.has(mode) && (
           <div className="count legend-note">Windows are drawn lighter and see-through.</div>
+        )}
+        {AFN_MODES.has(mode) && !geometry.afn.active && (
+          <div className="count legend-note">
+            {geometry.afn.present
+              ? 'AirflowNetwork:SimulationControl is set to NoMultizoneOrDistribution: EnergyPlus does not run the network.'
+              : 'There is no AirflowNetwork:SimulationControl: EnergyPlus does not run the network.'}
+          </div>
+        )}
+        {mode === 'openingFactor' && (
+          <div className="count legend-note">
+            Opening factor written on each AirflowNetwork surface: the most the opening can open.
+          </div>
+        )}
+        {mode === 'cd' && (
+          <div className="count legend-note">
+            Discharge coefficient at the maximum opening factor (interpolated between the opening
+            factor sets of a detailed opening).
+          </div>
         )}
       </div>
 
@@ -276,6 +303,14 @@ export default function Viewer3D({ geometry, selection, onSelect, dark }: Props)
             {one.boundary ? `${one.boundary} · ` : ''}
             {formatArea(one.area)} · azimuth {one.azimuth.toFixed(0)}° · tilt {one.tilt.toFixed(0)}°
           </div>
+          {one.afn && (
+            <div className="count">
+              AFN: {one.afn.component} ({one.afn.type}) · factor {one.afn.factor}
+              {one.afn.cd !== undefined ? ` · Cd ${formatNumber(one.afn.cd)}` : ''}
+              {one.afn.role === 'operable' ? ` · control ${one.afn.controlMode}` : ''}
+              {one.afn.viaPartner ? ` · listed on ${one.afn.viaPartner}` : ''}
+            </div>
+          )}
           {partner.status === 'ok' && (
             <div className="partner ok">Other side: {partner.name} (points back)</div>
           )}

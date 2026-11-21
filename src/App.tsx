@@ -22,13 +22,14 @@ import { idf, openInWorker } from './worker/client';
 const Viewer3D = lazy(() => import('./features/viewer3d/Viewer3D'));
 const SchedulesTab = lazy(() => import('./features/schedules/SchedulesTab'));
 const LoadsTab = lazy(() => import('./features/loads/LoadsTab'));
+const WindowsTab = lazy(() => import('./features/windows/WindowsTab'));
 
 type State =
   | { status: 'idle'; error?: string }
   | { status: 'loading'; name: string; progress: LoadProgress }
   | { status: 'ready'; summary: FileSummary };
 
-type Tab = 'summary' | '3d' | 'table' | 'schedules' | 'loads' | 'problems';
+type Tab = 'summary' | '3d' | 'table' | 'windows' | 'schedules' | 'loads' | 'problems';
 
 const STAGE_WEIGHT: Record<LoadProgress['stage'], [number, number]> = {
   reading: [0, 0.1],
@@ -224,6 +225,9 @@ export function App() {
               <TabButton id="table" current={tab} onSelect={setTab}>
                 Table
               </TabButton>
+              <TabButton id="windows" current={tab} onSelect={setTab}>
+                Windows
+              </TabButton>
               <TabButton id="schedules" current={tab} onSelect={setTab}>
                 Schedules
               </TabButton>
@@ -264,6 +268,19 @@ export function App() {
                 ) : (
                   <div className="content">Choose a class on the left.</div>
                 ))}
+              {tab === 'windows' && (
+                <Suspense fallback={<div className="content count">Loading…</div>}>
+                  <WindowsTab
+                    key={summary.fileName}
+                    selectedId={selectedId}
+                    onSelect={setSelectedId}
+                    onShow3D={(id) => {
+                      setSelectedId(id);
+                      setTab('3d');
+                    }}
+                  />
+                </Suspense>
+              )}
               {(tab === 'schedules' || tab === 'loads') && (
                 <Suspense fallback={<div className="content count">Loading charts…</div>}>
                   {tab === 'schedules' ? (

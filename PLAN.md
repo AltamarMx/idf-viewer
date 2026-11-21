@@ -491,7 +491,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 ### Fase 2b · Ventanas, ventilación natural e infiltración
 
 - [x] 2b.1 Geometría simplificada (C6): hecha en la fase 1.
-- [ ] 2b.2 Inventario de ventanas (L1) y ventanas en 3D por operabilidad (L2).
+- [x] 2b.2 Inventario de ventanas (L1) y ventanas en 3D por operabilidad (L2).
 - [ ] 2b.3 Resumen del AFN (L3), ficha de apertura (L4) y diagrama de apertura (L5).
 - [ ] 2b.4 Reglas de apertura (L6).
 - [ ] 2b.5 Infiltración (L7) y ventilación sin AFN (L8).
@@ -501,6 +501,18 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 - los ejemplos con AFN muestran fichas completas con los valores efectivos, incluyendo `ZoneLevel`;
 - las validaciones detectan los errores sembrados en los archivos de prueba;
 - funciona con la sintaxis AFN de 8.x y de 9.0+.
+
+**Avance de la fase 2b (se completa al cerrar la fase):**
+- 2b.2: pestaña nueva **Windows** con el inventario de ventanas y puertas: tipo, zona, superficie anfitriona, orientación, ancho × alto, antepecho y dintel (medidos desde el punto más bajo del muro), área sin marco, área de marco, multiplicadores, área total, construcción, U/SHGC/VT de `WindowMaterial:SimpleGlazingSystem`, marco, control de sombreado y su papel en el AFN (componente, factor de apertura, Cd y modo de control). Se filtra por tipo, zona, orientación y papel en el AFN; el botón "3D" lleva a la ventana en la vista 3D.
+- En 3D hay tres modos nuevos de color cuando el archivo tiene AFN: papel en el AFN (abertura detallada, simple u horizontal; grieta o área de fuga; extractor; flujo especificado; ventana fija), factor de apertura máximo y Cd.
+- Reglas usadas (de la documentación de EnergyPlus, pendientes de confirmar con referencias):
+  - el Cd de un `DetailedOpening` se interpola linealmente entre sus juegos de factor de apertura; el visor lo muestra en el factor de apertura de la superficie;
+  - con `ZoneLevel` (valor por omisión en la superficie) manda el modo de `AirflowNetwork:MultiZone:Zone`, cuyo valor por omisión es `NoVent`;
+  - en superficies interzona solo se declara un lado del par en `AirflowNetwork:MultiZone:Surface` y el otro lado comparte el componente;
+  - antes de 9.0 cada ventana nombra su `WindowProperty:ShadingControl`; desde 9.0 `WindowShadingControl` lista las ventanas.
+- Comprobado contra EnergyPlus: el área total de ventanas por orientación coincide con la tabla ventana-muro en los 8 ejemplos.
+- Archivos de prueba nuevos: `tests/fixtures/windows/Windows.idf` (26.2) y `Windows-8.9.idf`.
+- **Pendiente:** `make_oracles.py` ya pide la tabla "Exterior Fenestration" de EnergyPlus y la prueba que la compara está lista, pero falta correrlo con EnergyPlus 26.2, que no está instalado en esta computadora.
 
 ### Fase 2c · Construcciones, validación y complementos
 
@@ -547,7 +559,7 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 **Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Schedules, Loads y Problems. Último commit de código: `d0c5ec9` (fase 2a).
 
-**Siguiente:** fase 2b (ventanas, ventilación natural e infiltración), empezando por la tarea 2b.2. Se arranca cuando des el visto bueno.
+**En curso:** fase 2b (ventanas, ventilación natural e infiltración). La tarea 2b.2 está hecha, sin commit todavía; sigue la 2b.3 (resumen del AFN y ficha de apertura). Para regenerar las referencias hace falta instalar EnergyPlus 26.2 en esta computadora.
 
 **Pendiente suelto:** tu IDF de prueba todavía no está en `examples/`. Para que aparezca en la galería, cópialo ahí y, si quieres, dale título en `examples/examples.json`. Para que las pruebas también lo comparen contra EnergyPlus, hay que correr `make_oracles.py` sobre él (normal y con `--annual`).
 

@@ -86,3 +86,22 @@ test('loads: zone table, loads over time and occupancy peak', async ({ page }) =
   await expect(page.locator('.chart canvas').first()).toBeVisible();
   await expect(page.getByText('Peak in the building')).toBeVisible();
 });
+
+test('windows tab lists openings with their AFN role and shows them in 3D', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'Small office with AirflowNetwork');
+  await page.getByRole('tab', { name: 'Windows' }).click();
+  await expect(page.locator('.windows-notice')).toContainText('AirflowNetwork is on');
+  const row = page.locator('.table-row', { hasText: 'Zn001:Wall001:Win001' });
+  await expect(row).toContainText('Detailed opening');
+  await expect(row).toContainText('ELECTRO-CON-LIGHT');
+
+  await row.getByRole('button', { name: '3D' }).click();
+  await expect(page.locator('.surface-info')).toContainText('Zn001:Wall001:Win001');
+  await expect(page.locator('.surface-info')).toContainText('AFN: WiOpen1');
+  await page.getByLabel('Color by').selectOption('afn');
+  await expect(page.locator('.legend')).toContainText('Detailed opening (operable)');
+  await expect(page.locator('.legend')).toContainText('Crack (leakage only)');
+  expect(errors).toEqual([]);
+});

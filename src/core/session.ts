@@ -4,6 +4,13 @@
  * what they show, so the main thread never holds the whole model.
  */
 import {
+  type AfnComponentType,
+  type AfnModel,
+  type AfnRole,
+  type AfnSurfaceInfo,
+  readAfn,
+} from './airflow/afn';
+import {
   buildGeometry,
   type GeometryResult,
   type ShadingType,
@@ -15,6 +22,7 @@ import { type LoadsResult, type LoadType, resolveLoads, zoneSeries } from './loa
 import { type OccupancyReport, occupancyReport, type ZoneRow, zoneRows } from './loads/report';
 import { type ClassSummary, IdfModel, objectName, summarizeClasses } from './model/model';
 import { buildReferences, type ReferenceIndex } from './model/references';
+import { type WindowInventory, windowInventory } from './openings/windows';
 import { decodeIdf, type IdfObject, type ParseWarning, parseIdf } from './parser/idf';
 import { buildCalendar, DAY_TYPES, type DayType, type YearCalendar } from './schedules/calendar';
 import { type ScheduleInfo, ScheduleSet } from './schedules/evaluate';
@@ -135,9 +143,21 @@ export interface SurfaceView {
   azimuth: number;
   tilt: number;
   normal: [number, number, number];
+  /** How the surface takes part in the AirflowNetwork, if it does (L2). */
+  afn?: AfnBrief;
   /** x, y, z of each vertex, relative to GeometryView.center. */
   positions: Float32Array;
   triangles: Uint32Array;
+}
+
+export interface AfnBrief {
+  component: string;
+  type: AfnComponentType;
+  role: AfnRole;
+  factor: number;
+  cd?: number;
+  controlMode: string;
+  viaPartner?: string;
 }
 
 export interface GeometryView {
@@ -146,6 +166,8 @@ export interface GeometryView {
   northAxis: number;
   surfaces: SurfaceView[];
   zones: ZoneGeometry[];
+  /** AirflowNetwork:SimulationControl exists and runs the multizone network. */
+  afn: { present: boolean; active: boolean };
 }
 
 const MAX_TABLE_COLUMNS = 300;
@@ -336,11 +358,13 @@ export class Session {
       number,
       number,
     ];
+    const afn = this.afn;
     return {
       center,
       size,
       northAxis: rules.northAxis,
       zones,
+      afn: { present: afn.present, active: afn.active },
       surfaces: surfaces.map((s) => {
         const positions = new Float32Array(s.vertices.length * 3);
         s.vertices.forEach((v, i) => {
@@ -349,14 +373,46 @@ export class Session {
           positions[i * 3 + 2] = v[2] - center[2];
         });
         const { vertices: _v, normal, ...rest } = s;
+        const link = s.kind === 'shading' ? undefined : afn.surfaces.get(s.name.toLowerCase());
         return {
           ...rest,
+          afn: link && {
+            component: link.component,
+            type: link.type,
+            role: link.role,
+            factor: link.factor,
+            cd: link.cd,
+            controlMode: link.controlMode,
+            viaPartner: link.viaPartner,
+          },
           normal: normal as [number, number, number],
           positions,
           triangles: Uint32Array.from(triangulate(s.vertices, s.normal)),
         };
       }),
     };
+  }
+
+  private _afn?: AfnModel;
+
+  get afn(): AfnModel {
+    if (!this._afn) {
+      const info = new Map<string, AfnSurfaceInfo>();
+      for (const s of this.geometry.surfaces) {
+        if (s.kind === 'shading') continue;
+        info.set(s.name.toLowerCase(), {
+          zone: s.zone,
+          partner: s.boundary === 'Surface' ? s.boundaryObject : undefined,
+        });
+      }
+      this._afn = readAfn(this.model, this.schema, info);
+    }
+    return this._afn;
+  }
+
+  /** Windows and doors with their host, size, construction and AFN role (L1). */
+  windows(): WindowInventory {
+    return windowInventory(this.model, this.schema, this.geometry, this.afn);
   }
 
   buildingSummary(): BuildingSummary {

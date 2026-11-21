@@ -1254,3 +1254,30 @@ ul.alerts li.warning {
 table.grid.zones td:first-child {
   white-space: nowrap;
 }
+
+/* ---- Phase 2b: windows ---- */
+.table-row.static {
+  cursor: default;
+}
+
+.cell.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.windows-notice {
+  margin: 8px 12px 0;
+}
+
+.table-toolbar select {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.warn-text {
+  color: var(--warn);
+}

@@ -8,7 +8,9 @@ objects, and writes ``tests/oracles/<file stem>.json`` with:
 - surfaces: class, zone, gross and net area, azimuth, tilt and vertices
   (vertices as EnergyPlus reports them: upper-left corner first, counterclockwise,
   world coordinates, 2 decimals);
-- building: total and conditioned floor area and the window-wall ratio table.
+- building: total and conditioned floor area and the window-wall ratio table;
+- fenestration: EnergyPlus' "Exterior Fenestration" table (construction, frame,
+  areas, U-factor, SHGC, shading control, parent surface) for each window and door.
 
 With ``--annual`` it runs a whole year (with a weather file from the install; the
 values used do not depend on the weather) and writes ``<stem>.annual.json``:
@@ -48,7 +50,7 @@ DROP_CLASSES = {"output:sqlite", "output:table:summaryreports", "output:surfaces
 EXTRA_OBJECTS = """
 Output:Surfaces:List, DetailsWithVertices;
 Output:SQLite, SimpleAndTabular;
-Output:Table:SummaryReports, InputVerificationandResultsSummary;
+Output:Table:SummaryReports, InputVerificationandResultsSummary, EnvelopeSummary;
 """
 
 
@@ -160,8 +162,14 @@ def read_sql(sql: Path) -> dict:
         or table("InputVerificationandResultsSummary", "Building Area"),
         "windowWallRatio": table("InputVerificationandResultsSummary", "Window-Wall Ratio"),
     }
+    # Totals rows ("Total or Average", "North Total or Average"...) are dropped.
+    fenestration = {
+        name: row
+        for name, row in table("EnvelopeSummary", "Exterior Fenestration").items()
+        if "Total" not in name and "Average" not in name
+    }
     db.close()
-    return {"zones": zones, "surfaces": surfaces, "building": building}
+    return {"zones": zones, "surfaces": surfaces, "building": building, "fenestration": fenestration}
 
 
 def rounded(value, digits=6):
@@ -380,10 +388,14 @@ def main(argv: list[str] | None = None) -> int:
     if energyplus is None:
         print("EnergyPlus not found; pass --energyplus.", file=sys.stderr)
         return 1
-    fixtures = "schedules" if args.annual else "geometry"
-    files = args.files or sorted((ROOT / "examples").glob("*.idf")) + sorted(
-        (ROOT / "tests" / "fixtures" / fixtures).glob("*.idf")
-    )
+    fixtures = ["schedules"] if args.annual else ["geometry", "windows"]
+    files = args.files or sorted((ROOT / "examples").glob("*.idf")) + [
+        idf
+        for folder in fixtures
+        for idf in sorted((ROOT / "tests" / "fixtures" / folder).glob("*.idf"))
+        # Files of older versions cannot run in EnergyPlus 26.2.
+        if not re.search(r"-\d+\.\d+$", idf.stem)
+    ]
     worker = run_annual if args.annual else run
     failures = 0
     with ThreadPoolExecutor(max_workers=4) as pool:

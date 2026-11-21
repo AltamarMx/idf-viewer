@@ -27,6 +27,15 @@ export class FieldReader {
     return i === undefined ? '' : (this.obj.fields[i] ?? '').trim();
   }
 
+  /** Raw value, or the schema default when blank (e.g. "ZoneLevel"). */
+  strOr(name: string): string {
+    const value = this.str(name);
+    if (value) return value;
+    const i = this.index.get(name.toLowerCase());
+    const def = i === undefined ? undefined : this.cls?.fields[i]?.default;
+    return def === undefined ? '' : String(def);
+  }
+
   /** Numeric value, or undefined when blank, "autocalculate", "autosize"… */
   num(name: string): number | undefined {
     return toNumber(this.str(name));
