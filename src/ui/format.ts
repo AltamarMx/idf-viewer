@@ -17,6 +17,8 @@ export function formatBytes(bytes: number): string {
 /** Number with up to 2 decimals depending on its size, without trailing zeros. */
 export function formatNumber(n: number): string {
   const abs = Math.abs(n);
+  // Small values keep two significant digits instead of rounding to 0 (Cd 0.001).
+  if (abs > 0 && abs < 0.01) return String(Number(n.toPrecision(2)));
   if (abs >= 1000) return integer.format(Math.round(n));
   if (abs >= 10) return oneDecimal.format(n);
   return twoDecimals.format(n);

@@ -494,8 +494,8 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 - [x] 2b.2 Inventario de ventanas (L1) y ventanas en 3D por operabilidad (L2).
 - [x] 2b.3 Resumen del AFN (L3), ficha de apertura (L4) y diagrama de apertura (L5).
 - [x] 2b.4 Reglas de apertura (L6).
-- [ ] 2b.5 Infiltración (L7) y ventilación sin AFN (L8).
-- [ ] 2b.6 Validaciones de ventilación (L12), probadas con IDF que tienen errores a propósito.
+- [x] 2b.5 Infiltración (L7) y ventilación sin AFN (L8).
+- [x] 2b.6 Validaciones de ventilación (L12), probadas con IDF que tienen errores a propósito.
 
 **Listo cuando:**
 - los ejemplos con AFN muestran fichas completas con los valores efectivos, incluyendo `ZoneLevel`;
@@ -531,6 +531,25 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - `ASHRAE55Adaptive` y `CEN15251Adaptive`: abren al factor máximo cuando la temperatura operativa supera la temperatura de confort adaptativo y la zona está más caliente que el exterior;
   - `NoVent`: siempre cerrada;
   - si el límite superior no es mayor que el inferior, EnergyPlus marca error de entrada.
+- 2b.5: tercera sección de la pestaña Ventilation, **Infiltration and ventilation**:
+  - tabla de zonas con volumen, área exterior, área de ventanas, infiltración de diseño (m³/s y ACH), ventilación (ACH), área de aberturas por viento y tiro térmico, y su relación con el AFN (grietas y áreas de fuga);
+  - infiltración por objeto: método, caudal de diseño, ACH, caudal por m² de piso y de área exterior, horario y modelo de coeficientes (constante, DOE-2, BLAST o propio). `EffectiveLeakageArea` y `FlowCoefficient` se muestran con su fórmula, porque dependen del clima;
+  - `ZoneVentilation:DesignFlowRate` con sus límites (solo los que no están en su valor por omisión), `ZoneVentilation:WindandStackOpenArea` con su área comparada con las ventanas de la zona, `ZoneMixing`, `ZoneCrossMixing`, `ZoneAirBalance:OutdoorAir` y `ZoneThermalChimney`.
+- La asignación de objetos a zonas (`Zone`, `ZoneList`, `Space`, `SpaceList`) se movió a un módulo común (`src/core/model/targets.ts`) que usan cargas e infiltración; las cargas siguen coincidiendo con EnergyPlus.
+- Reglas usadas en 2b.5 (de la documentación de EnergyPlus, pendientes de confirmar):
+  - `Flow/ExteriorArea` usa el área bruta de muros, techos y pisos con frontera `Outdoors`; `Flow/ExteriorWallArea`, solo los muros;
+  - `AirChanges/Hour` = ACH × volumen / 3600; un `Space` usa la parte del volumen de su zona proporcional a su área de piso;
+  - un objeto asignado a una `ZoneList` aplica su caudal completo a cada zona;
+  - coeficientes de referencia: constante (1, 0, 0, 0), DOE-2 (0, 0, 0.224, 0), BLAST (0.606, 0.03636, 0.1177, 0);
+  - `WindandStackOpenArea` con `autocalculate`: Cw = 0.55 − 0.25 × ángulo / 180°, Cd = 0.40 + 0.0045·|ΔT|.
+- Archivos de prueba nuevos: `tests/fixtures/ventilation/Flows.idf` (26.2) y `Flows-8.9.idf`. `make_oracles.py` guarda ahora las tablas "Airflow Stats Nominal" del `.eio` (caudal de diseño, ACH y coeficientes por objeto y zona), y la prueba que las compara está lista.
+- 2b.6: el panel de problemas tiene la categoría **Ventilation**:
+  - errores: zona con superficies AFN sin `AirflowNetwork:MultiZone:Zone`; superficie exterior sin nodo externo cuando los Cp son `Input`; `DetailedOpening` cuyos factores de apertura no empiezan en 0, no terminan en 1 o no van en aumento; Cd fuera de (0, 1]; factores de ancho, alto o altura de inicio fuera de [0, 1]; límite superior de ΔT o Δh no mayor que el inferior;
+  - advertencias: `ZoneInfiltration`, `ZoneVentilation`, `ZoneMixing` o `ZoneCrossMixing` en una zona del AFN; altura de inicio + factor de alto mayor que 1;
+  - notas: superficies AFN que no tienen efecto porque el AFN está apagado, aberturas no rectangulares (rectángulo equivalente) y aberturas cuyo factor fija un programa EMS;
+  - las referencias AFN rotas (superficie, componente o nodo que no existen) ya las marcaba la revisión general de referencias (H1).
+- Archivo de prueba con errores a propósito: `tests/fixtures/ventilation/AfnErrors.idf`. Ningún ejemplo ni archivo de prueba correcto produce problemas de ventilación.
+- Corrección: los números distintos de cero menores que 0.01 se muestran con dos cifras significativas (antes, un Cd de 0.001 aparecía como 0).
 - **Pendiente:** `make_oracles.py` ya pide la tabla "Exterior Fenestration" de EnergyPlus y la prueba que la compara está lista, pero falta correrlo con EnergyPlus 26.2, que no está instalado en esta computadora.
 
 ### Fase 2c · Construcciones, validación y complementos
@@ -578,7 +597,12 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 **Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Schedules, Loads y Problems. Último commit de código: `d0c5ec9` (fase 2a).
 
-**En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2, 2b.3 y 2b.4 están hechas; sigue la 2b.5 (infiltración y ventilación sin AFN). Para regenerar las referencias hace falta instalar EnergyPlus 26.2 en esta computadora.
+**En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2 a 2b.6 están hechas y publicadas. Falta el **cierre de la fase, que se hará en la computadora que tiene EnergyPlus 26.2** (en esta no está instalado):
+
+1. `uv run tools/make_oracles.py` (sin `--annual`) para regenerar las referencias de los 8 ejemplos y de `tests/fixtures/geometry`, `windows` y `ventilation`. Ahora guardan además la tabla "Exterior Fenestration" y las tablas "Airflow Stats Nominal" del `.eio`.
+2. `npm test`: las pruebas que hoy se saltan ("matches the EnergyPlus fenestration table" y "design flows match EnergyPlus") pasarán a comparar. Si algo no coincide, corregir la regla y anotarla.
+3. Confirmar o corregir las reglas marcadas como "pendientes de confirmar" en el avance de la fase 2b, y pasarlas a "Notas de la fase 2b".
+4. Revisar que el README siga al día (ya menciona ventanas, AFN e infiltración), commit, push y revisar que GitHub Actions pase y el sitio quede publicado.
 
 **Pendiente suelto:** tu IDF de prueba todavía no está en `examples/`. Para que aparezca en la galería, cópialo ahí y, si quieres, dale título en `examples/examples.json`. Para que las pruebas también lo comparen contra EnergyPlus, hay que correr `make_oracles.py` sobre él (normal y con `--annual`).
 

@@ -7,6 +7,7 @@
  */
 import type { GeometryResult, Surface3D, SurfaceKind } from '../geometry/build';
 import { length, sub, type Vec3 } from '../geometry/polygon';
+import { type DescribedField, describeField } from '../model/describe';
 import type { IdfModel } from '../model/model';
 import { FieldReader } from '../model/reader';
 import type { ReferenceIndex } from '../model/references';
@@ -23,23 +24,8 @@ import {
 } from './afn';
 import { type OpeningRule, openingRule } from './rules';
 
-export interface AfnField {
-  label: string;
-  /** IDD field name, when the label is shorter. */
-  fieldName?: string;
-  value: string;
-  units?: string;
-  /** For ZoneLevel control: the value comes from the surface or from its zone. */
-  from?: 'surface' | 'zone';
-  /** The field is blank and the IDD default applies. */
-  defaulted?: boolean;
-  /** Object named by the value (schedule, curve, node…). */
-  refId?: number;
-  /** The ventilation control mode in effect does not use this value. */
-  unused?: boolean;
-  /** What a blank value means, e.g. "always available" for a schedule. */
-  blank?: string;
-}
+/** A field of the AirflowNetwork input with its source and default. */
+export type AfnField = DescribedField;
 
 export interface AfnNote {
   kind: 'info' | 'warn';
@@ -248,23 +234,7 @@ export class AfnInput {
 
   /** A field with its units, IDD default and the object it names. */
   private field(obj: IdfObject, name: string | undefined, label?: string): AfnField | undefined {
-    if (!name) return undefined;
-    const r = this.reader(obj);
-    if (!r.has(name)) return undefined;
-    const raw = r.str(name);
-    const value = raw || r.strOr(name);
-    const index = r.indexOf(name) as number;
-    const refId = raw
-      ? this.references.uses.get(obj.id)?.find((e) => e.field === index)?.to
-      : undefined;
-    return {
-      label: label ?? name,
-      fieldName: label ? name : undefined,
-      value,
-      units: r.units(name),
-      defaulted: !raw && value !== '',
-      refId,
-    };
+    return describeField(obj, this.reader(obj), this.references, name, label);
   }
 
   private fields(obj: IdfObject, names: string[]): AfnField[] {

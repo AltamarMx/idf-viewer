@@ -11,6 +11,7 @@ import {
   readAfn,
 } from './airflow/afn';
 import { type AfnCard, AfnInput, type AfnOverview } from './airflow/card';
+import { type ZoneFlows, zoneFlows } from './airflow/zoneflows';
 import {
   buildGeometry,
   type GeometryResult,
@@ -34,7 +35,8 @@ import type { ClassDocs, Schema } from './schema/types';
 import { type Resolution, resolveVersion } from './schema/version';
 import { type SearchHit, search } from './search';
 import { type BuildingSummary, buildingSummary } from './summary';
-import { collectProblems, type Problem } from './validation/problems';
+import { collectProblems, type Problem, sortProblems } from './validation/problems';
+import { ventilationProblems } from './validation/ventilation';
 
 export interface FileSource {
   name: string;
@@ -445,6 +447,21 @@ export class Session {
     return card;
   }
 
+  private _zoneFlows?: ZoneFlows;
+
+  /** Infiltration and ventilation without AirflowNetwork, per zone (L7, L8). */
+  zoneFlows(): ZoneFlows {
+    this._zoneFlows ??= zoneFlows(
+      this.model,
+      this.schema,
+      this.geometry,
+      this.references,
+      this.loads,
+      this.afn,
+    );
+    return this._zoneFlows;
+  }
+
   /** Windows and doors with their host, size, construction and AFN role (L1). */
   windows(): WindowInventory {
     return windowInventory(this.model, this.schema, this.geometry, this.afn);
@@ -694,8 +711,6 @@ export async function openFile(
     references,
     geometryWarnings: geometry.warnings,
   });
-  const problemCounts = { error: 0, warning: 0, info: 0 };
-  for (const p of problems) problemCounts[p.severity]++;
 
   const summary: FileSummary = {
     fileName: source.name,
@@ -707,8 +722,12 @@ export async function openFile(
     schemaBuild: schema?.build,
     classes,
     warnings: parsed.warnings,
-    problemCounts,
+    problemCounts: { error: 0, warning: 0, info: 0 },
     surfaceCount: geometry.surfaces.length,
   };
-  return new Session(model, schema, summary, references, geometry, problems, loader);
+  const session = new Session(model, schema, summary, references, geometry, problems, loader);
+  problems.push(...ventilationProblems(model, schema, geometry, session.afn));
+  sortProblems(problems);
+  for (const p of problems) summary.problemCounts[p.severity]++;
+  return session;
 }

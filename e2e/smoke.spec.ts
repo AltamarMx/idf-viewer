@@ -131,3 +131,30 @@ test('airflow network: summary and opening card with ZoneLevel values', async ({
   await expect(card.locator('canvas')).toHaveCount(2);
   expect(errors).toEqual([]);
 });
+
+test('infiltration and ventilation: zones, infiltration and wind and stack openings', async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'High-rise apartment building');
+  await page.getByRole('tab', { name: 'Ventilation' }).click();
+  await page.getByRole('tab', { name: 'Infiltration and ventilation' }).click();
+  await page.getByRole('button', { name: 'G SW Apartment', exact: true }).click();
+  const flows = page.locator('.flows');
+  await expect(flows).toContainText('Showing the objects of G SW Apartment');
+  await expect(flows).toContainText('Flow/ExteriorArea');
+  await expect(flows).toContainText('DOE-2');
+  await expect(flows).toContainText('Wind and stack open area');
+  expect(errors).toEqual([]);
+});
+
+test('problems panel lists the ventilation mistakes of a file', async ({ page }) => {
+  await page.goto('./');
+  await page.locator('input[type=file]').setInputFiles('tests/fixtures/ventilation/AfnErrors.idf');
+  await page.getByRole('tab', { name: /Problems/ }).click();
+  const panel = page.locator('.tab-body');
+  await expect(panel).toContainText('BadSets: Opening Factor 1 must be 0');
+  await expect(panel).toContainText('but no AirflowNetwork:MultiZone:Zone');
+  await expect(panel).toContainText('EMS sets the opening factor of Win:East');
+});

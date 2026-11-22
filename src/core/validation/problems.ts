@@ -13,7 +13,14 @@ export type Severity = 'error' | 'warning' | 'info';
 
 export interface Problem {
   severity: Severity;
-  category: 'Reading' | 'Version' | 'Schema' | 'Reference' | 'Duplicate name' | 'Geometry';
+  category:
+    | 'Reading'
+    | 'Version'
+    | 'Schema'
+    | 'Reference'
+    | 'Duplicate name'
+    | 'Geometry'
+    | 'Ventilation';
   message: string;
   objectId?: number;
   line?: number;
@@ -88,6 +95,10 @@ export function collectProblems(input: {
     });
   }
 
+  return sortProblems(problems);
+}
+
+export function sortProblems(problems: Problem[]): Problem[] {
   const order: Record<Severity, number> = { error: 0, warning: 1, info: 2 };
   return problems.sort(
     (a, b) => order[a.severity] - order[b.severity] || (a.line ?? 0) - (b.line ?? 0),

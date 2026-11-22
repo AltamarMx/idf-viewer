@@ -58,3 +58,24 @@ def test_prepare_annual_input_keeps_start_day_and_makes_a_full_year():
 def test_compress_keeps_distinct_days():
     values = [0.0] * 24 + [1.0] * 24 + [0.0] * 24
     assert make_oracles.compress(values) == {"profiles": [[0.0] * 24, [1.0] * 24], "days": [0, 1, 0]}
+
+
+def test_read_eio_airflow(tmp_path):
+    eio = tmp_path / "eplusout.eio"
+    eio.write_text(
+        "! <ZoneInfiltration Airflow Stats Nominal>, Name, Schedule Name, Zone Name, Design Volume Flow Rate {m3/s}, ACH - Air Changes per Hour\n"
+        "ZoneInfiltration Airflow Stats Nominal, INF 1, SCH, ZONE 1, 0.032, 0.48\n"
+        "HeatTransfer Surface, WALL 1\n",
+        encoding="latin-1",
+    )
+    assert make_oracles.read_eio_airflow(eio) == {
+        "ZoneInfiltration Airflow Stats Nominal": [
+            {
+                "Name": "INF 1",
+                "Schedule Name": "SCH",
+                "Zone Name": "ZONE 1",
+                "Design Volume Flow Rate {m3/s}": 0.032,
+                "ACH - Air Changes per Hour": 0.48,
+            }
+        ]
+    }

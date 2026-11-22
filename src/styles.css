@@ -1475,3 +1475,20 @@ table.grid.afn-surfaces th {
 ul.insight {
   margin: 6px 0 10px;
 }
+
+/* Infiltration and ventilation */
+table.grid.flows-table td,
+table.grid.flows-table th,
+table.grid.flows-zones td,
+table.grid.flows-zones th {
+  white-space: nowrap;
+}
+
+table.grid.flows-table td.wrap {
+  white-space: normal;
+  min-width: 260px;
+}
+
+.flows ul.notes {
+  margin: 6px 0 0;
+}

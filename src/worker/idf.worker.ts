@@ -81,6 +81,9 @@ const api: WorkerApi = {
   async afnCard(surface) {
     return current().afnCard(surface);
   },
+  async zoneFlows() {
+    return current().zoneFlows();
+  },
 };
 
 expose(api);

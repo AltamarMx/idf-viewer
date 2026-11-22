@@ -10,7 +10,10 @@ objects, and writes ``tests/oracles/<file stem>.json`` with:
   world coordinates, 2 decimals);
 - building: total and conditioned floor area and the window-wall ratio table;
 - fenestration: EnergyPlus' "Exterior Fenestration" table (construction, frame,
-  areas, U-factor, SHGC, shading control, parent surface) for each window and door.
+  areas, U-factor, SHGC, shading control, parent surface) for each window and door;
+- airflow: the "... Airflow Stats Nominal" tables of the .eio file (infiltration,
+  ventilation, mixing): design flow, flow per floor and exterior area, ACH and
+  coefficients of each object in each zone.
 
 With ``--annual`` it runs a whole year (with a weather file from the install; the
 values used do not depend on the weather) and writes ``<stem>.annual.json``:
@@ -112,6 +115,29 @@ def read_eio_surfaces(eio: Path) -> dict[str, dict]:
     return surfaces
 
 
+def read_eio_airflow(eio: Path) -> dict[str, list[dict]]:
+    """Rows of the "<... Airflow Stats Nominal>" tables, keyed by their header columns."""
+    headers: dict[str, list[str]] = {}
+    tables: dict[str, list[dict]] = {}
+    for raw in eio.read_text(encoding="latin-1").splitlines():
+        line = raw.strip()
+        if line.startswith("! <") and "Airflow Stats Nominal" in line:
+            cells = [c.strip() for c in line.split(",")]
+            headers[cells[0][3:].rstrip(">")] = cells[1:]
+            continue
+        cells = [c.strip() for c in line.split(",")]
+        section = cells[0]
+        if section in headers:
+            row: dict = {}
+            for name, value in zip(headers[section], cells[1:]):
+                try:
+                    row[name] = float(value)
+                except ValueError:
+                    row[name] = value
+            tables.setdefault(section, []).append(row)
+    return tables
+
+
 def read_sql(sql: Path) -> dict:
     db = sqlite3.connect(sql)
     db.row_factory = sqlite3.Row
@@ -199,6 +225,7 @@ def run(idf: Path, energyplus: Path) -> Path:
     sql = read_sql(run_dir / "eplusout.sql")
     for name, vertices in read_eio_surfaces(run_dir / "eplusout.eio").items():
         sql["surfaces"].setdefault(name, {}).update(vertices)
+    sql["airflow"] = read_eio_airflow(run_dir / "eplusout.eio")
     version = re.search(r"EnergyPlus, Version ([\d.]+)", (run_dir / "eplusout.err").read_text(errors="replace"))
     oracle = {
         "source": {"file": idf.name, "energyplus": version.group(1) if version else None},
@@ -388,7 +415,7 @@ def main(argv: list[str] | None = None) -> int:
     if energyplus is None:
         print("EnergyPlus not found; pass --energyplus.", file=sys.stderr)
         return 1
-    fixtures = ["schedules"] if args.annual else ["geometry", "windows"]
+    fixtures = ["schedules"] if args.annual else ["geometry", "windows", "ventilation"]
     files = args.files or sorted((ROOT / "examples").glob("*.idf")) + [
         idf
         for folder in fixtures

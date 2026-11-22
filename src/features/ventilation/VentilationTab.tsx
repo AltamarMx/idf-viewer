@@ -3,6 +3,7 @@ import type { AfnOverview } from '../../core/airflow/card';
 import { idf } from '../../worker/client';
 import { AfnPanel } from './AfnPanel';
 import { WindowsTable } from './WindowsTable';
+import { ZoneFlowsPanel } from './ZoneFlowsPanel';
 
 interface Props {
   selectedId: number | null;
@@ -11,7 +12,7 @@ interface Props {
   dark: boolean;
 }
 
-type Section = 'windows' | 'afn';
+type Section = 'windows' | 'afn' | 'flows';
 
 /** Windows, natural ventilation and the AirflowNetwork (L1–L5). */
 export default function VentilationTab({ selectedId, onSelect, onShow3D, dark }: Props) {
@@ -51,9 +52,20 @@ export default function VentilationTab({ selectedId, onSelect, onShow3D, dark }:
           Airflow network
           {overview && !hasAfn && <span className="count"> · none</span>}
         </button>
+        <button
+          type="button"
+          role="tab"
+          className="subtab"
+          aria-selected={section === 'flows'}
+          onClick={() => setSection('flows')}
+        >
+          Infiltration and ventilation
+        </button>
       </div>
       <div className="ventilation-body">
-        {section === 'windows' ? (
+        {section === 'flows' ? (
+          <ZoneFlowsPanel onSelect={onSelect} />
+        ) : section === 'windows' ? (
           <WindowsTable
             selectedId={selectedId}
             onSelect={onSelect}
