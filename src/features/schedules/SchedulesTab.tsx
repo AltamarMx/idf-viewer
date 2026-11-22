@@ -12,7 +12,7 @@ import { formatInt, formatNumber } from '../../ui/format';
 import { idf } from '../../worker/client';
 import { Chart } from '../charts/Chart';
 import { heatmapOption, lineOption, profilesOption } from '../charts/options';
-import { dayLabel } from '../charts/time';
+import { dayLabel, hourTicks } from '../charts/time';
 
 interface Props {
   dark: boolean;
@@ -452,6 +452,11 @@ function ZonePanels(props: {
                       height={p.view === 'line' ? 180 : 240}
                       dark={props.dark}
                       group="zone-subpanels"
+                      xTicks={
+                        p.view === 'line'
+                          ? hourTicks(props.calendar.dates, d.hourly.length)
+                          : undefined
+                      }
                     />
                   )
                 ) : (

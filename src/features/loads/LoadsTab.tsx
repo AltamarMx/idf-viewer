@@ -6,7 +6,7 @@ import { formatArea, formatInt, formatNumber } from '../../ui/format';
 import { idf } from '../../worker/client';
 import { Chart, type ChartOption } from '../charts/Chart';
 import { heatmapOption } from '../charts/options';
-import { dayLabel, hourLabel } from '../charts/time';
+import { type HourTicks, hourLabel, hourTickLabel, hourTicks } from '../charts/time';
 
 interface Props {
   dark: boolean;
@@ -193,8 +193,20 @@ export default function LoadsTab({ dark, onSelect }: Props) {
       )}
       {charts ? (
         <>
-          <Chart option={charts.power} height={300} dark={dark} group="loads" />
-          <Chart option={charts.people} height={170} dark={dark} group="loads" />
+          <Chart
+            option={charts.power}
+            height={300}
+            dark={dark}
+            group="loads"
+            xTicks={charts.ticks}
+          />
+          <Chart
+            option={charts.people}
+            height={170}
+            dark={dark}
+            group="loads"
+            xTicks={charts.ticks}
+          />
         </>
       ) : (
         <p className="count">Loading…</p>
@@ -316,7 +328,7 @@ function loadOptions(
   view: ZoneLoadView,
   calendar: CalendarView,
   perArea: boolean,
-): { power: ChartOption; people: ChartOption } {
+): { power: ChartOption; people: ChartOption; ticks: HourTicks } {
   const area = perArea && view.floorArea > 0 ? view.floorArea : 1;
   const unit = perArea ? 'W/m²' : 'W';
   const present = TYPES.filter((t) => view.watts[t].some((v) => v !== 0));
@@ -330,7 +342,7 @@ function loadOptions(
     type: 'value',
     min: 0,
     max: hours,
-    axisLabel: { formatter: (h: number) => dayLabel(Math.floor(h / 24), calendar.dates) },
+    axisLabel: { formatter: (h: number) => hourTickLabel(h, calendar.dates) },
   };
   const tooltip = {
     trigger: 'axis',
@@ -397,5 +409,6 @@ function loadOptions(
         },
       ],
     },
+    ticks: hourTicks(calendar.dates, hours),
   };
 }

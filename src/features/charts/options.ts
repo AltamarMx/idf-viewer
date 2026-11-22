@@ -2,7 +2,7 @@
 import { MONTH_LABELS } from '../../core/schedules/calendar';
 import type { CalendarView } from '../../core/session';
 import type { ChartOption } from './Chart';
-import { dayLabel, hourLabel, monthStarts, timeOfStep } from './time';
+import { dayLabel, hourLabel, hourTickLabel, monthStarts, timeOfStep } from './time';
 
 const AXIS = { axisLine: { show: true }, splitLine: { show: true, lineStyle: { opacity: 0.4 } } };
 
@@ -94,7 +94,7 @@ export function lineOption(
       type: 'value',
       min: 0,
       max: values.length,
-      axisLabel: { formatter: (h: number) => dayLabel(Math.floor(h / 24), calendar.dates) },
+      axisLabel: { formatter: (h: number) => hourTickLabel(h, calendar.dates) },
       ...AXIS,
     },
     yAxis: { type: 'value', name: unit, scale: true, ...AXIS },
