@@ -510,7 +510,7 @@
     180,                     !- Maximum Value of X
     ,                        !- Minimum Table Output
     ,                        !- Maximum Table Output
-    Angle,                   !- Input Unit Type for X
+    Dimensionless,           !- Input Unit Type for X
     Dimensionless,           !- Output Unit Type
     ,                        !- Normalization Reference
     0,                       !- X Value #1

@@ -1,6 +1,7 @@
 /**
  * Problems panel (H2): reading warnings, version fallback, unknown classes,
- * broken references and duplicate names (H1), and geometry warnings.
+ * broken references and duplicate names (H1), and geometry warnings. The
+ * checks against the IDD (H3) and unused objects (H4) are in idd.ts.
  * A quick pre-check; it does not replace EnergyPlus' own validation.
  */
 import type { GeometryWarning } from '../geometry/build';
@@ -20,7 +21,10 @@ export interface Problem {
     | 'Reference'
     | 'Duplicate name'
     | 'Geometry'
-    | 'Ventilation';
+    | 'Ventilation'
+    | 'Field'
+    | 'Object'
+    | 'Unused';
   message: string;
   objectId?: number;
   line?: number;

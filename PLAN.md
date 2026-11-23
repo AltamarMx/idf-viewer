@@ -556,7 +556,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 
 - [x] 2c.1 Corte de capas (E1) y uso de cada construcción (E3).
 - [ ] 2c.2 Capas y cortes 3D (C7), diagnóstico visual de geometría (C8) y elementos adicionales (C9).
-- [ ] 2c.3 Validación contra el IDD (H3), objetos sin uso (H4) y problemas de geometría (H5).
+- [ ] 2c.3 Validación contra el IDD (H3), objetos sin uso (H4) y problemas de geometría (H5). *H3 y H4 hechos; H5 va con C8 (2c.2).*
 - [ ] 2c.4 Vista de texto sincronizada (B6).
 - [ ] 2c.5 Lectura de epJSON (A5) y apertura desde una URL (A6).
 - [ ] 2c.6 Ubicación y días de diseño (D5) y salidas solicitadas (D6).
@@ -575,6 +575,18 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - Las capas son los campos "Outside Layer" y "Layer N", en ese orden, de exterior a interior; así se llaman en `Construction`, `Construction:InternalSource` (hasta 9.x) y `Construction:WindowEquivalentLayer`.
   - En 22.1+ la fuente de calor interna es `ConstructionProperty:InternalHeatSource`, que apunta a su construcción; antes era `Construction:InternalSource`. En ambos, "Source Present After Layer Number" cuenta desde el exterior.
   - Espesor de la capa: el campo "Thickness" de `Material`, `Material:RoofVegetation`, vidrios, gases, `WindowMaterial:Shade` y `WindowMaterial:ComplexShade`. Persianas y mallas no tienen un espesor de capa y se dibujan con ancho fijo.
+- 2c.3, parte H3 y H4 (2026-11-23): nuevas categorías en el panel de problemas.
+  - **Field** (errores): campo obligatorio en blanco y sin valor por omisión; número que no es número; "autosize"/"autocalculate" donde el campo no admite ninguno; entero con decimales; valor fuera del mínimo o máximo del IDD; opción que no existe (con la lista de opciones). Advertencia si un objeto tiene más campos de los que define su clase. Cada aviso lleva la línea del campo.
+  - **Object** (errores): más de un objeto de una clase única (`Timestep`, `SimulationControl`…) y objetos obligatorios que faltan (`Building`, `GlobalGeometryRules`). Advertencia si la clase es obsoleta.
+  - **Unused** (notas, no cuentan en el número de la pestaña): materiales, construcciones, horarios y curvas (`Curve:*`, `Table:Lookup` y las tablas de 8.x) que ningún otro objeto nombra. Cuentan como uso los nombres en sensores y actuadores EMS y en `Output:Variable`; una `MaterialProperty:*` sola no cuenta como uso de su material. Solo se revisa un nivel: los materiales de una construcción sin uso no se marcan.
+  - Si no hay IDD de la versión del archivo (se usa el más cercano), no se revisan los campos y se dice con una nota.
+  - Núcleo: `src/core/validation/idd.ts` (`iddProblems`, `unusedProblems`), que `openFile` agrega a los problemas. Tarda unos 33 ms con `HospitalLowEnergy.idf`.
+  - Archivo de prueba `tests/fixtures/validation/Validation.idf` (ver su README) y pruebas en `tests/validation.test.ts` y `e2e/smoke.spec.ts`. La prueba e2e del hospital ahora cuenta 30 problemas: las 4 referencias rotas de siempre y 26 objetos sin uso.
+  - Se corrigió `tests/fixtures/ventilation/Wind-8.9.idf`: tenía "Angle" como "Input Unit Type for X", que no existe en 8.9 (la validación nueva lo encontró).
+- Reglas usadas en H3 (comprobadas con los archivos que EnergyPlus lee sin errores: los 8 ejemplos y los archivos de prueba en 8.x, 9.x y 26.2, que salen sin errores de campo ni de objeto):
+  - EnergyPlus acepta "autosize" y "autocalculate" indistintamente donde el campo admite alguno de los dos (`PlantLoop` "Plant Loop Volume" es autocalculable y los ejemplos escriben "autosize"; en `AirTerminal:SingleDuct:VAV:Reheat` es al revés).
+  - Un campo obligatorio en blanco que tiene valor por omisión no es error (el IDD de 8.0 tiene 279 campos así).
+  - Los tipos de día de `Schedule:Week:Compact` aceptan "For:" y varios tipos en un campo, así que no se comparan contra la lista de opciones.
 
 ### Fase 3 · Extras de ventilación
 
@@ -641,7 +653,7 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 **Fase 3 adelantada:** la 3.1 (Cp y perfil de viento) está hecha y publicada (commit `9eab0e1`). La 3.2 (red de flujo entre zonas, sección Network en Ventilation) está hecha (2026-11-23).
 
-**Fase 2c empezada:** la 2c.1 (pestaña Constructions: corte de capas y uso de cada construcción) está hecha (2026-11-23). Lo que sigue de la 2c y no necesita EnergyPlus: 2c.3 sin H5 (validación contra el IDD y objetos sin uso), 2c.4 (vista de texto), 2c.6 (ubicación, días de diseño y salidas) y la parte C7/C9 de la 2c.2. Conviene hacer en la computadora con EnergyPlus la lectura de epJSON (A5, los archivos de prueba se generan con su convertidor) y el diagnóstico de geometría (C8/H5, para compararlo con los avisos de EnergyPlus). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
+**Fase 2c empezada:** la 2c.1 (pestaña Constructions: corte de capas y uso de cada construcción) y la parte H3/H4 de la 2c.3 (validación contra el IDD y objetos sin uso, en el panel de problemas) están hechas (2026-11-23). Lo que sigue de la 2c y no necesita EnergyPlus: 2c.4 (vista de texto), 2c.6 (ubicación, días de diseño y salidas) y la parte C7/C9 de la 2c.2. Conviene hacer en la computadora con EnergyPlus la lectura de epJSON (A5, los archivos de prueba se generan con su convertidor) y el diagnóstico de geometría (C8/H5, para compararlo con los avisos de EnergyPlus). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
 
 **En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2 a 2b.6 están hechas y publicadas. Falta el **cierre de la fase, que se hará en la computadora que tiene EnergyPlus 26.2** (en esta no está instalado):
 

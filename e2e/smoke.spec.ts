@@ -60,6 +60,9 @@ test('the hospital opens, draws in 3D and lists its problems', async ({ page }) 
   await page.getByRole('tab', { name: '3D' }).click();
   await expect(page.locator('.viewer canvas')).toBeVisible({ timeout: 30_000 });
   await page.getByRole('tab', { name: /Problems/ }).click();
+  // 4 broken references (Refrigeration:Case curves) and 26 unused objects (notes).
+  await expect(page.locator('table.problems tr')).toHaveCount(30);
+  await page.getByLabel('Category').selectOption('Reference');
   await expect(page.locator('table.problems tr')).toHaveCount(4);
 });
 
@@ -213,5 +216,21 @@ test('constructions: layers from outside to inside, usage and 3D', async ({ page
   await list.getByRole('button', { name: 'WALL-1', exact: true }).click();
   await detail.getByRole('button', { name: 'Show in 3D' }).click();
   await expect(page.locator('.viewer canvas')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('problems: field values against the IDD and unused objects', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('./');
+  await page.locator('input[type=file]').setInputFiles('tests/fixtures/validation/Validation.idf');
+  await page.getByRole('tab', { name: /Problems/ }).click();
+  const panel = page.locator('.tab-body');
+  await expect(panel).toContainText('Conductivity is required and blank');
+  await expect(panel).toContainText('Only one Timestep is allowed');
+  await page.getByLabel('Category').selectOption('Unused');
+  await expect(panel.locator('table.problems tr')).toHaveCount(6);
+  await panel.getByRole('button', { name: /UNUSED CURVE/ }).click();
+  await expect(page.locator('.inspector')).toContainText('Curve:Linear');
   expect(errors).toEqual([]);
 });

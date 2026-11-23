@@ -38,6 +38,7 @@ import type { ClassDocs, Schema } from './schema/types';
 import { type Resolution, resolveVersion } from './schema/version';
 import { type SearchHit, search } from './search';
 import { type BuildingSummary, buildingSummary } from './summary';
+import { iddProblems, unusedProblems } from './validation/idd';
 import { collectProblems, type Problem, sortProblems } from './validation/problems';
 import { ventilationProblems } from './validation/ventilation';
 
@@ -765,6 +766,8 @@ export async function openFile(
   };
   const session = new Session(model, schema, summary, references, geometry, problems, loader);
   problems.push(...ventilationProblems(model, schema, geometry, session.afn));
+  problems.push(...iddProblems(model, schema, resolution));
+  problems.push(...unusedProblems(model, schema, references));
   sortProblems(problems);
   for (const p of problems) summary.problemCounts[p.severity]++;
   return session;
