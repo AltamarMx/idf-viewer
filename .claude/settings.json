@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run typecheck)",
+      "Bash(npm run lint)",
+      "Bash(npm test)",
+      "Bash(uv run pytest)",
+      "Bash(uv run pytest -q)",
+      "Bash(gh run watch *)",
+      "Bash(mdls *)",
+      "Bash(pdfinfo *)",
+      "Bash(quarto --version)",
+      "mcp__claude_ai_Google_Docs__read_doc",
+      "mcp__claude_ai_Google_Drive__download_file_content"
+    ]
+  }
+}
