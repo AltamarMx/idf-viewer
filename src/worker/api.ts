@@ -2,6 +2,7 @@ import type { AfnCard, AfnOverview } from '../core/airflow/card';
 import type { FlowNetwork } from '../core/airflow/network';
 import type { WindView } from '../core/airflow/wind';
 import type { ZoneFlows } from '../core/airflow/zoneflows';
+import type { ConstructionRow } from '../core/constructions/constructions';
 import type { OccupancyReport, ZoneRow } from '../core/loads/report';
 import type { WindowInventory } from '../core/openings/windows';
 import type { ClassDocs } from '../core/schema/types';
@@ -52,4 +53,5 @@ export interface WorkerApi {
   zoneFlows(): Promise<ZoneFlows>;
   wind(): Promise<WindView>;
   network(): Promise<FlowNetwork>;
+  constructions(): Promise<ConstructionRow[]>;
 }

@@ -23,13 +23,22 @@ const Viewer3D = lazy(() => import('./features/viewer3d/Viewer3D'));
 const SchedulesTab = lazy(() => import('./features/schedules/SchedulesTab'));
 const LoadsTab = lazy(() => import('./features/loads/LoadsTab'));
 const VentilationTab = lazy(() => import('./features/ventilation/VentilationTab'));
+const ConstructionsTab = lazy(() => import('./features/constructions/ConstructionsTab'));
 
 type State =
   | { status: 'idle'; error?: string }
   | { status: 'loading'; name: string; progress: LoadProgress }
   | { status: 'ready'; summary: FileSummary };
 
-type Tab = 'summary' | '3d' | 'table' | 'ventilation' | 'schedules' | 'loads' | 'problems';
+type Tab =
+  | 'summary'
+  | '3d'
+  | 'table'
+  | 'constructions'
+  | 'ventilation'
+  | 'schedules'
+  | 'loads'
+  | 'problems';
 
 const STAGE_WEIGHT: Record<LoadProgress['stage'], [number, number]> = {
   reading: [0, 0.1],
@@ -225,6 +234,9 @@ export function App() {
               <TabButton id="table" current={tab} onSelect={setTab}>
                 Table
               </TabButton>
+              <TabButton id="constructions" current={tab} onSelect={setTab}>
+                Constructions
+              </TabButton>
               <TabButton id="ventilation" current={tab} onSelect={setTab}>
                 Ventilation
               </TabButton>
@@ -269,6 +281,19 @@ export function App() {
                 ) : (
                   <div className="content">Choose a class on the left.</div>
                 ))}
+              {tab === 'constructions' && (
+                <Suspense fallback={<div className="content count">Loading…</div>}>
+                  <ConstructionsTab
+                    key={summary.fileName}
+                    selectedId={selectedId}
+                    onSelect={setSelectedId}
+                    onShow3D={(id) => {
+                      setSelectedId(id);
+                      setTab('3d');
+                    }}
+                  />
+                </Suspense>
+              )}
               {tab === 'ventilation' && (
                 <Suspense fallback={<div className="content count">Loading…</div>}>
                   <VentilationTab

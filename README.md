@@ -12,6 +12,8 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
 - Opens `.idf` files from EnergyPlus 8.0 to 26.2, using the field names of each version.
 - Explorer of classes and objects, with cross-references between objects.
 - 3D view of the geometry, colored by boundary condition.
+- Constructions: a cross-section of the layers, from outside to inside and to scale, with the
+  properties of each material as written in the file, and where each construction is used.
 - Schedules, internal loads and occupancy over the year, per zone.
 - Windows, natural ventilation, AirflowNetwork and infiltration settings, wind pressure
   coefficients, the site wind profile and a diagram of the flow network between zones

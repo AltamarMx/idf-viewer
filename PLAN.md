@@ -554,7 +554,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 
 ### Fase 2c · Construcciones, validación y complementos
 
-- [ ] 2c.1 Corte de capas (E1) y uso de cada construcción (E3).
+- [x] 2c.1 Corte de capas (E1) y uso de cada construcción (E3).
 - [ ] 2c.2 Capas y cortes 3D (C7), diagnóstico visual de geometría (C8) y elementos adicionales (C9).
 - [ ] 2c.3 Validación contra el IDD (H3), objetos sin uso (H4) y problemas de geometría (H5).
 - [ ] 2c.4 Vista de texto sincronizada (B6).
@@ -562,6 +562,19 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 - [ ] 2c.6 Ubicación y días de diseño (D5) y salidas solicitadas (D6).
 
 **Listo cuando:** todos los features de esta fase funcionan con los ejemplos y con archivos de las versiones 8.x y 9.x.
+
+**Avance de la fase 2c (se completa al cerrar la fase):**
+- 2c.1 (2026-11-23): pestaña nueva **Constructions**, entre Table y Ventilation.
+  - Lista de construcciones con número de capas, superficies y área, y etiquetas "window", "missing layer" y "not used" (ninguna superficie ni otro objeto la usa). Filtro por nombre. Si el inspector muestra una construcción, la pestaña la selecciona.
+  - Corte de capas de exterior (izquierda) a interior (derecha), con espesores a escala. Las capas que solo tienen resistencia térmica (`Material:NoMass`, `Material:AirGap`, `Material:InfraredTransparent`) tienen ancho fijo y van rayadas; las muy delgadas se dibujan más anchas para que se vean, y la nota lo dice. La fuente de calor interna se marca con una línea punteada después de su capa.
+  - Una ficha por capa con todos los campos del material tal como están en el IDF; si un campo está en blanco se muestra el valor por omisión del IDD con la etiqueta "default". No se calculan U, R ni capacidad térmica (E2 quedó fuera, §5).
+  - Construcciones sin capas (`Construction:CfactorUndergroundWall`, `Construction:FfactorGroundFloor`, `Construction:AirBoundary`, etc.): se muestran sus campos.
+  - Uso: superficies, zonas y área (área × multiplicador de la ventana, sin multiplicadores de zona), por tipo de superficie; tabla de superficies; otros objetos que la nombran (`InternalMass`, `WindowShadingControl`…), y botón "Show in 3D" que resalta sus superficies (el 3D ya lo hacía al seleccionar una construcción).
+  - Núcleo: `src/core/constructions/constructions.ts` (`constructionList`), `session.constructions()` y `constructions()` en el worker. Pruebas en `tests/constructions.test.ts` (con `tests/fixtures/constructions/`, ver su README) y `e2e/smoke.spec.ts`.
+- Reglas usadas en 2c.1:
+  - Las capas son los campos "Outside Layer" y "Layer N", en ese orden, de exterior a interior; así se llaman en `Construction`, `Construction:InternalSource` (hasta 9.x) y `Construction:WindowEquivalentLayer`.
+  - En 22.1+ la fuente de calor interna es `ConstructionProperty:InternalHeatSource`, que apunta a su construcción; antes era `Construction:InternalSource`. En ambos, "Source Present After Layer Number" cuenta desde el exterior.
+  - Espesor de la capa: el campo "Thickness" de `Material`, `Material:RoofVegetation`, vidrios, gases, `WindowMaterial:Shade` y `WindowMaterial:ComplexShade`. Persianas y mallas no tienen un espesor de capa y se dibujan con ancho fijo.
 
 ### Fase 3 · Extras de ventilación
 
@@ -626,7 +639,9 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 **Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Ventilation, Schedules, Loads y Problems.
 
-**Fase 3 adelantada:** la 3.1 (Cp y perfil de viento) está hecha y publicada (commit `9eab0e1`). La 3.2 (red de flujo entre zonas, sección Network en Ventilation) está hecha (2026-11-23). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
+**Fase 3 adelantada:** la 3.1 (Cp y perfil de viento) está hecha y publicada (commit `9eab0e1`). La 3.2 (red de flujo entre zonas, sección Network en Ventilation) está hecha (2026-11-23).
+
+**Fase 2c empezada:** la 2c.1 (pestaña Constructions: corte de capas y uso de cada construcción) está hecha (2026-11-23). Lo que sigue de la 2c y no necesita EnergyPlus: 2c.3 sin H5 (validación contra el IDD y objetos sin uso), 2c.4 (vista de texto), 2c.6 (ubicación, días de diseño y salidas) y la parte C7/C9 de la 2c.2. Conviene hacer en la computadora con EnergyPlus la lectura de epJSON (A5, los archivos de prueba se generan con su convertidor) y el diagnóstico de geometría (C8/H5, para compararlo con los avisos de EnergyPlus). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
 
 **En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2 a 2b.6 están hechas y publicadas. Falta el **cierre de la fase, que se hará en la computadora que tiene EnergyPlus 26.2** (en esta no está instalado):
 

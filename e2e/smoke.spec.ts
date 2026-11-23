@@ -194,3 +194,24 @@ test('network: zones, outdoor nodes and their connections', async ({ page }) => 
   await expect(page.locator('.afn-card')).toContainText('Living:West');
   expect(errors).toEqual([]);
 });
+
+test('constructions: layers from outside to inside, usage and 3D', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'Five zones with spaces');
+  await page.getByRole('tab', { name: 'Constructions' }).click();
+  const list = page.locator('.constructions-list');
+  await list.getByRole('button', { name: 'WALL-1', exact: true }).click();
+  const detail = page.locator('.construction-detail');
+  await expect(detail.locator('.layer-section rect.layer-rect')).toHaveCount(4);
+  await expect(detail.locator('.layer-card')).toHaveCount(4);
+  await expect(detail).toContainText('10 surfaces in 5 zones');
+  // A layer opens its material in the inspector.
+  await detail.getByRole('button', { name: 'IN02', exact: true }).click();
+  await expect(page.locator('.inspector')).toContainText('IN02');
+  await page.getByRole('tab', { name: 'Constructions' }).click();
+  await list.getByRole('button', { name: 'WALL-1', exact: true }).click();
+  await detail.getByRole('button', { name: 'Show in 3D' }).click();
+  await expect(page.locator('.viewer canvas')).toBeVisible();
+  expect(errors).toEqual([]);
+});

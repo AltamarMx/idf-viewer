@@ -14,6 +14,7 @@ import { type AfnCard, AfnInput, type AfnOverview } from './airflow/card';
 import { type FlowNetwork, flowNetwork } from './airflow/network';
 import { type WindView, windView } from './airflow/wind';
 import { type ZoneFlows, zoneFlows } from './airflow/zoneflows';
+import { type ConstructionRow, constructionList } from './constructions/constructions';
 import {
   buildGeometry,
   type GeometryResult,
@@ -489,6 +490,19 @@ export class Session {
   /** Windows and doors with their host, size, construction and AFN role (L1). */
   windows(): WindowInventory {
     return windowInventory(this.model, this.schema, this.geometry, this.afn);
+  }
+
+  private _constructions?: ConstructionRow[];
+
+  /** Constructions with their layers (E1) and where they are used (E3). */
+  constructions(): ConstructionRow[] {
+    this._constructions ??= constructionList(
+      this.model,
+      this.schema,
+      this.geometry,
+      this.references,
+    );
+    return this._constructions;
   }
 
   buildingSummary(): BuildingSummary {

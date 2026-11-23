@@ -90,6 +90,9 @@ const api: WorkerApi = {
   async network() {
     return current().network();
   },
+  async constructions() {
+    return current().constructions();
+  },
 };
 
 expose(api);
