@@ -21,3 +21,10 @@
   nodes. In 8.2 the node names a `WindPressureCoefficientValues` and the array is also named
   on `AirflowNetwork:SimulationControl`; in 8.9 one node uses a symmetric
   `Table:OneIndependentVariable` with relative angle.
+- `Network.idf`: `examples/5ZoneAirCooledWithSpaces.idf` (plenum and 5 zones, North Axis 30°)
+  with an AirflowNetwork for the flow network diagram: `MultizoneWithoutDistribution` with
+  `SurfaceAverageCalculation`, cracks on the exterior walls, a detailed opening on the front
+  window (opening factor 0.5) and on the interzone wall SB12, a crack on SB32 (listed from
+  Zone 3's side), a zone exhaust fan on BACK-2, a network zone without surfaces (Zone 5), a
+  `ZoneMixing` from Zone 4 to Zone 5 and a `ZoneCrossMixing` between Zone 3 and Zone 5. The
+  exhaust fan has no `Fan:ZoneExhaust`, so EnergyPlus does not run it; it has no reference.

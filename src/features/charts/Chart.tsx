@@ -1,8 +1,8 @@
 /**
  * ECharts wrapper. Only the chart types the viewer uses are bundled, and this
- * module is loaded lazily with the Schedules and Loads tabs.
+ * module is loaded lazily with the tabs that draw charts.
  */
-import { HeatmapChart, LineChart, ScatterChart } from 'echarts/charts';
+import { GraphChart, HeatmapChart, LineChart, ScatterChart } from 'echarts/charts';
 import {
   DataZoomComponent,
   GridComponent,
@@ -21,6 +21,7 @@ echarts.use([
   LineChart,
   HeatmapChart,
   ScatterChart,
+  GraphChart,
   GridComponent,
   TooltipComponent,
   VisualMapComponent,
@@ -33,6 +34,14 @@ echarts.use([
 
 export type ChartOption = echarts.EChartsCoreOption;
 
+/** What ECharts passes to a click handler (the fields the viewer uses). */
+export interface ChartClick {
+  dataType?: string;
+  data?: unknown;
+  seriesIndex?: number;
+  dataIndex?: number;
+}
+
 interface Props {
   option: ChartOption;
   height: number;
@@ -41,18 +50,22 @@ interface Props {
   group?: string;
   /** Ticks of the x axis, recomputed when the chart is zoomed or resized. */
   xTicks?: HourTicks;
+  onClick?: (params: ChartClick) => void;
 }
 
-export function Chart({ option, height, dark, group, xTicks }: Props) {
+export function Chart({ option, height, dark, group, xTicks, onClick }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const ticksRef = useRef<() => void>(() => {});
+  const clickRef = useRef(onClick);
+  clickRef.current = onClick;
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const chart = echarts.init(el, dark ? 'dark' : undefined, { renderer: 'canvas' });
     chartRef.current = chart;
+    chart.on('click', (params) => clickRef.current?.(params as ChartClick));
     const observer = new ResizeObserver(() => {
       chart.resize();
       ticksRef.current();

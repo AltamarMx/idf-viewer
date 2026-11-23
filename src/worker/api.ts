@@ -1,4 +1,5 @@
 import type { AfnCard, AfnOverview } from '../core/airflow/card';
+import type { FlowNetwork } from '../core/airflow/network';
 import type { WindView } from '../core/airflow/wind';
 import type { ZoneFlows } from '../core/airflow/zoneflows';
 import type { OccupancyReport, ZoneRow } from '../core/loads/report';
@@ -50,4 +51,5 @@ export interface WorkerApi {
   afnCard(surface: string): Promise<AfnCard | null>;
   zoneFlows(): Promise<ZoneFlows>;
   wind(): Promise<WindView>;
+  network(): Promise<FlowNetwork>;
 }

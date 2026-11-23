@@ -87,6 +87,9 @@ const api: WorkerApi = {
   async wind() {
     return current().wind();
   },
+  async network() {
+    return current().network();
+  },
 };
 
 expose(api);

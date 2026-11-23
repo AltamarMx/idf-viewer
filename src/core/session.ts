@@ -11,6 +11,7 @@ import {
   readAfn,
 } from './airflow/afn';
 import { type AfnCard, AfnInput, type AfnOverview } from './airflow/card';
+import { type FlowNetwork, flowNetwork } from './airflow/network';
 import { type WindView, windView } from './airflow/wind';
 import { type ZoneFlows, zoneFlows } from './airflow/zoneflows';
 import {
@@ -469,6 +470,20 @@ export class Session {
       this.afn,
     );
     return this._zoneFlows;
+  }
+
+  private _network?: FlowNetwork;
+
+  /** Flow network between zones: AirflowNetwork links and zone mixing (L11). */
+  network(): FlowNetwork {
+    this._network ??= flowNetwork(
+      this.model,
+      this.schema,
+      this.geometry,
+      this.afn,
+      this.zoneFlows().rows,
+    );
+    return this._network;
   }
 
   /** Windows and doors with their host, size, construction and AFN role (L1). */

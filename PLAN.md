@@ -174,7 +174,7 @@ Para leer `.epJSON` (A5), los nombres de campo se convierten con la misma regla 
 | Gráficas | Apache ECharts | Incluye áreas apiladas, mapas de calor y gráficas polares, y sincroniza el zoom entre subpaneles (F8). Solo se descarga al abrir una gráfica. |
 | Vista de texto | CodeMirror 6 | Maneja archivos de varios MB |
 | Mapa | Leaflet + OpenStreetMap | Ligero |
-| Red de flujo (L11) | Cytoscape.js | Acomoda los nodos automáticamente |
+| Red de flujo (L11) | Apache ECharts (gráfica `graph`) | Ya está en el proyecto. Se cambió de Cytoscape.js en la fase 3: las zonas se acomodan según su posición en planta, no automáticamente |
 | Comunicación con el worker | Comlink | Simplifica el código |
 | Instalable (K5) | vite-plugin-pwa | Se agrega en la última fase |
 | Calidad | Vitest, Playwright, Biome | Pruebas unitarias, pruebas en navegador real y formato del código |
@@ -566,7 +566,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 ### Fase 3 · Extras de ventilación
 
 - [x] 3.1 Gráfica polar de Cp (L9), con la sintaxis de 8.x y de 9.0+.
-- [ ] 3.2 Red de flujo entre zonas (L11).
+- [x] 3.2 Red de flujo entre zonas (L11).
 
 **Avance de la fase 3 (se completa al cerrar la fase):**
 - 3.1: sección nueva **Wind** en Ventilation.
@@ -584,6 +584,18 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - `WindPressureCoefficientValues`: interpolación lineal entre direcciones y, después de la última, de regreso a la primera en 360°.
   - Simétrico: de 180° a 360° se usa el valor de 360° − ángulo. Relativo: el ángulo se mide desde la normal de la fachada.
   - Ángulo absoluto: dirección de donde viene el viento, en sentido horario desde el norte, igual que en el archivo de clima.
+- 3.2: sección nueva **Network** en Ventilation (entre "Airflow network" e "Infiltration and ventilation"). Funciona también sin AirflowNetwork: entonces muestra solo `ZoneMixing` y `ZoneCrossMixing`.
+  - Diagrama (gráfica `graph` de ECharts) con las zonas en su posición en planta, norte arriba, y cada nivel de piso en una columna aparte ("Level 0.0 m", "Level 3.0 m"…). Los nodos exteriores van alrededor, hacia donde miran sus superficies; los de techo, arriba. Zonas sin geometría: en círculo. Zoom y arrastre; las etiquetas que se enciman se ocultan.
+  - Una conexión por par de nodos y tipo de componente, con los colores de AirflowNetwork del 3D. Flecha en extractores (`exhaustfan`) y en `ZoneMixing` (de la zona fuente a la que recibe); doble flecha en `ZoneCrossMixing`; las mezclas van en línea punteada. El grosor crece con el número de superficies.
+  - Clic en una zona o en un nodo exterior → inspector. Clic en una conexión → la tabla "Connections" muestra solo esa (From, To, tipo, superficies u objetos, Cd y flujo de diseño). Cada superficie abre su ficha AirflowNetwork.
+  - Avisos: zona con `AirflowNetwork:MultiZone:Zone` sin superficies en la red, nodo exterior que nadie usa (como `EFacade` en la casa), superficie interzona cuya otra zona no existe o no está en la red, superficie de la red con frontera que no es exterior ni interzona, y la lista de zonas que quedan fuera.
+  - Núcleo: `src/core/airflow/network.ts` (`flowNetwork`), `session.network()` y `network()` en el worker. Acomodo: `src/features/ventilation/networkLayout.ts`.
+  - Archivo de prueba `tests/fixtures/ventilation/Network.idf` (ver su README) y pruebas en `tests/network.test.ts` y `e2e/smoke.spec.ts`.
+- Reglas usadas en 3.2 (de la documentación de EnergyPlus; EnergyPlus no reporta la red en un formato que se compare todavía):
+  - El otro lado de una superficie de la red sale de su frontera: `Outdoors` → su nodo exterior (Cp `Input`) o la fachada a la que mira (`SurfaceAverageCalculation`); `Surface` → la zona de la superficie pareja (para una ventana o puerta sin pareja propia, la de su muro base); `Zone` → esa zona.
+  - Un solo `AirflowNetwork:MultiZone:Surface` cubre los dos lados de un par interzona.
+  - Fachada: la de la superficie con su azimut e inclinación (techo si la inclinación es menor de 60°, piso si es mayor de 120°), igual que en la tabla de ventanas. Con North Axis de 30° el frente de `5ZoneAirCooledWithSpaces` mira a 210° y sigue siendo sur.
+  - Nivel de una zona: la altura más baja de sus pisos, redondeada a 0.1 m. Posición: centro de sus pisos ponderado por área.
 
 ### Fase 4 · Instalable
 
@@ -610,11 +622,11 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 - …
 
-## 9. Dónde vamos (2026-11-22)
+## 9. Dónde vamos (2026-11-23)
 
 **Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Ventilation, Schedules, Loads y Problems.
 
-**Fase 3 adelantada:** la 3.1 (Cp y perfil de viento) está hecha; sigue la 3.2 (red de flujo entre zonas). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
+**Fase 3 adelantada:** la 3.1 (Cp y perfil de viento) está hecha y publicada (commit `9eab0e1`). La 3.2 (red de flujo entre zonas, sección Network en Ventilation) está hecha (2026-11-23). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
 
 **En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2 a 2b.6 están hechas y publicadas. Falta el **cierre de la fase, que se hará en la computadora que tiene EnergyPlus 26.2** (en esta no está instalado):
 

@@ -173,3 +173,24 @@ test('wind: Cp of the external nodes and site wind profile', async ({ page }) =>
   await expect(page.locator('.wind')).toContainText('Terrain Suburbs');
   expect(errors).toEqual([]);
 });
+
+test('network: zones, outdoor nodes and their connections', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'House with AirflowNetwork');
+  await page.getByRole('tab', { name: 'Ventilation' }).click();
+  await page.getByRole('tab', { name: 'Network', exact: true }).click();
+  const panel = page.locator('.network');
+  await expect(panel.locator('canvas')).toBeVisible();
+  await expect(panel).toContainText('3 zones, 3 outdoor nodes and 6 connections');
+  await expect(panel.locator('.notice.warn')).toContainText('External node EFacade');
+  await expect(panel.locator('table.network-links tbody tr')).toHaveCount(6);
+  // A surface of the table opens its AirflowNetwork card.
+  await panel.getByRole('button', { name: 'Living:West', exact: true }).click();
+  await expect(page.getByRole('tab', { name: 'Airflow network' })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
+  await expect(page.locator('.afn-card')).toContainText('Living:West');
+  expect(errors).toEqual([]);
+});

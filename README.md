@@ -14,7 +14,8 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
 - 3D view of the geometry, colored by boundary condition.
 - Schedules, internal loads and occupancy over the year, per zone.
 - Windows, natural ventilation, AirflowNetwork and infiltration settings, wind pressure
-  coefficients and the site wind profile.
+  coefficients, the site wind profile and a diagram of the flow network between zones
+  (AirflowNetwork connections and zone mixing).
 
 It does not edit files, run simulations or read simulation results.
 
