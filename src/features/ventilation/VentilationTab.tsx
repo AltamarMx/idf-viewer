@@ -3,6 +3,7 @@ import type { AfnOverview } from '../../core/airflow/card';
 import { idf } from '../../worker/client';
 import { AfnPanel } from './AfnPanel';
 import { WindowsTable } from './WindowsTable';
+import { WindPanel } from './WindPanel';
 import { ZoneFlowsPanel } from './ZoneFlowsPanel';
 
 interface Props {
@@ -12,9 +13,9 @@ interface Props {
   dark: boolean;
 }
 
-type Section = 'windows' | 'afn' | 'flows';
+type Section = 'windows' | 'afn' | 'flows' | 'wind';
 
-/** Windows, natural ventilation and the AirflowNetwork (L1–L5). */
+/** Windows, natural ventilation, the AirflowNetwork and wind (L1–L9). */
 export default function VentilationTab({ selectedId, onSelect, onShow3D, dark }: Props) {
   const [section, setSection] = useState<Section>('windows');
   const [overview, setOverview] = useState<AfnOverview | null>(null);
@@ -61,9 +62,20 @@ export default function VentilationTab({ selectedId, onSelect, onShow3D, dark }:
         >
           Infiltration and ventilation
         </button>
+        <button
+          type="button"
+          role="tab"
+          className="subtab"
+          aria-selected={section === 'wind'}
+          onClick={() => setSection('wind')}
+        >
+          Wind
+        </button>
       </div>
       <div className="ventilation-body">
-        {section === 'flows' ? (
+        {section === 'wind' ? (
+          <WindPanel onSelect={onSelect} dark={dark} />
+        ) : section === 'flows' ? (
           <ZoneFlowsPanel onSelect={onSelect} />
         ) : section === 'windows' ? (
           <WindowsTable

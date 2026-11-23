@@ -13,7 +13,8 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
 - Explorer of classes and objects, with cross-references between objects.
 - 3D view of the geometry, colored by boundary condition.
 - Schedules, internal loads and occupancy over the year, per zone.
-- Windows, natural ventilation, AirflowNetwork and infiltration settings.
+- Windows, natural ventilation, AirflowNetwork and infiltration settings, wind pressure
+  coefficients and the site wind profile.
 
 It does not edit files, run simulations or read simulation results.
 

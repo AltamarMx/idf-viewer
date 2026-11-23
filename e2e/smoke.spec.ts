@@ -128,7 +128,8 @@ test('airflow network: summary and opening card with ZoneLevel values', async ({
   await expect(card.locator('.tag.zone').first()).toBeVisible();
   await expect(card.locator('.opening-diagram')).toHaveCount(3);
   await expect(card).toContainText('VentingSched is above zero');
-  await expect(card.locator('canvas')).toHaveCount(2);
+  // Modulation, opening sets and the Cp of the external node.
+  await expect(card.locator('canvas')).toHaveCount(3);
   expect(errors).toEqual([]);
 });
 
@@ -157,4 +158,18 @@ test('problems panel lists the ventilation mistakes of a file', async ({ page })
   await expect(panel).toContainText('BadSets: Opening Factor 1 must be 0');
   await expect(panel).toContainText('but no AirflowNetwork:MultiZone:Zone');
   await expect(panel).toContainText('EMS sets the opening factor of Win:East');
+});
+
+test('wind: Cp of the external nodes and site wind profile', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'House with AirflowNetwork');
+  await page.getByRole('tab', { name: 'Ventilation' }).click();
+  await page.getByRole('tab', { name: 'Wind', exact: true }).click();
+  await expect(page.locator('table.wind-nodes tbody tr')).toHaveCount(4);
+  await page.getByRole('button', { name: 'SFacade', exact: true }).click();
+  await expect(page.locator('.wind .notice.warn')).toContainText('EastRoof faces 90°');
+  await expect(page.locator('.wind canvas')).toHaveCount(2);
+  await expect(page.locator('.wind')).toContainText('Terrain Suburbs');
+  expect(errors).toEqual([]);
 });

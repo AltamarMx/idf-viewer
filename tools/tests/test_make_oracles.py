@@ -79,3 +79,29 @@ def test_read_eio_airflow(tmp_path):
             }
         ]
     }
+
+
+def test_read_eio_site(tmp_path):
+    eio = tmp_path / "eplusout.eio"
+    eio.write_text(
+        "! <Environment:Site Atmospheric Variation>,Wind Speed Profile Exponent {},"
+        "Wind Speed Profile Boundary Layer Thickness {m},Air Temperature Gradient Coefficient {K/m}\n"
+        "Environment:Site Atmospheric Variation,0.250,370.000,6.500000E-003\n"
+        "! <Environment:Weather Station>,Wind Sensor Height Above Ground {m},Wind Speed Profile Exponent {}\n"
+        "Environment:Weather Station,12.000,0.140\n"
+        "! <ZoneInfiltration Airflow Stats Nominal>, Name\n"
+        "ZoneInfiltration Airflow Stats Nominal, INF 1\n",
+        encoding="latin-1",
+    )
+    assert make_oracles.read_eio_site(eio) == {
+        "Environment:Site Atmospheric Variation": [
+            {
+                "Wind Speed Profile Exponent {}": 0.25,
+                "Wind Speed Profile Boundary Layer Thickness {m}": 370.0,
+                "Air Temperature Gradient Coefficient {K/m}": 0.0065,
+            }
+        ],
+        "Environment:Weather Station": [
+            {"Wind Sensor Height Above Ground {m}": 12.0, "Wind Speed Profile Exponent {}": 0.14}
+        ],
+    }

@@ -565,8 +565,25 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 
 ### Fase 3 · Extras de ventilación
 
-- [ ] 3.1 Gráfica polar de Cp (L9), con la sintaxis de 8.x y de 9.0+.
+- [x] 3.1 Gráfica polar de Cp (L9), con la sintaxis de 8.x y de 9.0+.
 - [ ] 3.2 Red de flujo entre zonas (L11).
+
+**Avance de la fase 3 (se completa al cerrar la fase):**
+- 3.1: sección nueva **Wind** en Ventilation.
+  - Tabla de nodos externos con altura, viento local entre viento del clima, de dónde salen los Cp, tipo de ángulo, simetría y superficies que usan cada nodo. Al hacer clic en un nodo se ve su gráfica polar; "Compare all nodes" los encima.
+  - Gráfica polar: Cp contra dirección del viento, con los valores de entrada como puntos, el círculo Cp = 0 punteado y, en ángulo absoluto, una línea hacia donde mira cada fachada. La misma gráfica aparece en la ficha de cada abertura.
+  - Aviso cuando una superficie mira lejos (más de 45°) de la dirección donde su nodo tiene el Cp más alto. En la casa de ejemplo, el techo este usa el nodo de la fachada sur.
+  - Perfil de viento del sitio: exponente y capa límite del terreno o de `Site:HeightVariation`, datos de `Site:WeatherStation`, y gráfica del viento local contra la altura con los nodos marcados.
+  - Con `SurfaceAverageCalculation` (como en tu archivo) dice que EnergyPlus calcula los Cp y que el visor todavía no reproduce ese cálculo (L10, a futuro).
+- Sintaxis cubiertas: 8.0–8.7 (el nodo nombra un `WindPressureCoefficientValues`; el arreglo de direcciones también está en `AirflowNetwork:SimulationControl`), 8.8+ (valores, curva o tabla, con simetría y ángulo relativo), `Table:OneIndependentVariable` (hasta 9.1) y `Table:Lookup` (9.2+). Curvas dibujadas: `Curve:Linear`, `Quadratic`, `Cubic`, `Quartic` y `Exponent`; otras se nombran pero no se dibujan. Tablas que leen un archivo externo no se dibujan.
+- `make_oracles.py` ahora también guarda las tablas "Environment:Site Atmospheric Variation" y "Environment:Weather Station" del `.eio`; la prueba "site wind profile matches EnergyPlus" las compara cuando existan.
+- Reglas usadas en 3.1 (de la documentación de EnergyPlus, pendientes de confirmar):
+  - Viento local: V(z) = V<sub>clima</sub> · (δ<sub>est</sub>/z<sub>est</sub>)^α<sub>est</sub> · (z/δ)^α; cero en z ≤ 0. Estación por omisión: 10 m, α 0.14, δ 270 m.
+  - Terreno: Country 0.14/270 m, Suburbs 0.22/370 m, City 0.33/460 m, Ocean 0.10/210 m, Urban 0.22/370 m.
+  - `Site:HeightVariation` reemplaza solo los campos que escribe; un campo en blanco antes del último escrito toma el valor por omisión del IDD (0.22 y 370 m). **Se confirma con el `.eio` de `Wind.idf`.**
+  - `WindPressureCoefficientValues`: interpolación lineal entre direcciones y, después de la última, de regreso a la primera en 360°.
+  - Simétrico: de 180° a 360° se usa el valor de 360° − ángulo. Relativo: el ángulo se mide desde la normal de la fachada.
+  - Ángulo absoluto: dirección de donde viene el viento, en sentido horario desde el norte, igual que en el archivo de clima.
 
 ### Fase 4 · Instalable
 
@@ -593,18 +610,20 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 - …
 
-## 9. Dónde vamos (2026-11-20)
+## 9. Dónde vamos (2026-11-22)
 
-**Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Schedules, Loads y Problems. Último commit de código: `d0c5ec9` (fase 2a).
+**Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Ventilation, Schedules, Loads y Problems.
+
+**Fase 3 adelantada:** la 3.1 (Cp y perfil de viento) está hecha; sigue la 3.2 (red de flujo entre zonas). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
 
 **En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2 a 2b.6 están hechas y publicadas. Falta el **cierre de la fase, que se hará en la computadora que tiene EnergyPlus 26.2** (en esta no está instalado):
 
-1. `uv run tools/make_oracles.py` (sin `--annual`) para regenerar las referencias de los 8 ejemplos y de `tests/fixtures/geometry`, `windows` y `ventilation`. Ahora guardan además la tabla "Exterior Fenestration" y las tablas "Airflow Stats Nominal" del `.eio`.
-2. `npm test`: las pruebas que hoy se saltan ("matches the EnergyPlus fenestration table" y "design flows match EnergyPlus") pasarán a comparar. Si algo no coincide, corregir la regla y anotarla.
-3. Confirmar o corregir las reglas marcadas como "pendientes de confirmar" en el avance de la fase 2b, y pasarlas a "Notas de la fase 2b".
+1. `uv run tools/make_oracles.py` (sin `--annual`) para regenerar las referencias de los 8 ejemplos y de `tests/fixtures/geometry`, `windows` y `ventilation`. Ahora guardan además la tabla "Exterior Fenestration" y, del `.eio`, las tablas "Airflow Stats Nominal" y las del perfil de viento.
+2. `npm test`: las pruebas que hoy se saltan ("matches the EnergyPlus fenestration table", "design flows match EnergyPlus" y "site wind profile matches EnergyPlus") pasarán a comparar. Si algo no coincide, corregir la regla y anotarla.
+3. Confirmar o corregir las reglas marcadas como "pendientes de confirmar" en el avance de las fases 2b y 3, y pasarlas a sus notas de fase.
 4. Revisar que el README siga al día (ya menciona ventanas, AFN e infiltración), commit, push y revisar que GitHub Actions pase y el sitio quede publicado.
 
-**Pendiente suelto:** tu IDF de prueba todavía no está en `examples/`. Para que aparezca en la galería, cópialo ahí y, si quieres, dale título en `examples/examples.json`. Para que las pruebas también lo comparen contra EnergyPlus, hay que correr `make_oracles.py` sobre él (normal y con `--annual`).
+**Tu IDF de prueba (`examples/1ra_Airflow.idf`) es privado:** está en `.git/info/exclude` y no se sube al repositorio, que es público. Por la misma razón no se generan sus referencias de EnergyPlus (`tests/oracles/1ra_Airflow*.json`), porque tendrían datos de tu edificio. Si `make_oracles.py` corre sobre todo `examples/` en una computadora donde esté el archivo, borra esas referencias antes del commit.
 
 ### Cómo seguir en otra computadora
 

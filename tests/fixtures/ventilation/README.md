@@ -12,3 +12,12 @@
   whose opening factors do not go from 0 to 1 and with Cd 1.3, inverted ΔT limits, zone
   infiltration in a network zone, a surface that does not exist, a triangular operable
   window and an EMS actuator on an opening. EnergyPlus does not run it; it has no reference.
+- `Wind.idf`: `tests/fixtures/windows/Windows.idf` with Cp `Input` and one external node
+  per facade, each with a different source of Cp: `WindPressureCoefficientValues` (south,
+  west, roof), a symmetric `Table:Lookup` with relative angle (east) and a symmetric
+  `Curve:Quadratic` with relative angle and output limits (north). `Site:HeightVariation`
+  gives only the exponent, and `Site:WeatherStation` puts the wind sensor at 12 m.
+- `Wind-8.2.idf` and `Wind-8.9.idf`: two cracked walls of `1ZoneUncontrolled` with external
+  nodes. In 8.2 the node names a `WindPressureCoefficientValues` and the array is also named
+  on `AirflowNetwork:SimulationControl`; in 8.9 one node uses a symmetric
+  `Table:OneIndependentVariable` with relative angle.

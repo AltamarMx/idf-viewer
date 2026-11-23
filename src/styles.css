@@ -1492,3 +1492,46 @@ table.grid.flows-table td.wrap {
 .flows ul.notes {
   margin: 6px 0 0;
 }
+
+/* Wind (L9) */
+.wind {
+  container-type: inline-size;
+}
+
+.wind-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px 20px;
+  align-items: start;
+}
+
+.wind-chart {
+  max-width: 460px;
+}
+
+@container (min-width: 1000px) {
+  .wind-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
+  }
+}
+
+table.grid.wind-nodes tbody tr {
+  cursor: pointer;
+}
+
+table.grid.wind-nodes td {
+  white-space: nowrap;
+}
+
+.wind-chart .chip {
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.formula {
+  white-space: nowrap;
+}
+
+.warn-mark {
+  color: var(--warn);
+}

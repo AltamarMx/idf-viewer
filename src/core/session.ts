@@ -11,6 +11,7 @@ import {
   readAfn,
 } from './airflow/afn';
 import { type AfnCard, AfnInput, type AfnOverview } from './airflow/card';
+import { type WindView, windView } from './airflow/wind';
 import { type ZoneFlows, zoneFlows } from './airflow/zoneflows';
 import {
   buildGeometry,
@@ -445,6 +446,14 @@ export class Session {
       card.availability = { schedule, hours, total, evaluable: !schedule || Boolean(hourly) };
     }
     return card;
+  }
+
+  private _wind?: WindView;
+
+  /** Site wind profile and Cp of the external nodes (L9). */
+  wind(): WindView {
+    this._wind ??= windView(this.model, this.schema, this.geometry, this.afn);
+    return this._wind;
   }
 
   private _zoneFlows?: ZoneFlows;

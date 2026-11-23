@@ -2,12 +2,13 @@
  * ECharts wrapper. Only the chart types the viewer uses are bundled, and this
  * module is loaded lazily with the Schedules and Loads tabs.
  */
-import { HeatmapChart, LineChart } from 'echarts/charts';
+import { HeatmapChart, LineChart, ScatterChart } from 'echarts/charts';
 import {
   DataZoomComponent,
   GridComponent,
   LegendComponent,
   MarkLineComponent,
+  PolarComponent,
   TooltipComponent,
   VisualMapComponent,
 } from 'echarts/components';
@@ -19,12 +20,14 @@ import type { HourTicks } from './time';
 echarts.use([
   LineChart,
   HeatmapChart,
+  ScatterChart,
   GridComponent,
   TooltipComponent,
   VisualMapComponent,
   DataZoomComponent,
   LegendComponent,
   MarkLineComponent,
+  PolarComponent,
   CanvasRenderer,
 ]);
 

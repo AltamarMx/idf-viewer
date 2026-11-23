@@ -84,6 +84,9 @@ const api: WorkerApi = {
   async zoneFlows() {
     return current().zoneFlows();
   },
+  async wind() {
+    return current().wind();
+  },
 };
 
 expose(api);

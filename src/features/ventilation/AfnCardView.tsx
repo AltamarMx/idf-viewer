@@ -1,10 +1,13 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { interpolateSet, type OpeningFactorSet } from '../../core/airflow/afn';
 import type { AfnCard } from '../../core/airflow/card';
+import type { WindNode } from '../../core/airflow/wind';
 import { formatNumber } from '../../ui/format';
+import { idf } from '../../worker/client';
 import { Chart, type ChartOption } from '../charts/Chart';
 import { FieldValue } from './AfnPanel';
 import { OpeningRuleView } from './OpeningRuleView';
+import { CpPolar } from './WindPanel';
 
 interface Props {
   card: AfnCard;
@@ -227,6 +230,7 @@ export function AfnCardView({ card, onSelect, onShow3D, onClose, dark }: Props) 
               </table>
             </div>
           )}
+          <NodeCpChart name={node.name} dark={dark} />
           {node.cp && node.cp.values.length === 0 && node.cp.sourceClass && (
             <p className="count">
               Cp from {node.cp.sourceClass}{' '}
@@ -472,5 +476,30 @@ function OpeningDiagram(props: {
         Cd {formatNumber(set.cd)}
       </figcaption>
     </figure>
+  );
+}
+
+/** Polar chart of the Cp of the card's external node (L9). */
+function NodeCpChart({ name, dark }: { name: string; dark: boolean }) {
+  const [node, setNode] = useState<WindNode | null>(null);
+  useEffect(() => {
+    let live = true;
+    idf.wind().then((w) => {
+      if (live) setNode(w.nodes.find((n) => n.name.toLowerCase() === name.toLowerCase()) ?? null);
+    });
+    return () => {
+      live = false;
+    };
+  }, [name]);
+  if (!node || node.cp.curve.length === 0) return null;
+  return (
+    <>
+      <CpPolar nodes={[node]} dark={dark} height={260} />
+      {node.warnings.map((w) => (
+        <div key={w} className="notice warn">
+          {w}
+        </div>
+      ))}
+    </>
   );
 }

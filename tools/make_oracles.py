@@ -115,15 +115,17 @@ def read_eio_surfaces(eio: Path) -> dict[str, dict]:
     return surfaces
 
 
-def read_eio_airflow(eio: Path) -> dict[str, list[dict]]:
-    """Rows of the "<... Airflow Stats Nominal>" tables, keyed by their header columns."""
+def read_eio_tables(eio: Path, wanted) -> dict[str, list[dict]]:
+    """Rows of the .eio tables whose header ("! <Section>, columns...") `wanted` accepts."""
     headers: dict[str, list[str]] = {}
     tables: dict[str, list[dict]] = {}
     for raw in eio.read_text(encoding="latin-1").splitlines():
         line = raw.strip()
-        if line.startswith("! <") and "Airflow Stats Nominal" in line:
+        if line.startswith("! <"):
             cells = [c.strip() for c in line.split(",")]
-            headers[cells[0][3:].rstrip(">")] = cells[1:]
+            section = cells[0][3:].rstrip(">")
+            if wanted(section):
+                headers[section] = cells[1:]
             continue
         cells = [c.strip() for c in line.split(",")]
         section = cells[0]
@@ -136,6 +138,19 @@ def read_eio_airflow(eio: Path) -> dict[str, list[dict]]:
                     row[name] = value
             tables.setdefault(section, []).append(row)
     return tables
+
+
+def read_eio_airflow(eio: Path) -> dict[str, list[dict]]:
+    """Rows of the "<... Airflow Stats Nominal>" tables, keyed by their header columns."""
+    return read_eio_tables(eio, lambda section: "Airflow Stats Nominal" in section)
+
+
+def read_eio_site(eio: Path) -> dict[str, list[dict]]:
+    """Wind profile of the site and of the weather station, as EnergyPlus applies them."""
+    return read_eio_tables(
+        eio,
+        lambda section: section in ("Environment:Site Atmospheric Variation", "Environment:Weather Station"),
+    )
 
 
 def read_sql(sql: Path) -> dict:
@@ -226,6 +241,7 @@ def run(idf: Path, energyplus: Path) -> Path:
     for name, vertices in read_eio_surfaces(run_dir / "eplusout.eio").items():
         sql["surfaces"].setdefault(name, {}).update(vertices)
     sql["airflow"] = read_eio_airflow(run_dir / "eplusout.eio")
+    sql["site"] = read_eio_site(run_dir / "eplusout.eio")
     version = re.search(r"EnergyPlus, Version ([\d.]+)", (run_dir / "eplusout.err").read_text(errors="replace"))
     oracle = {
         "source": {"file": idf.name, "energyplus": version.group(1) if version else None},
