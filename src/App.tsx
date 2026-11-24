@@ -13,7 +13,7 @@ import { Landing } from './features/gallery/Landing';
 import { Inspector } from './features/inspector/Inspector';
 import { ProblemsPanel } from './features/problems/ProblemsPanel';
 import { SearchDialog } from './features/search/SearchDialog';
-import { FileOverview } from './features/summary/FileOverview';
+import { SummaryTab } from './features/summary/SummaryTab';
 import { ClassTableView } from './features/table/ClassTableView';
 import { formatInt } from './ui/format';
 import { useTheme } from './ui/useTheme';
@@ -24,6 +24,7 @@ const SchedulesTab = lazy(() => import('./features/schedules/SchedulesTab'));
 const LoadsTab = lazy(() => import('./features/loads/LoadsTab'));
 const VentilationTab = lazy(() => import('./features/ventilation/VentilationTab'));
 const ConstructionsTab = lazy(() => import('./features/constructions/ConstructionsTab'));
+const TextTab = lazy(() => import('./features/text/TextTab'));
 
 type State =
   | { status: 'idle'; error?: string }
@@ -34,6 +35,7 @@ type Tab =
   | 'summary'
   | '3d'
   | 'table'
+  | 'text'
   | 'constructions'
   | 'ventilation'
   | 'schedules'
@@ -234,6 +236,9 @@ export function App() {
               <TabButton id="table" current={tab} onSelect={setTab}>
                 Table
               </TabButton>
+              <TabButton id="text" current={tab} onSelect={setTab}>
+                Text
+              </TabButton>
               <TabButton id="constructions" current={tab} onSelect={setTab}>
                 Constructions
               </TabButton>
@@ -256,7 +261,9 @@ export function App() {
               </TabButton>
             </div>
             <div className="tab-body">
-              {tab === 'summary' && <FileOverview summary={summary} />}
+              {tab === 'summary' && (
+                <SummaryTab key={summary.fileName} summary={summary} onSelect={setSelectedId} />
+              )}
               {tab === '3d' &&
                 (geometry ? (
                   <Suspense fallback={<div className="content count">Loading 3D…</div>}>
@@ -281,6 +288,16 @@ export function App() {
                 ) : (
                   <div className="content">Choose a class on the left.</div>
                 ))}
+              {tab === 'text' && (
+                <Suspense fallback={<div className="content count">Loading…</div>}>
+                  <TextTab
+                    key={summary.fileName}
+                    selectedId={selectedId}
+                    onSelect={setSelectedId}
+                    dark={theme === 'dark'}
+                  />
+                </Suspense>
+              )}
               {tab === 'constructions' && (
                 <Suspense fallback={<div className="content count">Loading…</div>}>
                   <ConstructionsTab

@@ -28,6 +28,7 @@ import { type OccupancyReport, occupancyReport, type ZoneRow, zoneRows } from '.
 import { type ClassSummary, IdfModel, objectName, summarizeClasses } from './model/model';
 import { buildReferences, type ReferenceIndex } from './model/references';
 import { type WindowInventory, windowInventory } from './openings/windows';
+import { type OutputsView, outputsView } from './outputs';
 import { decodeIdf, type IdfObject, type ParseWarning, parseIdf } from './parser/idf';
 import { buildCalendar, DAY_TYPES, type DayType, type YearCalendar } from './schedules/calendar';
 import { type ScheduleInfo, ScheduleSet } from './schedules/evaluate';
@@ -37,6 +38,7 @@ import type { SchemaLoader } from './schema/load';
 import type { ClassDocs, Schema } from './schema/types';
 import { type Resolution, resolveVersion } from './schema/version';
 import { type SearchHit, search } from './search';
+import { type SiteView, siteView } from './site';
 import { type BuildingSummary, buildingSummary } from './summary';
 import { iddProblems, unusedProblems } from './validation/idd';
 import { collectProblems, type Problem, sortProblems } from './validation/problems';
@@ -152,6 +154,8 @@ export interface SurfaceView {
   normal: [number, number, number];
   /** How the surface takes part in the AirflowNetwork, if it does (L2). */
   afn?: AfnBrief;
+  /** Floor level of its zone (m, world coordinates), for layers and the exploded view (C7). */
+  level?: number;
   /** x, y, z of each vertex, relative to GeometryView.center. */
   positions: Float32Array;
   triangles: Uint32Array;
@@ -175,6 +179,13 @@ export interface GeometryView {
   zones: ZoneGeometry[];
   /** AirflowNetwork:SimulationControl exists and runs the multizone network. */
   afn: { present: boolean; active: boolean };
+  /** Daylighting reference points (C9), relative to `center` like the surfaces. */
+  daylightingPoints: {
+    id: number;
+    name: string;
+    zone?: string;
+    position: [number, number, number];
+  }[];
 }
 
 const MAX_TABLE_COLUMNS = 300;
@@ -217,6 +228,14 @@ export interface ZoneScheduleEntry {
   uses: { objectId: number; className: string; objectName?: string; fieldName: string }[];
 }
 
+/** The file as written, and the lines of each object (B6). */
+export interface TextView {
+  text: string;
+  /** First and last line (1-based) of the object with that id. */
+  starts: Int32Array;
+  ends: Int32Array;
+}
+
 export interface ZoneLoadView {
   /** null for the whole building (with zone multipliers). */
   zone: string | null;
@@ -228,6 +247,9 @@ export interface ZoneLoadView {
 }
 
 export class Session {
+  /** Decoded text of the file, for the text view. */
+  sourceText = '';
+
   constructor(
     readonly model: IdfModel,
     readonly schema: Schema | undefined,
@@ -366,12 +388,40 @@ export class Session {
       number,
     ];
     const afn = this.afn;
+    // Floor level of each zone: the lowest point of its floors (or of all its
+    // surfaces), rounded to 0.1 m like the flow network diagram.
+    const lowest = new Map<string, { floor: number; any: number }>();
+    for (const s of surfaces) {
+      if (!s.zone || s.kind === 'shading') continue;
+      const key = s.zone.toLowerCase();
+      const z = Math.min(...s.vertices.map((v) => v[2]));
+      const entry = lowest.get(key) ?? { floor: Infinity, any: Infinity };
+      entry.any = Math.min(entry.any, z);
+      if (s.kind === 'floor') entry.floor = Math.min(entry.floor, z);
+      lowest.set(key, entry);
+    }
+    const levelOf = (zone?: string) => {
+      const entry = zone ? lowest.get(zone.toLowerCase()) : undefined;
+      if (!entry) return undefined;
+      const z = Number.isFinite(entry.floor) ? entry.floor : entry.any;
+      return Math.round(z * 10) / 10;
+    };
     return {
       center,
       size,
       northAxis: rules.northAxis,
       zones,
       afn: { present: afn.present, active: afn.active },
+      daylightingPoints: this.geometry.daylightingPoints.map((p) => ({
+        id: p.id,
+        name: p.name,
+        zone: p.zone,
+        position: [
+          p.position[0] - center[0],
+          p.position[1] - center[1],
+          p.position[2] - center[2],
+        ] as [number, number, number],
+      })),
       surfaces: surfaces.map((s) => {
         const positions = new Float32Array(s.vertices.length * 3);
         s.vertices.forEach((v, i) => {
@@ -393,6 +443,7 @@ export class Session {
             viaPartner: link.viaPartner,
           },
           normal: normal as [number, number, number],
+          level: levelOf(s.zone),
           positions,
           triangles: Uint32Array.from(triangulate(s.vertices, s.normal)),
         };
@@ -504,6 +555,29 @@ export class Session {
       this.references,
     );
     return this._constructions;
+  }
+
+  /** Site location, design days, run periods and holidays (D5). */
+  siteView(): SiteView {
+    return siteView(this.model, this.schema, this.references);
+  }
+
+  /** Output variables, meters and reports the file requests (D6). */
+  outputs(): OutputsView {
+    return outputsView(this.model, this.schema, this.references);
+  }
+
+  /** The file as written, with the lines of each object (B6). */
+  textView(): TextView {
+    const n = this.model.objects.length;
+    const starts = new Int32Array(n);
+    const ends = new Int32Array(n);
+    this.model.objects.forEach((obj, i) => {
+      starts[i] = obj.line;
+      // Field lines grow, so the last one is the end of the object.
+      ends[i] = obj.fieldLines[obj.fieldLines.length - 1] ?? obj.line;
+    });
+    return { text: this.sourceText, starts, ends };
   }
 
   buildingSummary(): BuildingSummary {
@@ -765,6 +839,7 @@ export async function openFile(
     surfaceCount: geometry.surfaces.length,
   };
   const session = new Session(model, schema, summary, references, geometry, problems, loader);
+  session.sourceText = text;
   problems.push(...ventilationProblems(model, schema, geometry, session.afn));
   problems.push(...iddProblems(model, schema, resolution));
   problems.push(...unusedProblems(model, schema, references));

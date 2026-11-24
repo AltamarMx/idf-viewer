@@ -10,10 +10,14 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
 ## What it does
 
 - Opens `.idf` files from EnergyPlus 8.0 to 26.2, using the field names of each version.
-- Explorer of classes and objects, with cross-references between objects.
+- Explorer of classes and objects, with cross-references between objects, and the file as
+  written, with syntax colors, in sync with the inspector.
 - Problems panel: broken references, duplicate names, field values checked against the IDD of
   the file's version, and materials, constructions, schedules and curves that nothing uses.
-- 3D view of the geometry, colored by boundary condition.
+- Site location on a world map drawn in the browser, design days, run periods and holidays,
+  and the outputs the file requests.
+- 3D view of the geometry, colored by boundary condition, with layers by zone and floor,
+  transparency, a horizontal cut, floors pulled apart and daylighting reference points.
 - Constructions: a cross-section of the layers, from outside to inside and to scale, with the
   properties of each material as written in the file, and where each construction is used.
 - Schedules, internal loads and occupancy over the year, per zone.

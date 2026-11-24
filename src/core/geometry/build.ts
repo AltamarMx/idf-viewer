@@ -91,7 +91,18 @@ export interface GeometryRules {
   clockwise: boolean;
   relative: boolean;
   rectRelative: boolean;
+  /** "Daylighting Reference Point Coordinate System" is Relative. */
+  daylightingRelative: boolean;
   northAxis: number;
+}
+
+/** A daylighting reference point (C9), in world coordinates. */
+export interface DaylightingPoint {
+  /** Daylighting:ReferencePoint, or Daylighting:Controls before 8.6. */
+  id: number;
+  name: string;
+  zone?: string;
+  position: Vec3;
 }
 
 export interface GeometryWarning {
@@ -103,6 +114,7 @@ export interface GeometryResult {
   rules: GeometryRules;
   surfaces: Surface3D[];
   zones: ZoneGeometry[];
+  daylightingPoints: DaylightingPoint[];
   warnings: GeometryWarning[];
 }
 
@@ -236,6 +248,9 @@ function readRules(model: IdfModel, schema: Schema): GeometryRules {
   const start = (r?.str('Starting Vertex Position') || 'UpperLeftCorner').toLowerCase();
   const coords = (r?.str('Coordinate System') || 'Relative').toLowerCase();
   const rect = (r?.str('Rectangular Surface Coordinate System') || 'Relative').toLowerCase();
+  const daylighting = (
+    r?.str('Daylighting Reference Point Coordinate System') || 'Relative'
+  ).toLowerCase();
   const building = model.ofClass('building')[0];
   const north = building ? new FieldReader(building, schema.classes.building).num('North Axis') : 0;
   return {
@@ -250,6 +265,7 @@ function readRules(model: IdfModel, schema: Schema): GeometryRules {
     clockwise: (r?.str('Vertex Entry Direction') ?? '').toLowerCase() === 'clockwise',
     relative: coords === 'relative',
     rectRelative: rect === 'relative',
+    daylightingRelative: daylighting === 'relative',
     northAxis: north ?? 0,
   };
 }
@@ -296,10 +312,12 @@ export function buildGeometry(model: IdfModel, schema: Schema | undefined): Geom
         clockwise: false,
         relative: true,
         rectRelative: true,
+        daylightingRelative: true,
         northAxis: 0,
       },
       surfaces,
       zones: [],
+      daylightingPoints: [],
       warnings,
     };
   }
@@ -693,7 +711,56 @@ export function buildGeometry(model: IdfModel, schema: Schema | undefined): Geom
     }
   }
 
-  return { rules, surfaces, zones: zoneGeometry(model, schema, surfaces), warnings };
+  // 4. Daylighting reference points (C9): relative to their zone, like the
+  // surfaces, unless "Daylighting Reference Point Coordinate System" is World.
+  const daylightingPoints: DaylightingPoint[] = [];
+  const spaceZone = new Map<string, string>();
+  for (const obj of model.ofClass('space')) {
+    const r = reader(obj);
+    spaceZone.set(r.str('Name').toLowerCase(), r.str('Zone Name').toLowerCase());
+  }
+  const addPoint = (id: number, name: string, zoneOrSpace: string, xyz: Vec3) => {
+    const key = zoneOrSpace.toLowerCase();
+    const zone = zones.get(key) ?? zones.get(spaceZone.get(key) ?? '');
+    daylightingPoints.push({
+      id,
+      name,
+      zone: zone?.name ?? (zoneOrSpace || undefined),
+      position: rules.daylightingRelative ? zoneToWorld(xyz, zone) : xyz,
+    });
+  };
+  for (const obj of model.ofClass('daylighting:referencepoint')) {
+    const r = reader(obj);
+    const xyz: Vec3 = [
+      r.numOr('X-Coordinate of Reference Point', 0),
+      r.numOr('Y-Coordinate of Reference Point', 0),
+      r.numOr('Z-Coordinate of Reference Point', 0),
+    ];
+    addPoint(obj.id, r.str('Name'), r.str(r.find(/^Zone (or Space )?Name$/) ?? 'Zone Name'), xyz);
+  }
+  // Before 8.6 the points were fields of Daylighting:Controls.
+  for (const obj of model.ofClass('daylighting:controls')) {
+    const r = reader(obj);
+    if (!r.has('X-Coordinate of First Reference Point')) continue;
+    const zone = r.str('Zone Name');
+    const count = r.numOr('Total Daylighting Reference Points', 1);
+    for (const [i, which] of (['First', 'Second'] as const).entries()) {
+      if (i >= count) break;
+      addPoint(obj.id, `${zone} reference point ${i + 1}`, zone, [
+        r.numOr(`X-Coordinate of ${which} Reference Point`, 0),
+        r.numOr(`Y-Coordinate of ${which} Reference Point`, 0),
+        r.numOr(`Z-Coordinate of ${which} Reference Point`, 0),
+      ]);
+    }
+  }
+
+  return {
+    rules,
+    surfaces,
+    zones: zoneGeometry(model, schema, surfaces),
+    daylightingPoints,
+    warnings,
+  };
 }
 
 const BASE_KINDS = new Set<SurfaceKind>(['wall', 'floor', 'roof', 'ceiling']);

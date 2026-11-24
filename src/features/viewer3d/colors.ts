@@ -12,15 +12,17 @@ export type ColorMode =
   | 'boundary'
   | 'type'
   | 'zone'
+  | 'space'
   | 'construction'
   | 'afn'
   | 'openingFactor'
   | 'cd';
 
-export const COLOR_MODES: { id: ColorMode; label: string; afn?: boolean }[] = [
+export const COLOR_MODES: { id: ColorMode; label: string; afn?: boolean; spaces?: boolean }[] = [
   { id: 'boundary', label: 'Boundary condition' },
   { id: 'type', label: 'Surface type' },
   { id: 'zone', label: 'Zone' },
+  { id: 'space', label: 'Space', spaces: true },
   { id: 'construction', label: 'Construction' },
   { id: 'afn', label: 'Airflow network role', afn: true },
   { id: 'openingFactor', label: 'Maximum opening factor', afn: true },
@@ -243,7 +245,13 @@ export function categorize(
     return { of, legend };
   }
   const nameOf = (s: SurfaceView) =>
-    mode === 'zone' ? s.zone : s.kind === 'shading' ? undefined : s.construction;
+    mode === 'zone'
+      ? s.zone
+      : mode === 'space'
+        ? s.space
+        : s.kind === 'shading'
+          ? undefined
+          : s.construction;
   const names = [...new Set(surfaces.map(nameOf).filter((v): v is string => Boolean(v)))].sort(
     (a, b) => a.localeCompare(b, undefined, { numeric: true }),
   );
@@ -255,7 +263,12 @@ export function categorize(
   );
   const none: Category = {
     key: '(none)',
-    label: mode === 'zone' ? 'No zone (site or building shading)' : 'No construction (shading)',
+    label:
+      mode === 'zone'
+        ? 'No zone (site or building shading)'
+        : mode === 'space'
+          ? 'No space'
+          : 'No construction (shading)',
     color: NONE_COLOR,
   };
   const of = surfaces.map((s) => byName.get(nameOf(s)?.toLowerCase() ?? '') ?? none);

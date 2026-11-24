@@ -234,3 +234,58 @@ test('problems: field values against the IDD and unused objects', async ({ page 
   await expect(page.locator('.inspector')).toContainText('Curve:Linear');
   expect(errors).toEqual([]);
 });
+
+test('text view follows the inspector and a click opens an object', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'One zone, uncontrolled');
+  await page.getByRole('tab', { name: 'Text' }).click();
+  const editor = page.locator('.text-editor .cm-editor');
+  await expect(editor).toContainText('1ZoneUncontrolled.idf');
+  // Choosing an object scrolls to it and highlights its lines.
+  await page.keyboard.press('ControlOrMeta+K');
+  await page.locator('.search-dialog input').fill('zone one');
+  await expect(page.locator('.search-results')).toContainText('ZONE ONE');
+  await page.keyboard.press('Enter');
+  await expect(editor.locator('.cm-selected-object').first()).toContainText('Zone,');
+  // A click on a line of another object opens it in the inspector.
+  await editor.locator('.cm-line', { hasText: 'Zn001:Wall001,' }).first().click();
+  await expect(page.locator('.inspector-head h2')).toHaveText('Zn001:Wall001');
+  await expect(editor.locator('.cm-selected-object').first()).toContainText(
+    'BuildingSurface:Detailed',
+  );
+  expect(errors).toEqual([]);
+});
+
+test('summary: site with design days and requested outputs', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'High-rise apartment building');
+  await page.getByRole('tab', { name: 'Site and design days' }).click();
+  await expect(page.locator('.site-map')).toBeVisible();
+  await expect(page.locator('table.design-days tbody tr')).toHaveCount(2);
+  await expect(page.locator('.site')).toContainText('2nd Sunday in March');
+  await page.getByRole('tab', { name: 'Outputs' }).click();
+  await expect(page.locator('.outputs')).toContainText('AllSummaryAndMonthly');
+  await expect(page.locator('.outputs')).toContainText('Monthly tables (9)');
+  expect(errors).toEqual([]);
+});
+
+test('3D layers: hide shading, cut, separate floors and daylighting points', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'Small office with AirflowNetwork');
+  await page.getByRole('tab', { name: '3D' }).click();
+  await expect(page.locator('.viewer canvas')).toBeVisible();
+  await page.getByRole('button', { name: 'Layers and cuts' }).click();
+  const panel = page.locator('.layers-panel');
+  await expect(panel).toContainText('Daylighting points (1)');
+  await expect(panel.locator('.layers-list.zones label')).toHaveCount(4);
+  await panel.getByRole('checkbox', { name: 'Shading' }).uncheck();
+  await panel.locator('.layers-slider', { hasText: 'Cut at' }).getByRole('checkbox').check();
+  await page.getByLabel('Separate floors').fill('4');
+  await expect(panel).toContainText('+4 m');
+  await panel.getByRole('button', { name: 'Reset layers' }).click();
+  await expect(panel.getByRole('checkbox', { name: 'Shading' })).toBeChecked();
+  expect(errors).toEqual([]);
+});

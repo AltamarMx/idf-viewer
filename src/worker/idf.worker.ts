@@ -93,6 +93,16 @@ const api: WorkerApi = {
   async constructions() {
     return current().constructions();
   },
+  async siteView() {
+    return current().siteView();
+  },
+  async outputs() {
+    return current().outputs();
+  },
+  async textView() {
+    const view = current().textView();
+    return transfer(view, [view.starts.buffer, view.ends.buffer] as ArrayBuffer[]);
+  },
 };
 
 expose(api);

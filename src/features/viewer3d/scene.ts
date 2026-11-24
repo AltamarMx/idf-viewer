@@ -28,6 +28,8 @@ interface Slot {
   vertexCount: number;
   triangles: Uint32Array;
   edges: Uint32Array;
+  /** Positions as built, before the exploded view moves them. */
+  base: Float32Array;
 }
 
 interface Group {
@@ -75,6 +77,7 @@ export class SceneView {
     this.controls.addEventListener('change', () => this.requestRender());
 
     this.buildMeshes(geometry.surfaces);
+    this.addPoints();
     this.addHelpers();
 
     this.resizeObserver = new ResizeObserver(() => this.resize());
@@ -120,6 +123,7 @@ export class SceneView {
           vertexCount: n,
           triangles: s.triangles.map((t) => t + offset),
           edges,
+          base: positions.slice(offset * 3, (offset + n) * 3),
         };
         offset += n;
       });
@@ -217,6 +221,91 @@ export class SceneView {
       group.triangleOwner = Int32Array.from(owners);
     });
     this.requestRender();
+  }
+
+  /** Opacity of the opaque surfaces (C7); 1 draws them solid. */
+  setOpacity(opacity: number) {
+    const group = this.groups[0];
+    if (!group) return;
+    const material = group.mesh.material as THREE.MeshLambertMaterial;
+    material.opacity = opacity;
+    material.transparent = opacity < 1;
+    material.depthWrite = opacity >= 1;
+    material.needsUpdate = true;
+    this.requestRender();
+  }
+
+  /** Horizontal cut (C7): hides everything above `z` (scene coordinates), or nothing when null. */
+  setCut(z: number | null) {
+    this.renderer.localClippingEnabled = z !== null;
+    const planes = z === null ? [] : [new THREE.Plane(new THREE.Vector3(0, 0, -1), z)];
+    for (const g of this.groups) {
+      (g.mesh.material as THREE.Material).clippingPlanes = planes;
+      (g.edges.material as THREE.Material).clippingPlanes = planes;
+    }
+    if (this.points) (this.points.material as THREE.Material).clippingPlanes = planes;
+    this.requestRender();
+  }
+
+  /** Exploded view (C7): moves each surface up by `dz[i]`; the points by `pointDz[i]`. */
+  setOffsets(dz: number[], pointDz: number[]) {
+    this.groups.forEach((group, g) => {
+      const attr = group.mesh.geometry.getAttribute('position') as THREE.BufferAttribute;
+      const array = attr.array as Float32Array;
+      this.slots.forEach((slot, i) => {
+        if (slot.group !== g) return;
+        const shift = dz[i] ?? 0;
+        for (let v = 0; v < slot.vertexCount; v++) {
+          const at = (slot.vertexStart + v) * 3;
+          array[at] = slot.base[v * 3] as number;
+          array[at + 1] = slot.base[v * 3 + 1] as number;
+          array[at + 2] = (slot.base[v * 3 + 2] as number) + shift;
+        }
+      });
+      attr.needsUpdate = true;
+      group.mesh.geometry.computeBoundingSphere();
+    });
+    if (this.points) {
+      const attr = this.points.geometry.getAttribute('position') as THREE.BufferAttribute;
+      this.geometry.daylightingPoints.forEach((p, i) => {
+        attr.setXYZ(i, p.position[0], p.position[1], p.position[2] + (pointDz[i] ?? 0));
+      });
+      attr.needsUpdate = true;
+      this.points.geometry.computeBoundingSphere();
+    }
+    this.requestRender();
+  }
+
+  /** Daylighting reference points (C9). */
+  setPointsVisible(visible: boolean[]) {
+    if (!this.points) return;
+    const index: number[] = [];
+    visible.forEach((v, i) => {
+      if (v) index.push(i);
+    });
+    this.points.geometry.setIndex(index);
+    this.requestRender();
+  }
+
+  private points?: THREE.Points;
+
+  private addPoints() {
+    const list = this.geometry.daylightingPoints;
+    if (list.length === 0) return;
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(Float32Array.from(list.flatMap((p) => p.position)), 3),
+    );
+    const material = new THREE.PointsMaterial({
+      color: 0xffb300,
+      size: 9,
+      sizeAttenuation: false,
+      depthTest: false,
+    });
+    this.points = new THREE.Points(geometry, material);
+    this.points.renderOrder = 3;
+    this.scene.add(this.points);
   }
 
   /** Index of the surface under the pointer, or null. */

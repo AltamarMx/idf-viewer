@@ -56,6 +56,14 @@ function highlighted(surfaces: SurfaceView[], selection: ObjectRef | null): Set<
   return result;
 }
 
+/** A copy of the set with `value` added or removed. */
+function toggled<T>(set: Set<T>, value: T): Set<T> {
+  const next = new Set(set);
+  if (next.has(value)) next.delete(value);
+  else next.add(value);
+  return next;
+}
+
 type PartnerState =
   | { status: 'none' }
   | { status: 'ok' | 'one-way'; index: number; name: string; pointsTo?: string }
@@ -105,7 +113,59 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
   }, [surfaces, of]);
 
   const hasAfn = geometry.afn.present || surfaces.some((s) => s.afn);
-  const modes = COLOR_MODES.filter((m) => !m.afn || hasAfn);
+  const hasSpaces = surfaces.some((s) => s.space);
+  const modes = COLOR_MODES.filter((m) => (!m.afn || hasAfn) && (!m.spaces || hasSpaces));
+
+  // Layers and cuts (C7) and daylighting points (C9).
+  const [layers, setLayers] = useState(false);
+  const [showShading, setShowShading] = useState(true);
+  const [showOpenings, setShowOpenings] = useState(true);
+  const [showPoints, setShowPoints] = useState(true);
+  const [hiddenZones, setHiddenZones] = useState<Set<string>>(new Set());
+  const [hiddenLevels, setHiddenLevels] = useState<Set<number>>(new Set());
+  const [opacity, setOpacity] = useState(1);
+  const [cut, setCut] = useState<number | null>(null);
+  const [explode, setExplode] = useState(0);
+
+  const zoneNames = useMemo(
+    () =>
+      [...new Set(surfaces.map((s) => s.zone).filter((z): z is string => Boolean(z)))].sort(
+        (a, b) => a.localeCompare(b, undefined, { numeric: true }),
+      ),
+    [surfaces],
+  );
+  const levels = useMemo(
+    () =>
+      [...new Set(surfaces.map((s) => s.level).filter((l): l is number => l !== undefined))].sort(
+        (a, b) => a - b,
+      ),
+    [surfaces],
+  );
+  const zLow = geometry.center[2] - geometry.size[2] / 2;
+  const zHigh = geometry.center[2] + geometry.size[2] / 2;
+  const pointLevel = useMemo(() => {
+    const byZone = new Map(surfaces.map((s) => [s.zone?.toLowerCase(), s.level]));
+    return geometry.daylightingPoints.map((p) => byZone.get(p.zone?.toLowerCase()));
+  }, [surfaces, geometry.daylightingPoints]);
+  const layerVisible = useMemo(
+    () =>
+      surfaces.map((s) => {
+        if (s.kind === 'shading' && !showShading) return false;
+        if (['window', 'door', 'glassdoor', 'tdd'].includes(s.kind) && !showOpenings) return false;
+        if (s.zone && hiddenZones.has(s.zone.toLowerCase())) return false;
+        if (s.level !== undefined && hiddenLevels.has(s.level)) return false;
+        return true;
+      }),
+    [surfaces, showShading, showOpenings, hiddenZones, hiddenLevels],
+  );
+  const layersOn =
+    !showShading ||
+    !showOpenings ||
+    hiddenZones.size > 0 ||
+    hiddenLevels.size > 0 ||
+    opacity < 1 ||
+    cut !== null ||
+    explode > 0;
   const selected = useMemo(() => [...highlighted(surfaces, selection)], [surfaces, selection]);
   const partner = useMemo(() => partnerOf(surfaces, selected), [surfaces, selected]);
 
@@ -164,8 +224,38 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: re-apply after the scene is rebuilt for new geometry
   useEffect(() => {
-    viewRef.current?.setVisible(of.map((c) => !hidden.has(c.key)));
-  }, [of, hidden, geometry]);
+    viewRef.current?.setVisible(of.map((c, i) => !hidden.has(c.key) && Boolean(layerVisible[i])));
+  }, [of, hidden, layerVisible, geometry]);
+
+  useEffect(() => {
+    viewRef.current?.setPointsVisible(
+      geometry.daylightingPoints.map((p, i) => {
+        if (!showPoints) return false;
+        if (p.zone && hiddenZones.has(p.zone.toLowerCase())) return false;
+        const level = pointLevel[i];
+        return level === undefined || !hiddenLevels.has(level);
+      }),
+    );
+  }, [showPoints, hiddenZones, hiddenLevels, pointLevel, geometry]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-apply after the scene is rebuilt for new geometry
+  useEffect(() => viewRef.current?.setOpacity(opacity), [opacity, geometry]);
+
+  // The cut is a world height; the scene is centered on the model.
+  useEffect(
+    () => viewRef.current?.setCut(cut === null ? null : cut - geometry.center[2]),
+    [cut, geometry],
+  );
+
+  // Exploded view: each level moves up by its index × the gap.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-apply after the scene is rebuilt for new geometry
+  useEffect(() => {
+    const shift = (level?: number) => (level === undefined ? 0 : levels.indexOf(level) * explode);
+    viewRef.current?.setOffsets(
+      surfaces.map((s) => shift(s.level)),
+      pointLevel.map((l) => shift(l)),
+    );
+  }, [explode, levels, surfaces, pointLevel, geometry]);
 
   const toggle = (key: string) =>
     setHidden((current) => {
@@ -217,7 +307,151 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          className={`btn small${layersOn ? ' primary' : ''}`}
+          aria-expanded={layers}
+          onClick={() => setLayers((v) => !v)}
+        >
+          Layers and cuts
+        </button>
       </div>
+
+      {layers && (
+        <div className="layers-panel">
+          <div className="layers-row">
+            <label>
+              <input
+                type="checkbox"
+                checked={showShading}
+                onChange={(e) => setShowShading(e.target.checked)}
+              />{' '}
+              Shading
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={showOpenings}
+                onChange={(e) => setShowOpenings(e.target.checked)}
+              />{' '}
+              Windows and doors
+            </label>
+            {geometry.daylightingPoints.length > 0 && (
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showPoints}
+                  onChange={(e) => setShowPoints(e.target.checked)}
+                />{' '}
+                Daylighting points ({formatInt(geometry.daylightingPoints.length)})
+              </label>
+            )}
+          </div>
+          <label className="layers-slider">
+            Opacity
+            <input
+              type="range"
+              min={0.15}
+              max={1}
+              step={0.05}
+              value={opacity}
+              onChange={(e) => setOpacity(Number(e.target.value))}
+            />
+            <span className="count">{Math.round(opacity * 100)} %</span>
+          </label>
+          <label className="layers-slider">
+            <input
+              type="checkbox"
+              checked={cut !== null}
+              onChange={(e) => setCut(e.target.checked ? (zLow + zHigh) / 2 : null)}
+            />{' '}
+            Cut at
+            <input
+              type="range"
+              min={zLow}
+              max={zHigh}
+              step={Math.max((zHigh - zLow) / 200, 0.01)}
+              value={cut ?? (zLow + zHigh) / 2}
+              disabled={cut === null}
+              onChange={(e) => setCut(Number(e.target.value))}
+            />
+            <span className="count">{cut === null ? '—' : `${formatNumber(cut)} m`}</span>
+          </label>
+          {levels.length > 1 && (
+            <label className="layers-slider">
+              Separate floors
+              <input
+                type="range"
+                min={0}
+                max={Math.max(5, Math.ceil(geometry.size[2] / levels.length) * 2)}
+                step={0.5}
+                value={explode}
+                onChange={(e) => setExplode(Number(e.target.value))}
+              />
+              <span className="count">{explode ? `+${formatNumber(explode)} m` : 'off'}</span>
+            </label>
+          )}
+          {levels.length > 1 && (
+            <fieldset className="layers-list">
+              <legend>Floor levels</legend>
+              {levels.map((l) => (
+                <label key={l}>
+                  <input
+                    type="checkbox"
+                    checked={!hiddenLevels.has(l)}
+                    onChange={() => setHiddenLevels((current) => toggled(current, l))}
+                  />{' '}
+                  {formatNumber(l)} m
+                </label>
+              ))}
+            </fieldset>
+          )}
+          {zoneNames.length > 0 && (
+            <fieldset className="layers-list zones">
+              <legend>
+                Zones{' '}
+                <button type="button" className="link" onClick={() => setHiddenZones(new Set())}>
+                  all
+                </button>{' '}
+                <button
+                  type="button"
+                  className="link"
+                  onClick={() => setHiddenZones(new Set(zoneNames.map((z) => z.toLowerCase())))}
+                >
+                  none
+                </button>
+              </legend>
+              {zoneNames.map((z) => (
+                <label key={z}>
+                  <input
+                    type="checkbox"
+                    checked={!hiddenZones.has(z.toLowerCase())}
+                    onChange={() => setHiddenZones((current) => toggled(current, z.toLowerCase()))}
+                  />{' '}
+                  {z}
+                </label>
+              ))}
+            </fieldset>
+          )}
+          {layersOn && (
+            <button
+              type="button"
+              className="link"
+              onClick={() => {
+                setShowShading(true);
+                setShowOpenings(true);
+                setHiddenZones(new Set());
+                setHiddenLevels(new Set());
+                setOpacity(1);
+                setCut(null);
+                setExplode(0);
+              }}
+            >
+              Reset layers
+            </button>
+          )}
+        </div>
+      )}
 
       <svg
         ref={compassRef}

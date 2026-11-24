@@ -173,7 +173,7 @@ Para leer `.epJSON` (A5), los nombres de campo se convierten con la misma regla 
 | 3D | three.js | Estándar de WebGL |
 | Gráficas | Apache ECharts | Incluye áreas apiladas, mapas de calor y gráficas polares, y sincroniza el zoom entre subpaneles (F8). Solo se descarga al abrir una gráfica. |
 | Vista de texto | CodeMirror 6 | Maneja archivos de varios MB |
-| Mapa | Leaflet + OpenStreetMap | Ligero |
+| Mapa | Mapa del mundo propio en SVG con Natural Earth 1:110m (dominio público) | Se cambió de Leaflet + OpenStreetMap en la fase 2c: los mosaicos de OpenStreetMap le dirían a un servidor de mapas dónde está el edificio, y el visor no envía nada del archivo. Sin conexión y sin dependencias |
 | Red de flujo (L11) | Apache ECharts (gráfica `graph`) | Ya está en el proyecto. Se cambió de Cytoscape.js en la fase 3: las zonas se acomodan según su posición en planta, no automáticamente |
 | Comunicación con el worker | Comlink | Simplifica el código |
 | Instalable (K5) | vite-plugin-pwa | Se agrega en la última fase |
@@ -555,11 +555,11 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 ### Fase 2c · Construcciones, validación y complementos
 
 - [x] 2c.1 Corte de capas (E1) y uso de cada construcción (E3).
-- [ ] 2c.2 Capas y cortes 3D (C7), diagnóstico visual de geometría (C8) y elementos adicionales (C9).
+- [ ] 2c.2 Capas y cortes 3D (C7), diagnóstico visual de geometría (C8) y elementos adicionales (C9). *C7 y C9 hechos; C8 va en la computadora con EnergyPlus.*
 - [ ] 2c.3 Validación contra el IDD (H3), objetos sin uso (H4) y problemas de geometría (H5). *H3 y H4 hechos; H5 va con C8 (2c.2).*
-- [ ] 2c.4 Vista de texto sincronizada (B6).
+- [x] 2c.4 Vista de texto sincronizada (B6).
 - [ ] 2c.5 Lectura de epJSON (A5) y apertura desde una URL (A6).
-- [ ] 2c.6 Ubicación y días de diseño (D5) y salidas solicitadas (D6).
+- [x] 2c.6 Ubicación y días de diseño (D5) y salidas solicitadas (D6).
 
 **Listo cuando:** todos los features de esta fase funcionan con los ejemplos y con archivos de las versiones 8.x y 9.x.
 
@@ -587,6 +587,30 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - EnergyPlus acepta "autosize" y "autocalculate" indistintamente donde el campo admite alguno de los dos (`PlantLoop` "Plant Loop Volume" es autocalculable y los ejemplos escriben "autosize"; en `AirTerminal:SingleDuct:VAV:Reheat` es al revés).
   - Un campo obligatorio en blanco que tiene valor por omisión no es error (el IDD de 8.0 tiene 279 campos así).
   - Los tipos de día de `Schedule:Week:Compact` aceptan "For:" y varios tipos en un campo, así que no se comparan contra la lista de opciones.
+- 2c.4 (2026-11-23): pestaña nueva **Text**, entre Table y Constructions.
+  - El IDF tal como está escrito, con CodeMirror 6 (solo lectura): números de línea, colores para nombres de clase, números, comentarios `!` y notas `!-`, y búsqueda con Ctrl/⌘+F.
+  - Sincronizada con el inspector: al elegir un objeto en cualquier pestaña, el texto salta a su primera línea y resalta todas sus líneas; un clic en una línea de un objeto lo abre en el inspector (un clic entre objetos, en comentarios, no hace nada; arrastrar para seleccionar texto tampoco).
+  - El worker guarda el texto decodificado y la primera y última línea de cada objeto (`session.textView()`).
+  - Con `HospitalLowEnergy.idf` (4.4 MB) la pestaña abre en menos de un segundo y salta a un objeto de la línea 32,900 en unos 10 ms.
+  - Dependencias nuevas, con versión exacta: `@codemirror/state`, `view`, `language`, `search` y `@lezer/highlight`. La pestaña se carga solo cuando se abre.
+  - Pruebas: `tests/text.test.ts` (líneas de cada objeto) y `e2e/smoke.spec.ts`.
+- 2c.6 (2026-11-23): la pestaña Summary ahora tiene tres secciones: **Overview** (lo que ya había), **Site and design days** y **Outputs**.
+  - Site and design days: `Site:Location` con sus campos y un mapa del mundo dibujado en el visor (equirectangular, Natural Earth 1:110m, en `src/features/summary/worldLand.ts`; se carga solo al abrir la sección). Tabla de `SizingPeriod:DesignDay` (fecha, tipo de día, temperatura máxima, rango, humedad con el valor que corresponde a su tipo, presión, viento y modelo solar con su claridad o sus taub/taud). Fichas de `SizingPeriod:WeatherFileDays`/`WeatherFileConditionType` y de cada `RunPeriod` con todos sus campos. Tabla de `RunPeriodControl:SpecialDays` y fechas de `RunPeriodControl:DaylightSavingTime`.
+  - Aviso del visor (no de EnergyPlus) si la zona horaria y la longitud difieren en más de 2 horas: casi siempre es un signo equivocado (oeste y sur son negativos).
+  - Outputs: conteo de variables y medidores por frecuencia, en el orden del IDD, que sirve de filtro; tablas de `Output:Variable` (variable, clave, frecuencia, horario) y de medidores (`Output:Meter` y sus variantes); `Output:Table:SummaryReports`; fichas de `Output:Table:Monthly` con cada variable y su agregación; y las demás solicitudes y ajustes del grupo "Output Reporting" (SQLite, estilo de tablas, archivos de salida, dibujos…) con sus campos. Una frecuencia en blanco muestra el valor por omisión del IDD con la etiqueta "default".
+  - Nombres de campo de 8.x: el medidor se llama "Name" hasta 8.x y "Key Name" desde 9.0.
+  - Núcleo: `src/core/site.ts` (`siteView`) y `src/core/outputs.ts` (`outputsView`). Pruebas en `tests/site-outputs.test.ts` y `e2e/smoke.spec.ts`.
+- 2c.2, parte C7 y C9 (2026-11-23): botón **Layers and cuts** en la vista 3D.
+  - Mostrar u ocultar sombreados, ventanas y puertas, puntos de iluminación natural, cada nivel de piso y cada zona (con "all" y "none"). Se combina con el mostrar u ocultar de la leyenda.
+  - Opacidad de las superficies opacas (15 % a 100 %), corte horizontal a una altura elegida (oculta todo lo que está arriba) y "Separate floors", que sube cada nivel su número de orden × la separación elegida. "Reset layers" regresa todo. El botón se marca cuando alguna capa está activa.
+  - Nivel de una zona: la altura más baja de sus pisos (o de sus superficies), redondeada a 0.1 m, igual que en el diagrama de la red. Las ventanas y los sombreados de zona siguen a su zona; los sombreados de sitio y de edificio no tienen nivel y no se mueven.
+  - C9: puntos de referencia de iluminación natural, como cuadros naranjas visibles a través de las superficies. Color nuevo "Space" cuando el archivo tiene `Space` (9.6+).
+  - Núcleo: `daylightingPoints` en `buildGeometry` y en `geometryView()`, y `level` en cada superficie. Pruebas en `tests/daylighting.test.ts` y `e2e/smoke.spec.ts`.
+- Reglas usadas en C9 (de la documentación de EnergyPlus; **pendientes de confirmar** con EnergyPlus):
+  - `Daylighting:ReferencePoint` (8.6+, con "Zone or Space Name" desde 9.6) y, antes de 8.6, los dos puntos que traía `Daylighting:Controls`. Un punto en un `Space` se dibuja en la zona de ese espacio.
+  - Con "Daylighting Reference Point Coordinate System" Relative (el valor por omisión) el punto se transforma como los vértices de su zona: rotación y origen de la zona y luego el norte del edificio. Con World se usa tal cual.
+  - Z en blanco usa el valor por omisión del IDD (0.8 m).
+  - Para confirmarlo: agregar a `make_oracles.py` la posición de los puntos que EnergyPlus reporta y compararla con `HospitalLowEnergy.idf` y la oficina pequeña.
 
 ### Fase 3 · Extras de ventilación
 
@@ -653,7 +677,7 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 **Fase 3 adelantada:** la 3.1 (Cp y perfil de viento) está hecha y publicada (commit `9eab0e1`). La 3.2 (red de flujo entre zonas, sección Network en Ventilation) está hecha (2026-11-23).
 
-**Fase 2c empezada:** la 2c.1 (pestaña Constructions: corte de capas y uso de cada construcción) y la parte H3/H4 de la 2c.3 (validación contra el IDD y objetos sin uso, en el panel de problemas) están hechas (2026-11-23). Lo que sigue de la 2c y no necesita EnergyPlus: 2c.4 (vista de texto), 2c.6 (ubicación, días de diseño y salidas) y la parte C7/C9 de la 2c.2. Conviene hacer en la computadora con EnergyPlus la lectura de epJSON (A5, los archivos de prueba se generan con su convertidor) y el diagnóstico de geometría (C8/H5, para compararlo con los avisos de EnergyPlus). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
+**Fase 2c empezada:** la 2c.1 (pestaña Constructions: corte de capas y uso de cada construcción) y la parte H3/H4 de la 2c.3 (validación contra el IDD y objetos sin uso, en el panel de problemas) están hechas (2026-11-23). La 2c.4 (vista de texto), la 2c.6 (ubicación, días de diseño y salidas) y la parte C7/C9 de la 2c.2 (capas, cortes y puntos de iluminación natural en el 3D) también están hechas. Ya no queda nada de la 2c que no necesite EnergyPlus. Conviene hacer en la computadora con EnergyPlus la lectura de epJSON (A5, los archivos de prueba se generan con su convertidor) y el diagnóstico de geometría (C8/H5, para compararlo con los avisos de EnergyPlus). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
 
 **En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2 a 2b.6 están hechas y publicadas. Falta el **cierre de la fase, que se hará en la computadora que tiene EnergyPlus 26.2** (en esta no está instalado):
 

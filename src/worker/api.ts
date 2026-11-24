@@ -5,6 +5,7 @@ import type { ZoneFlows } from '../core/airflow/zoneflows';
 import type { ConstructionRow } from '../core/constructions/constructions';
 import type { OccupancyReport, ZoneRow } from '../core/loads/report';
 import type { WindowInventory } from '../core/openings/windows';
+import type { OutputsView } from '../core/outputs';
 import type { ClassDocs } from '../core/schema/types';
 import type { SearchHit } from '../core/search';
 import type {
@@ -19,9 +20,11 @@ import type {
   ObjectView,
   ScheduleDetail,
   ScheduleListItem,
+  TextView,
   ZoneLoadView,
   ZoneScheduleEntry,
 } from '../core/session';
+import type { SiteView } from '../core/site';
 import type { BuildingSummary } from '../core/summary';
 import type { Problem } from '../core/validation/problems';
 
@@ -54,4 +57,7 @@ export interface WorkerApi {
   wind(): Promise<WindView>;
   network(): Promise<FlowNetwork>;
   constructions(): Promise<ConstructionRow[]>;
+  textView(): Promise<TextView>;
+  siteView(): Promise<SiteView>;
+  outputs(): Promise<OutputsView>;
 }

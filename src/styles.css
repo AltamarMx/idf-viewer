@@ -1821,3 +1821,187 @@ table.grid.construction-table tr.selected td {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+
+/* Text view (B6) */
+.text-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.text-hint {
+  margin: 0;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.text-editor {
+  flex: 1;
+  min-height: 0;
+  background: var(--surface);
+}
+
+.text-editor .cm-panels {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+/* Site and design days (D5), outputs (D6) */
+.site-location {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px 24px;
+  align-items: start;
+}
+
+@media (min-width: 1100px) {
+  .site-location {
+    grid-template-columns: minmax(280px, 520px) minmax(0, 1fr);
+  }
+}
+
+.site-map {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: block;
+}
+
+.map-sea {
+  fill: var(--surface-2);
+}
+
+.map-land {
+  fill: var(--border);
+  stroke: var(--text-2);
+  stroke-width: 0.2;
+}
+
+.map-grid {
+  stroke: var(--border);
+  stroke-width: 0.3;
+}
+
+.map-site {
+  fill: var(--error);
+}
+
+.map-halo {
+  fill: none;
+  stroke: var(--error);
+  stroke-width: 0.8;
+}
+
+.map-label {
+  fill: var(--text);
+  font-size: 8px;
+  font-weight: 600;
+}
+
+table.grid.fields-compact td {
+  padding: 2px 8px 2px 0;
+}
+
+table.grid.design-days td {
+  white-space: nowrap;
+}
+
+table.grid.design-days td.wrap {
+  white-space: normal;
+  min-width: 220px;
+}
+
+.period-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.output-frequencies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.output-frequencies .chip {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+.output-frequencies .chip.on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.output-items {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+
+/* 3D layers and cuts (C7) */
+.layers-panel {
+  position: absolute;
+  top: 60px;
+  left: 10px;
+  width: min(300px, calc(100% - 20px));
+  max-height: calc(100% - 170px);
+  overflow: auto;
+  display: grid;
+  gap: 8px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  font-size: 13px;
+}
+
+.layers-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.layers-slider {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: 6px;
+}
+
+.layers-slider:has(input[type="checkbox"]) {
+  grid-template-columns: auto auto minmax(0, 1fr) 56px;
+}
+
+.layers-slider .count {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.layers-list {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 0;
+  padding: 4px 8px 6px;
+  display: grid;
+  gap: 2px;
+}
+
+.layers-list.zones {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.layers-list legend {
+  font-size: 12px;
+  color: var(--text-2);
+  padding: 0 4px;
+}
