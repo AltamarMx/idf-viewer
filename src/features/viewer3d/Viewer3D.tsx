@@ -9,6 +9,16 @@ import {
   categorize,
   isGlazed,
 } from './colors';
+import {
+  type ExplodeMode,
+  explodeOffsets,
+  offsetOf,
+  type PairStatus,
+  pairLines,
+  surfaceCenters,
+  type Vec3,
+  zoneCenters,
+} from './explode';
 import { SceneView, type ViewName } from './scene';
 
 interface Props {
@@ -55,6 +65,28 @@ function highlighted(surfaces: SurfaceView[], selection: ObjectRef | null): Set<
   });
   return result;
 }
+
+/** Surface types shown or hidden together in the layers panel. */
+const KIND_GROUPS = [
+  { id: 'wall', label: 'Walls' },
+  { id: 'floor', label: 'Floors' },
+  { id: 'roof', label: 'Roofs' },
+  { id: 'ceiling', label: 'Ceilings' },
+  { id: 'window', label: 'Windows' },
+  { id: 'door', label: 'Doors' },
+  { id: 'shading', label: 'Shading' },
+];
+
+function kindGroup(kind: string): string {
+  if (kind === 'glassdoor' || kind === 'tdd') return 'window';
+  return kind;
+}
+
+const PAIR_COLORS: Record<PairStatus, string> = {
+  ok: '#2e9e44',
+  'one-way': '#f08c00',
+  missing: '#e03131',
+};
 
 /** A copy of the set with `value` added or removed. */
 function toggled<T>(set: Set<T>, value: T): Set<T> {
@@ -118,14 +150,28 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
 
   // Layers and cuts (C7) and daylighting points (C9).
   const [layers, setLayers] = useState(false);
-  const [showShading, setShowShading] = useState(true);
-  const [showOpenings, setShowOpenings] = useState(true);
+  const [hiddenKinds, setHiddenKinds] = useState<Set<string>>(new Set());
   const [showPoints, setShowPoints] = useState(true);
+  const [showPairs, setShowPairs] = useState(false);
   const [hiddenZones, setHiddenZones] = useState<Set<string>>(new Set());
   const [hiddenLevels, setHiddenLevels] = useState<Set<number>>(new Set());
   const [opacity, setOpacity] = useState(1);
   const [cut, setCut] = useState<number | null>(null);
+  const [explodeMode, setExplodeMode] = useState<ExplodeMode>('zones');
   const [explode, setExplode] = useState(0);
+
+  const centers = useMemo(() => surfaceCenters(surfaces), [surfaces]);
+  const zoneCenter = useMemo(() => zoneCenters(surfaces, centers), [surfaces, centers]);
+  const pairs = useMemo(() => pairLines(surfaces), [surfaces]);
+  const pairCounts = useMemo(() => {
+    const counts: Record<PairStatus, number> = { ok: 0, 'one-way': 0, missing: 0 };
+    for (const p of pairs) counts[p.status]++;
+    return counts;
+  }, [pairs]);
+  const kinds = useMemo(() => {
+    const present = new Set(surfaces.map((s) => kindGroup(s.kind)));
+    return KIND_GROUPS.filter((k) => present.has(k.id));
+  }, [surfaces]);
 
   const zoneNames = useMemo(
     () =>
@@ -150,17 +196,16 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
   const layerVisible = useMemo(
     () =>
       surfaces.map((s) => {
-        if (s.kind === 'shading' && !showShading) return false;
-        if (['window', 'door', 'glassdoor', 'tdd'].includes(s.kind) && !showOpenings) return false;
+        if (hiddenKinds.has(kindGroup(s.kind))) return false;
         if (s.zone && hiddenZones.has(s.zone.toLowerCase())) return false;
         if (s.level !== undefined && hiddenLevels.has(s.level)) return false;
         return true;
       }),
-    [surfaces, showShading, showOpenings, hiddenZones, hiddenLevels],
+    [surfaces, hiddenKinds, hiddenZones, hiddenLevels],
   );
   const layersOn =
-    !showShading ||
-    !showOpenings ||
+    hiddenKinds.size > 0 ||
+    showPairs ||
     hiddenZones.size > 0 ||
     hiddenLevels.size > 0 ||
     opacity < 1 ||
@@ -247,15 +292,45 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
     [cut, geometry],
   );
 
-  // Exploded view: each level moves up by its index × the gap.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: re-apply after the scene is rebuilt for new geometry
+  // Exploded view: floors up, or zones away from the center of the model.
+  const offsets = useMemo(
+    () => explodeOffsets(surfaces, explodeMode, explode, zoneCenter, levels),
+    [surfaces, explodeMode, explode, zoneCenter, levels],
+  );
   useEffect(() => {
-    const shift = (level?: number) => (level === undefined ? 0 : levels.indexOf(level) * explode);
     viewRef.current?.setOffsets(
-      surfaces.map((s) => shift(s.level)),
-      pointLevel.map((l) => shift(l)),
+      offsets,
+      geometry.daylightingPoints.map((p, i) =>
+        offsetOf(p.zone, pointLevel[i], explodeMode, explode, zoneCenter, levels),
+      ),
     );
-  }, [explode, levels, surfaces, pointLevel, geometry]);
+  }, [offsets, explodeMode, explode, zoneCenter, levels, pointLevel, geometry]);
+
+  // Lines between interzone pairs, from center to center, moved with their surfaces.
+  useEffect(() => {
+    const at = (i: number): Vec3 => {
+      const c = centers[i] as Vec3;
+      const o = offsets[i] as Vec3;
+      return [c[0] + o[0], c[1] + o[1], c[2] + o[2]];
+    };
+    const stub = Math.max(0.5, Math.max(...geometry.size) * 0.04);
+    viewRef.current?.setPairLines(
+      showPairs
+        ? pairs
+            .filter((p) => layerVisible[p.from] || (p.to !== undefined && layerVisible[p.to]))
+            .map((p) => {
+              const from = at(p.from);
+              // A missing other side: a short line out of the surface.
+              const n = (surfaces[p.from] as SurfaceView).normal;
+              const to =
+                p.to !== undefined
+                  ? at(p.to)
+                  : ([from[0] + n[0] * stub, from[1] + n[1] * stub, from[2] + n[2] * stub] as Vec3);
+              return { from, to, color: PAIR_COLORS[p.status] };
+            })
+        : [],
+    );
+  }, [showPairs, pairs, centers, offsets, layerVisible, surfaces, geometry]);
 
   const toggle = (key: string) =>
     setHidden((current) => {
@@ -320,22 +395,16 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
       {layers && (
         <div className="layers-panel">
           <div className="layers-row">
-            <label>
-              <input
-                type="checkbox"
-                checked={showShading}
-                onChange={(e) => setShowShading(e.target.checked)}
-              />{' '}
-              Shading
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={showOpenings}
-                onChange={(e) => setShowOpenings(e.target.checked)}
-              />{' '}
-              Windows and doors
-            </label>
+            {kinds.map((k) => (
+              <label key={k.id}>
+                <input
+                  type="checkbox"
+                  checked={!hiddenKinds.has(k.id)}
+                  onChange={() => setHiddenKinds((current) => toggled(current, k.id))}
+                />{' '}
+                {k.label}
+              </label>
+            ))}
             {geometry.daylightingPoints.length > 0 && (
               <label>
                 <input
@@ -377,19 +446,70 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
             />
             <span className="count">{cut === null ? '—' : `${formatNumber(cut)} m`}</span>
           </label>
-          {levels.length > 1 && (
-            <label className="layers-slider">
-              Separate floors
-              <input
-                type="range"
-                min={0}
-                max={Math.max(5, Math.ceil(geometry.size[2] / levels.length) * 2)}
-                step={0.5}
-                value={explode}
-                onChange={(e) => setExplode(Number(e.target.value))}
-              />
-              <span className="count">{explode ? `+${formatNumber(explode)} m` : 'off'}</span>
-            </label>
+          <div className="layers-explode">
+            <label htmlFor="explode-mode">Separate</label>
+            <select
+              id="explode-mode"
+              value={explodeMode}
+              onChange={(e) => {
+                setExplodeMode(e.target.value as ExplodeMode);
+                setExplode(0);
+              }}
+            >
+              <option value="zones">zones</option>
+              {levels.length > 1 && <option value="floors">floors</option>}
+            </select>
+            <input
+              type="range"
+              aria-label="Separation"
+              min={0}
+              max={
+                explodeMode === 'zones'
+                  ? 1.5
+                  : Math.max(5, Math.ceil(geometry.size[2] / Math.max(levels.length, 1)) * 2)
+              }
+              step={explodeMode === 'zones' ? 0.05 : 0.5}
+              value={explode}
+              onChange={(e) => setExplode(Number(e.target.value))}
+            />
+            <span className="count">
+              {!explode
+                ? 'off'
+                : explodeMode === 'zones'
+                  ? `${Math.round(explode * 100)} %`
+                  : `+${formatNumber(explode)} m`}
+            </span>
+          </div>
+          {pairs.length > 0 && (
+            <div className="layers-pairs">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showPairs}
+                  onChange={(e) => setShowPairs(e.target.checked)}
+                />{' '}
+                Interzone pairs ({formatInt(pairs.length)})
+              </label>
+              {showPairs && (
+                <ul>
+                  <li>
+                    <span className="network-line" style={{ borderColor: PAIR_COLORS.ok }} /> Both
+                    sides name each other: {formatInt(pairCounts.ok)}
+                  </li>
+                  <li>
+                    <span
+                      className="network-line"
+                      style={{ borderColor: PAIR_COLORS['one-way'] }}
+                    />{' '}
+                    The other side names another surface: {formatInt(pairCounts['one-way'])}
+                  </li>
+                  <li>
+                    <span className="network-line" style={{ borderColor: PAIR_COLORS.missing }} />{' '}
+                    The other side does not exist: {formatInt(pairCounts.missing)}
+                  </li>
+                </ul>
+              )}
+            </div>
           )}
           {levels.length > 1 && (
             <fieldset className="layers-list">
@@ -438,8 +558,8 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
               type="button"
               className="link"
               onClick={() => {
-                setShowShading(true);
-                setShowOpenings(true);
+                setHiddenKinds(new Set());
+                setShowPairs(false);
                 setHiddenZones(new Set());
                 setHiddenLevels(new Set());
                 setOpacity(1);

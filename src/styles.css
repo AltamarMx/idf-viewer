@@ -2005,3 +2005,39 @@ table.grid.design-days td.wrap {
   color: var(--text-2);
   padding: 0 4px;
 }
+
+.layers-explode {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: 6px;
+}
+
+.layers-explode select {
+  padding: 2px 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.layers-explode .count {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.layers-pairs ul {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+  font-size: 12px;
+}
+
+.layers-pairs li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

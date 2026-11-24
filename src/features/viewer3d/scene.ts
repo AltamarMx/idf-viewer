@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { GeometryView, SurfaceView } from '../../core/session';
 import { isGlazed } from './colors';
+import type { Vec3 } from './explode';
 
 export type ViewName = 'iso' | 'top' | 'north' | 'south' | 'east' | 'west';
 
@@ -239,27 +240,29 @@ export class SceneView {
   setCut(z: number | null) {
     this.renderer.localClippingEnabled = z !== null;
     const planes = z === null ? [] : [new THREE.Plane(new THREE.Vector3(0, 0, -1), z)];
+    this.cutPlanes = planes;
     for (const g of this.groups) {
       (g.mesh.material as THREE.Material).clippingPlanes = planes;
       (g.edges.material as THREE.Material).clippingPlanes = planes;
     }
     if (this.points) (this.points.material as THREE.Material).clippingPlanes = planes;
+    if (this.pairs) (this.pairs.material as THREE.Material).clippingPlanes = planes;
     this.requestRender();
   }
 
-  /** Exploded view (C7): moves each surface up by `dz[i]`; the points by `pointDz[i]`. */
-  setOffsets(dz: number[], pointDz: number[]) {
+  /** Exploded view (C7): moves each surface by `offsets[i]` and each point by `pointOffsets[i]`. */
+  setOffsets(offsets: Vec3[], pointOffsets: Vec3[]) {
     this.groups.forEach((group, g) => {
       const attr = group.mesh.geometry.getAttribute('position') as THREE.BufferAttribute;
       const array = attr.array as Float32Array;
       this.slots.forEach((slot, i) => {
         if (slot.group !== g) return;
-        const shift = dz[i] ?? 0;
+        const [dx, dy, dz] = offsets[i] ?? [0, 0, 0];
         for (let v = 0; v < slot.vertexCount; v++) {
           const at = (slot.vertexStart + v) * 3;
-          array[at] = slot.base[v * 3] as number;
-          array[at + 1] = slot.base[v * 3 + 1] as number;
-          array[at + 2] = (slot.base[v * 3 + 2] as number) + shift;
+          array[at] = (slot.base[v * 3] as number) + dx;
+          array[at + 1] = (slot.base[v * 3 + 1] as number) + dy;
+          array[at + 2] = (slot.base[v * 3 + 2] as number) + dz;
         }
       });
       attr.needsUpdate = true;
@@ -268,10 +271,44 @@ export class SceneView {
     if (this.points) {
       const attr = this.points.geometry.getAttribute('position') as THREE.BufferAttribute;
       this.geometry.daylightingPoints.forEach((p, i) => {
-        attr.setXYZ(i, p.position[0], p.position[1], p.position[2] + (pointDz[i] ?? 0));
+        const [dx, dy, dz] = pointOffsets[i] ?? [0, 0, 0];
+        attr.setXYZ(i, p.position[0] + dx, p.position[1] + dy, p.position[2] + dz);
       });
       attr.needsUpdate = true;
       this.points.geometry.computeBoundingSphere();
+    }
+    this.refit();
+    this.requestRender();
+  }
+
+  private pairs?: THREE.LineSegments;
+  private cutPlanes: THREE.Plane[] = [];
+
+  /** Lines between interzone pairs, each with its color; empty removes them. */
+  setPairLines(segments: { from: Vec3; to: Vec3; color: string }[]) {
+    if (this.pairs) {
+      this.scene.remove(this.pairs);
+      this.pairs.geometry.dispose();
+      (this.pairs.material as THREE.Material).dispose();
+      this.pairs = undefined;
+    }
+    if (segments.length > 0) {
+      const positions = new Float32Array(segments.length * 6);
+      const colors = new Float32Array(segments.length * 6);
+      const color = new THREE.Color();
+      segments.forEach((s, i) => {
+        positions.set([...s.from, ...s.to], i * 6);
+        color.set(s.color);
+        colors.set([color.r, color.g, color.b, color.r, color.g, color.b], i * 6);
+      });
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      const material = new THREE.LineBasicMaterial({ vertexColors: true, depthTest: false });
+      material.clippingPlanes = this.cutPlanes;
+      this.pairs = new THREE.LineSegments(geometry, material);
+      this.pairs.renderOrder = 4;
+      this.scene.add(this.pairs);
     }
     this.requestRender();
   }
@@ -328,12 +365,38 @@ export class SceneView {
   }
 
   setView(name: ViewName) {
-    const dir = new THREE.Vector3(...VIEW_DIRECTIONS[name]).normalize();
-    const distance = (this.radius / Math.sin(THREE.MathUtils.degToRad(this.camera.fov / 2))) * 1.05;
-    this.controls.target.set(0, 0, 0);
-    this.camera.position.copy(dir.multiplyScalar(distance));
+    this.frame3d(new THREE.Vector3(...VIEW_DIRECTIONS[name]).normalize());
+  }
+
+  /** Center and radius of what is drawn; they grow when the parts are pulled apart. */
+  private bounds = { center: new THREE.Vector3(), radius: 0 };
+
+  /** Looks at the model from `dir` (from the target to the camera) so that all of it fits. */
+  private frame3d(dir: THREE.Vector3) {
+    const radius = this.bounds.radius || this.radius;
+    const distance = (radius / Math.sin(THREE.MathUtils.degToRad(this.camera.fov / 2))) * 1.05;
+    this.controls.target.copy(this.bounds.center);
+    this.camera.position.copy(this.bounds.center).addScaledVector(dir, distance);
     this.controls.update();
     this.requestRender();
+  }
+
+  /** After moving the parts: refit the camera, keeping the direction it looks from. */
+  private refit() {
+    const box = new THREE.Box3();
+    for (const g of this.groups) {
+      g.mesh.geometry.computeBoundingBox();
+      if (g.mesh.geometry.boundingBox) box.union(g.mesh.geometry.boundingBox);
+    }
+    if (box.isEmpty()) return;
+    const sphere = box.getBoundingSphere(new THREE.Sphere());
+    const same =
+      sphere.center.distanceTo(this.bounds.center) < 1e-6 &&
+      Math.abs(sphere.radius - this.bounds.radius) < 1e-6;
+    if (same) return;
+    this.bounds = { center: sphere.center, radius: Math.max(sphere.radius, 1) };
+    const dir = this.camera.position.clone().sub(this.controls.target).normalize();
+    this.frame3d(dir);
   }
 
   requestRender() {

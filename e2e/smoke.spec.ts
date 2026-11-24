@@ -271,7 +271,7 @@ test('summary: site with design days and requested outputs', async ({ page }) =>
   expect(errors).toEqual([]);
 });
 
-test('3D layers: hide shading, cut, separate floors and daylighting points', async ({ page }) => {
+test('3D layers: surface types, cut, separate floors and daylighting points', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await openExample(page, 'Small office with AirflowNetwork');
@@ -281,11 +281,31 @@ test('3D layers: hide shading, cut, separate floors and daylighting points', asy
   const panel = page.locator('.layers-panel');
   await expect(panel).toContainText('Daylighting points (1)');
   await expect(panel.locator('.layers-list.zones label')).toHaveCount(4);
-  await panel.getByRole('checkbox', { name: 'Shading' }).uncheck();
+  // Only the surface types in the file are listed: the small office has no shading.
+  await expect(panel.getByRole('checkbox', { name: 'Shading' })).toHaveCount(0);
+  await panel.getByRole('checkbox', { name: 'Windows' }).uncheck();
+  await panel.getByRole('checkbox', { name: 'Roofs' }).uncheck();
   await panel.locator('.layers-slider', { hasText: 'Cut at' }).getByRole('checkbox').check();
-  await page.getByLabel('Separate floors').fill('4');
+  await panel.getByLabel('Separate').selectOption('floors');
+  await panel.getByLabel('Separation').fill('4');
   await expect(panel).toContainText('+4 m');
   await panel.getByRole('button', { name: 'Reset layers' }).click();
-  await expect(panel.getByRole('checkbox', { name: 'Shading' })).toBeChecked();
+  await expect(panel.getByRole('checkbox', { name: 'Windows' })).toBeChecked();
+  await expect(panel.getByRole('checkbox', { name: 'Roofs' })).toBeChecked();
+  expect(errors).toEqual([]);
+});
+
+test('3D exploded zones with interzone pair lines', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'Five zones with spaces');
+  await page.getByRole('tab', { name: '3D' }).click();
+  await expect(page.locator('.viewer canvas')).toBeVisible();
+  await page.getByRole('button', { name: 'Layers and cuts' }).click();
+  const panel = page.locator('.layers-panel');
+  await panel.getByLabel('Separation').fill('0.6');
+  await expect(panel).toContainText('60 %');
+  await panel.getByRole('checkbox', { name: /Interzone pairs/ }).check();
+  await expect(panel).toContainText('The other side does not exist: 0');
   expect(errors).toEqual([]);
 });
