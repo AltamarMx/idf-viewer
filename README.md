@@ -10,6 +10,10 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
 ## What it does
 
 - Opens `.idf` files from EnergyPlus 8.0 to 26.2, using the field names of each version.
+- Opens a file from your disk, from pasted text or from a web address. A link such as
+  `https://altamarmx.github.io/idf-viewer/?url=https://github.com/user/repository/blob/main/model.idf`
+  opens that file directly; the server must allow other sites to read it (CORS), as GitHub and
+  Gist do. Your browser downloads it straight from that server.
 - Explorer of classes and objects, with cross-references between objects, and the file as
   written, with syntax colors, in sync with the inspector.
 - Problems panel: broken references, duplicate names, field values checked against the IDD of

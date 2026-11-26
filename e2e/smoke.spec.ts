@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, type Page, test } from '@playwright/test';
 
 async function openExample(page: Page, title: string) {
@@ -308,4 +309,57 @@ test('3D exploded zones with interzone pair lines', async ({ page }) => {
   await panel.getByRole('checkbox', { name: /Interzone pairs/ }).check();
   await expect(panel).toContainText('The other side does not exist: 0');
   expect(errors).toEqual([]);
+});
+
+test('?url= opens a file from GitHub through its raw address', async ({ page }) => {
+  const idf = readFileSync('examples/1ZoneUncontrolled.idf');
+  const requested: string[] = [];
+  await page.route('https://raw.githubusercontent.com/**', (route) => {
+    requested.push(route.request().url());
+    return route.fulfill({
+      body: idf,
+      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'text/plain' },
+    });
+  });
+  await page.goto('./?url=https://github.com/someone/models/blob/main/One%20zone.idf');
+  await expect(page.locator('.file-meta')).toContainText('One zone.idf');
+  await expect(page.locator('.file-meta')).toContainText('v26.2');
+  expect(requested).toEqual([
+    'https://raw.githubusercontent.com/someone/models/main/One%20zone.idf',
+  ]);
+
+  // Back to the start page: the address no longer names a file.
+  await page.getByRole('button', { name: 'IDF Viewer' }).click();
+  await expect(page).toHaveURL(/\/idf-viewer\/$/);
+});
+
+test('open from a URL: a failed download gives a clear error', async ({ page }) => {
+  // Playwright does not apply CORS to the responses it fakes; for the page, a server that does
+  // not allow other sites and a failed connection are the same error.
+  await page.route('https://models.example.org/**', (route) => route.abort('failed'));
+  await page.goto('./');
+  await page.getByText('Or open from a URL').click();
+  await page.getByLabel('Address of the IDF file').fill('https://models.example.org/a.idf');
+  await page.getByRole('button', { name: 'Open', exact: true }).click();
+  await expect(page.locator('.notice.error')).toContainText('Could not open a.idf');
+  await expect(page.locator('.notice.error')).toContainText('CORS');
+  await expect(page).toHaveURL(/\?url=https:\/\/models\.example\.org\/a\.idf$/);
+
+  // Reloading tries again and keeps the address in the field.
+  await page.reload();
+  await expect(page.locator('.notice.error')).toContainText('CORS');
+  await expect(page.getByLabel('Address of the IDF file')).toHaveValue(
+    'https://models.example.org/a.idf',
+  );
+});
+
+test('an example gets a link that reopens it; a local file clears it', async ({ page }) => {
+  await openExample(page, 'One zone, uncontrolled');
+  await expect(page).toHaveURL(/\?url=examples\/1ZoneUncontrolled\.idf$/);
+  await page.reload();
+  await expect(page.locator('.file-meta')).toContainText('1ZoneUncontrolled.idf');
+
+  await page.locator('input[type=file]').setInputFiles('tests/fixtures/1ZoneUncontrolled-8.2.idf');
+  await expect(page.locator('.file-meta')).toContainText('v8.2');
+  await expect(page).toHaveURL(/\/idf-viewer\/$/);
 });

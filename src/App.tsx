@@ -10,6 +10,7 @@ import type {
 } from './core/session';
 import { ClassTree } from './features/explorer/ClassTree';
 import { Landing } from './features/gallery/Landing';
+import { displayName, downloadIdf, urlParameter, viewerLink } from './features/gallery/remote';
 import { Inspector } from './features/inspector/Inspector';
 import { ProblemsPanel } from './features/problems/ProblemsPanel';
 import { SearchDialog } from './features/search/SearchDialog';
@@ -51,6 +52,14 @@ const STAGE_WEIGHT: Record<LoadProgress['stage'], [number, number]> = {
 
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
 
+/** The viewer's folder; relative `?url=` addresses (the examples) are resolved against it. */
+const BASE = new URL(import.meta.env.BASE_URL, window.location.origin).href;
+
+/** Puts `?url=` in the address bar (or removes it) without adding a history entry. */
+function setAddressBar(url: string | null) {
+  window.history.replaceState(window.history.state, '', viewerLink(window.location.href, url));
+}
+
 export function App() {
   const [theme, toggleTheme] = useTheme();
   const [state, setState] = useState<State>({ status: 'idle' });
@@ -61,37 +70,72 @@ export function App() {
   const [geometry, setGeometry] = useState<GeometryView | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [dragging, setDragging] = useState(false);
+  // The address of the last file opened from a URL, kept for the start page if it fails.
+  const [lastUrl, setLastUrl] = useState(() => urlParameter(window.location.search));
   const inputRef = useRef<HTMLInputElement>(null);
   const loadId = useRef(0);
+  const startedFromAddress = useRef(false);
 
-  const open = useCallback(async (source: FileSource | Promise<FileSource>, name: string) => {
-    const id = ++loadId.current;
-    setState({ status: 'loading', name, progress: { stage: 'reading', message: 'Reading file' } });
-    try {
-      const summary = await openInWorker(await source, (progress) => {
-        if (id === loadId.current) setState({ status: 'loading', name, progress });
-      });
-      if (id !== loadId.current) return;
-      setSelectedClass(null);
-      setSelectedId(null);
-      setSelection(null);
-      setGeometry(null);
-      setTab('summary');
-      setState({ status: 'ready', summary });
-    } catch (error) {
-      if (id !== loadId.current) return;
-      setState({ status: 'idle', error: `Could not open ${name}: ${messageOf(error)}` });
-    }
-  }, []);
+  const open = useCallback(
+    async (source: FileSource | Promise<FileSource>, name: string, message = 'Reading file') => {
+      const id = ++loadId.current;
+      setState({ status: 'loading', name, progress: { stage: 'reading', message } });
+      try {
+        const summary = await openInWorker(await source, (progress) => {
+          if (id === loadId.current) setState({ status: 'loading', name, progress });
+        });
+        if (id !== loadId.current) return;
+        setSelectedClass(null);
+        setSelectedId(null);
+        setSelection(null);
+        setGeometry(null);
+        setTab('summary');
+        setState({ status: 'ready', summary });
+      } catch (error) {
+        if (id !== loadId.current) return;
+        setState({ status: 'idle', error: `Could not open ${name}: ${messageOf(error)}` });
+      }
+    },
+    [],
+  );
+
+  // A file from the user's disk or pasted text: the address bar no longer names a file.
+  const openLocal = useCallback(
+    (source: FileSource | Promise<FileSource>, name: string) => {
+      setAddressBar(null);
+      setLastUrl(null);
+      return open(source, name);
+    },
+    [open],
+  );
 
   const openLocalFile = useCallback(
     (file: File) =>
-      open(
+      openLocal(
         file.arrayBuffer().then((buffer) => ({ name: file.name, buffer })),
         file.name,
       ),
+    [openLocal],
+  );
+
+  // A file from a web address (A6), an example included: the address bar gets `?url=`, so
+  // the page can be reloaded or shared and opens the same file.
+  const openUrl = useCallback(
+    (url: string) => {
+      setAddressBar(url);
+      setLastUrl(url);
+      return open(downloadIdf(url, BASE), displayName(url, BASE), 'Downloading');
+    },
     [open],
   );
+
+  // `?url=` in the address when the page opens. The ref keeps StrictMode from downloading twice.
+  useEffect(() => {
+    if (startedFromAddress.current) return;
+    startedFromAddress.current = true;
+    const url = urlParameter(window.location.search);
+    if (url) void openUrl(url);
+  }, [openUrl]);
 
   const summary = state.status === 'ready' ? state.summary : null;
 
@@ -168,7 +212,10 @@ export function App() {
         <button
           type="button"
           className="brand"
-          onClick={() => setState({ status: 'idle' })}
+          onClick={() => {
+            setAddressBar(null);
+            setState({ status: 'idle' });
+          }}
           title="Back to the start page"
         >
           <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" />
@@ -354,17 +401,10 @@ export function App() {
         <div className="pane">
           <Landing
             error={state.status === 'idle' ? state.error : undefined}
+            lastUrl={lastUrl ?? undefined}
             onPickFile={() => inputRef.current?.click()}
-            onOpenUrl={(url, name) =>
-              open(
-                fetch(url).then(async (r) => {
-                  if (!r.ok) throw new Error(`download failed (${r.status})`);
-                  return { name, buffer: await r.arrayBuffer() };
-                }),
-                name,
-              )
-            }
-            onOpenText={(text) => open({ name: 'Pasted text', text }, 'pasted text')}
+            onOpenUrl={(url) => void openUrl(url)}
+            onOpenText={(text) => openLocal({ name: 'Pasted text', text }, 'pasted text')}
           />
         </div>
       )}

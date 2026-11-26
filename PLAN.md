@@ -558,7 +558,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 - [ ] 2c.2 Capas y cortes 3D (C7), diagnóstico visual de geometría (C8) y elementos adicionales (C9). *C7 y C9 hechos; C8 va en la computadora con EnergyPlus.*
 - [ ] 2c.3 Validación contra el IDD (H3), objetos sin uso (H4) y problemas de geometría (H5). *H3 y H4 hechos; H5 va con C8 (2c.2).*
 - [x] 2c.4 Vista de texto sincronizada (B6).
-- [ ] 2c.5 Lectura de epJSON (A5) y apertura desde una URL (A6).
+- [ ] 2c.5 Lectura de epJSON (A5) y apertura desde una URL (A6). *A6 hecho; A5 va en la computadora con EnergyPlus.*
 - [x] 2c.6 Ubicación y días de diseño (D5) y salidas solicitadas (D6).
 
 **Listo cuando:** todos los features de esta fase funcionan con los ejemplos y con archivos de las versiones 8.x y 9.x.
@@ -612,6 +612,15 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - **Pares interzona:** líneas del centro de cada superficie con frontera "Surface" al centro de la superficie que nombra: verde si se nombran mutuamente (una línea por par), naranja si la otra nombra a otra superficie, roja (corta, hacia afuera) si la otra no existe. Se omiten las superficies que se nombran a sí mismas y las ventanas o puertas sin objeto propio. La leyenda cuenta cada tipo. En `5ZoneAirCooledWithSpaces` los 18 pares cierran.
   - **Tipos de superficie** (muros, pisos, techos, plafones, ventanas, puertas, sombreados) en el panel, independientes del modo de color; solo aparecen los tipos que tiene el archivo. Reemplazan a las casillas "Shading" y "Windows and doors".
   - Cálculos en `src/features/viewer3d/explode.ts` (`explodeOffsets`, `pairLines`), probados en `tests/explode.test.ts` con un archivo hecho a mano que tiene un par correcto, dos que nombran a otra superficie, uno sin la otra cara y una partición que se nombra a sí misma.
+- 2c.5, parte A6 (2026-11-24): abrir un IDF desde una dirección web.
+  - `?url=` en la dirección del visor abre ese archivo al cargar la página, por ejemplo `https://altamarmx.github.io/idf-viewer/?url=https://github.com/NREL/EnergyPlus/blob/develop/testfiles/1ZoneUncontrolled.idf`. La dirección del archivo puede ir tal cual o codificada; todo lo que sigue a `url=` cuenta como la dirección, así que funciona aunque tenga `&`.
+  - En la página de inicio, "Or open from a URL": un campo para pegar la dirección.
+  - Los enlaces de GitHub (`github.com/…/blob/…` y `…/raw/…`) se convierten en su archivo de `raw.githubusercontent.com`, y los de Gist (`gist.github.com/usuario/id`) en `gist.githubusercontent.com/…/raw`, que es el primer archivo del gist. Las páginas de `github.com` no dejan que otro sitio las lea; `raw.githubusercontent.com` y `gist.githubusercontent.com` sí.
+  - Al abrir un archivo desde una dirección, la barra del navegador queda con `?url=…`: recargar la página lo vuelve a abrir y el enlace se puede compartir. Los ejemplos de la galería también (`?url=examples/HospitalLowEnergy.idf`). Abrir un archivo local, pegar texto o volver al inicio quita el `?url=`.
+  - Avisos claros cuando falla: el servidor no permite que otros sitios lean el archivo (CORS) o no hay conexión (para la página son el mismo error), el servidor responde con un error (404 not found…), la dirección devolvió una página web y no un IDF, o la dirección es `http://` y el sitio publicado es `https://` (el navegador no lo permite). Si falla, la dirección se queda en el campo para corregirla.
+  - Privacidad: el navegador descarga el archivo directamente del servidor donde está, sin pasar por ningún servidor del visor. GitHub Pages sí recibe la dirección del archivo (no su contenido), porque va dentro de la dirección de la página.
+  - Comprobado con archivos reales: el enlace de GitHub de `1ZoneUncontrolled.idf` de EnergyPlus abre; GitLab no permite que otros sitios lean sus archivos y da el aviso de CORS. La rama de desarrollo de EnergyPlus ya está en la versión 27.1; el visor la abre con el esquema de 26.2 y lo avisa.
+  - Código: `src/features/gallery/remote.ts`. Pruebas en `tests/remote.test.ts` y tres en `e2e/smoke.spec.ts`. Playwright no aplica CORS a las respuestas que simula, así que la prueba del error simula una descarga fallida.
 - Reglas usadas en C9 (de la documentación de EnergyPlus; **pendientes de confirmar** con EnergyPlus):
   - `Daylighting:ReferencePoint` (8.6+, con "Zone or Space Name" desde 9.6) y, antes de 8.6, los dos puntos que traía `Daylighting:Controls`. Un punto en un `Space` se dibuja en la zona de ese espacio.
   - Con "Daylighting Reference Point Coordinate System" Relative (el valor por omisión) el punto se transforma como los vértices de su zona: rotación y origen de la zona y luego el norte del edificio. Con World se usa tal cual.
@@ -677,22 +686,30 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 - …
 
-## 9. Dónde vamos (2026-11-23)
+## 9. Dónde vamos (2026-11-26)
 
-**Terminado y publicado:** fases 0, 1 y 2a, en https://altamarmx.github.io/idf-viewer/. El visor tiene las pestañas Summary, 3D, Table, Ventilation, Schedules, Loads y Problems.
+**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1 y 2a terminadas; 2b, 2c y 3 hechas salvo lo que necesita EnergyPlus. Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
 
-**Fase 3 adelantada:** la 3.1 (Cp y perfil de viento) está hecha y publicada (commit `9eab0e1`). La 3.2 (red de flujo entre zonas, sección Network en Ventilation) está hecha (2026-11-23).
+**Todo lo que falta de las fases 2b, 2c y 3 necesita EnergyPlus 26.2**, que no está en la computadora donde se trabajó hasta el 2026-11-26. En la computadora que lo tiene, en este orden:
 
-**Fase 2c empezada:** la 2c.1 (pestaña Constructions: corte de capas y uso de cada construcción) y la parte H3/H4 de la 2c.3 (validación contra el IDD y objetos sin uso, en el panel de problemas) están hechas (2026-11-23). La 2c.4 (vista de texto), la 2c.6 (ubicación, días de diseño y salidas) y la parte C7/C9 de la 2c.2 (capas, cortes y puntos de iluminación natural en el 3D) también están hechas. Ya no queda nada de la 2c que no necesite EnergyPlus. Conviene hacer en la computadora con EnergyPlus la lectura de epJSON (A5, los archivos de prueba se generan con su convertidor) y el diagnóstico de geometría (C8/H5, para compararlo con los avisos de EnergyPlus). Se empezó antes de cerrar la 2b porque no necesita EnergyPlus; el cierre de la 2b y la comparación del perfil de viento se hacen juntos en la computadora con EnergyPlus 26.2.
+1. **Cierre de la fase 2b** (2b.2 a 2b.6 hechas y publicadas) y de la fase 3 (3.1 y 3.2 hechas):
+   1. `uv run tools/make_oracles.py` (sin `--annual`) para regenerar las referencias de los 8 ejemplos y de `tests/fixtures/geometry`, `windows` y `ventilation`. Ahora guardan además la tabla "Exterior Fenestration" y, del `.eio`, las tablas "Airflow Stats Nominal" y las del perfil de viento.
+   2. `npm test`: las 3 pruebas que hoy se saltan ("matches the EnergyPlus fenestration table", "design flows match EnergyPlus" y "site wind profile matches EnergyPlus") pasarán a comparar. Si algo no coincide, corregir la regla y anotarla.
+   3. Confirmar o corregir las reglas marcadas como "pendientes de confirmar" en el avance de las fases 2b, 2c (puntos de iluminación natural, C9) y 3, y pasarlas a sus notas de fase. Para C9 hay que agregar a `make_oracles.py` la posición de los puntos que reporta EnergyPlus.
+   4. Revisar que el README siga al día, commit, push y revisar que GitHub Actions pase y el sitio quede publicado.
+2. **Lo que queda de la fase 2c** (al terminarlo se cierra la fase):
+   - **Diagnóstico de geometría (C8/H5):** superficies volteadas, no planas o casi sin área, ventanas fuera de su muro, pares interzona que no coinciden y zonas que no cierran, en el 3D y en el panel de problemas. Las tolerancias se comparan con los avisos que EnergyPlus escribe en el `.err`. Es la recomendada para empezar: sigue de la vista explotada y los pares interzona.
+   - **Lectura de epJSON (A5):** los archivos de prueba se generan con el convertidor de EnergyPlus (`ConvertInputFormat`).
+3. **Fase 4 (instalable):** no necesita EnergyPlus. Antes de empezar hay que decidir si al instalar se descargan los esquemas de las 27 versiones (unos MB más, una sola vez) o solo los de las versiones que se vayan abriendo.
 
-**En curso:** fase 2b (ventanas, ventilación natural e infiltración). Las tareas 2b.2 a 2b.6 están hechas y publicadas. Falta el **cierre de la fase, que se hará en la computadora que tiene EnergyPlus 26.2** (en esta no está instalado):
+**Pendiente menor:** la rama de desarrollo de EnergyPlus ya está en la versión 27.1. Hoy el visor la abre con el esquema de 26.2 y lo avisa. Cuando salga la 27.1 oficial, instalarla y correr `tools/fetch_idds.py` y `tools/idd2json.py`.
 
-1. `uv run tools/make_oracles.py` (sin `--annual`) para regenerar las referencias de los 8 ejemplos y de `tests/fixtures/geometry`, `windows` y `ventilation`. Ahora guardan además la tabla "Exterior Fenestration" y, del `.eio`, las tablas "Airflow Stats Nominal" y las del perfil de viento.
-2. `npm test`: las pruebas que hoy se saltan ("matches the EnergyPlus fenestration table", "design flows match EnergyPlus" y "site wind profile matches EnergyPlus") pasarán a comparar. Si algo no coincide, corregir la regla y anotarla.
-3. Confirmar o corregir las reglas marcadas como "pendientes de confirmar" en el avance de las fases 2b y 3, y pasarlas a sus notas de fase.
-4. Revisar que el README siga al día (ya menciona ventanas, AFN e infiltración), commit, push y revisar que GitHub Actions pase y el sitio quede publicado.
+**Tu IDF de prueba (`examples/1ra_Airflow.idf`) es privado:** está en `.git/info/exclude` y no se sube al repositorio, que es público. Por la misma razón no se generan sus referencias de EnergyPlus (`tests/oracles/1ra_Airflow*.json`), porque tendrían datos de tu edificio. Como no está en el repositorio, en la otra computadora hay que copiarlo a mano a `examples/` y, **antes de cualquier commit**, agregar estas dos líneas a `.git/info/exclude`:
 
-**Tu IDF de prueba (`examples/1ra_Airflow.idf`) es privado:** está en `.git/info/exclude` y no se sube al repositorio, que es público. Por la misma razón no se generan sus referencias de EnergyPlus (`tests/oracles/1ra_Airflow*.json`), porque tendrían datos de tu edificio. Si `make_oracles.py` corre sobre todo `examples/` en una computadora donde esté el archivo, borra esas referencias antes del commit.
+```
+examples/1ra_Airflow.idf
+tests/oracles/1ra_Airflow*
+```
 
 ### Cómo seguir en otra computadora
 
@@ -714,4 +731,4 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 No hace falta descargar nada de EnergyPlus para trabajar: los esquemas (`public/schemas/`) y las referencias (`tests/oracles/`) ya están en el repositorio. **EnergyPlus 26.2** solo se necesita para regenerar referencias (`tools/make_oracles.py`) o esquemas (`tools/fetch_idds.py` y `tools/idd2json.py`). Los scripts lo buscan en `/Applications/EnergyPlus-*`; en otra ubicación se indica con `--energyplus`.
 
-La conversación con Claude y sus notas se quedan en la computadora anterior. Lo necesario para continuar está en este archivo y en `CLAUDE.md`, que Claude Code lee al abrir la carpeta. Para retomar, abre Claude Code en la carpeta del proyecto y pide seguir con la fase 2b.
+La conversación con Claude y sus notas se quedan en la computadora anterior. Lo necesario para continuar está en este archivo y en `CLAUDE.md`, que Claude Code lee al abrir la carpeta. Para retomar, abre Claude Code en la carpeta del proyecto y pide seguir con el cierre de la fase 2b.

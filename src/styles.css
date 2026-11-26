@@ -438,6 +438,23 @@ table.grid td.num {
   color: var(--text);
 }
 
+.url-form {
+  display: flex;
+  gap: 8px;
+}
+
+.url-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
 .paste summary {
   cursor: pointer;
   color: var(--text-2);

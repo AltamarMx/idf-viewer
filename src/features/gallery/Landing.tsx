@@ -11,17 +11,21 @@ interface ExampleEntry {
 
 interface Props {
   error?: string;
+  /** Address of the last file opened from a URL, if that was the last thing opened. */
+  lastUrl?: string;
   onPickFile: () => void;
-  onOpenUrl: (url: string, name: string) => void;
+  /** A web address, or a path relative to the viewer such as `examples/…`. */
+  onOpenUrl: (url: string) => void;
   onOpenText: (text: string) => void;
 }
 
 const EXAMPLES_URL = `${import.meta.env.BASE_URL}examples/`;
 
-/** Start page: open a local file (A1) or an example from the gallery. */
-export function Landing({ error, onPickFile, onOpenUrl, onOpenText }: Props) {
+/** Start page: open a local file (A1), a file from a URL (A6) or an example from the gallery. */
+export function Landing({ error, lastUrl, onPickFile, onOpenUrl, onOpenText }: Props) {
   const [examples, setExamples] = useState<ExampleEntry[] | null>(null);
   const [pasted, setPasted] = useState('');
+  const [address, setAddress] = useState(lastUrl ?? '');
 
   useEffect(() => {
     let cancelled = false;
@@ -79,6 +83,36 @@ export function Landing({ error, onPickFile, onOpenUrl, onOpenText }: Props) {
         </p>
       </details>
 
+      <details className="paste" open={Boolean(error && lastUrl)}>
+        <summary>Or open from a URL</summary>
+        <form
+          className="url-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (address.trim()) onOpenUrl(address.trim());
+          }}
+        >
+          <input
+            type="text"
+            inputMode="url"
+            aria-label="Address of the IDF file"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="https://github.com/user/repository/blob/main/model.idf"
+            spellCheck={false}
+            autoComplete="off"
+          />
+          <button type="submit" className="btn" disabled={!address.trim()}>
+            Open
+          </button>
+        </form>
+        <p className="privacy">
+          Your browser downloads the file directly from that server, which must allow other sites to
+          read it (CORS). Links to files on GitHub and Gist work. The page address then opens the
+          same file, so you can share it: <code>?url=</code> followed by the file's address.
+        </p>
+      </details>
+
       <h3>Examples</h3>
       {examples === null && <p className="count">Loading examples…</p>}
       {examples?.length === 0 && <p className="count">No examples available.</p>}
@@ -89,9 +123,7 @@ export function Landing({ error, onPickFile, onOpenUrl, onOpenText }: Props) {
               type="button"
               key={example.file}
               className="example"
-              onClick={() =>
-                onOpenUrl(`${EXAMPLES_URL}${encodeURIComponent(example.file)}`, example.file)
-              }
+              onClick={() => onOpenUrl(`examples/${encodeURIComponent(example.file)}`)}
             >
               <div className="title">{example.title}</div>
               {example.description && <div className="desc">{example.description}</div>}
