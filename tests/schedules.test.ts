@@ -47,6 +47,36 @@ describe.each(annualCases)('%s', (stem, idf) => {
     expect(problems.slice(0, 10).join('\n'), `${problems.length} differences`).toBe('');
   });
 
+  it('evaluates every schedule like EnergyPlus, timestep by timestep', async () => {
+    const { oracle, schedules, calendar } = await load();
+    if (!oracle.timestep) return; // only the schedule fixtures keep timesteps
+    const tph = oracle.timestep.timestepsPerHour;
+    expect(calendar.timestepsPerHour).toBe(tph);
+    const problems: string[] = [];
+    let compared = 0;
+    for (const [name, series] of Object.entries(oracle.timestep.schedules)) {
+      const info = schedules.info(name);
+      if (!info?.evaluable || info.emsActuators) continue;
+      const ours = schedules.timesteps(name);
+      const theirs = expand(series);
+      compared++;
+      expect(ours?.length).toBe(theirs.length);
+      const bad = theirs.findIndex((v, i) => !close(ours?.[i] ?? Number.NaN, v));
+      if (bad >= 0) {
+        const day = Math.floor(bad / (24 * tph));
+        const minute = ((bad % (24 * tph)) * 60) / tph;
+        problems.push(
+          `${name}: ${oracle.calendar.dates[day]} ${Math.floor(minute / 60)}:${String(minute % 60).padStart(2, '0')}: ${ours?.[bad]} vs ${theirs[bad]}`,
+        );
+      }
+    }
+    expect(compared).toBeGreaterThan(0);
+    expect(
+      problems.slice(0, 12).join('\n'),
+      `${problems.length} of ${compared} schedules differ`,
+    ).toBe('');
+  });
+
   it('evaluates every schedule like EnergyPlus, hour by hour', async () => {
     const { oracle, schedules, calendar } = await load();
     const problems: string[] = [];

@@ -5,8 +5,8 @@ import type { CalendarView, ZoneLoadView } from '../../core/session';
 import { formatArea, formatInt, formatNumber } from '../../ui/format';
 import { idf } from '../../worker/client';
 import { Chart, type ChartOption } from '../charts/Chart';
-import { heatmapOption } from '../charts/options';
-import { type HourTicks, hourLabel, hourTickLabel, hourTicks } from '../charts/time';
+import { heatmapOption, type StepData, stepAt, stepData, stepPoints } from '../charts/options';
+import { type HourTicks, hourTickLabel, hourTicks, stepLabel } from '../charts/time';
 
 interface Props {
   dark: boolean;
@@ -214,8 +214,9 @@ export default function LoadsTab({ dark, onSelect }: Props) {
       <p className="count">
         People power = occupants × activity level. Equipment shows its design level × schedule
         {discountLost ? ' minus the fraction lost' : ' (consumption)'}. Infiltration, solar gains
-        and the envelope depend on the simulation and are not included. Times are standard time,
-        hour ending.
+        and the envelope depend on the simulation and are not included. Values are computed at every
+        timestep ({60 / calendar.timestepsPerHour} min) in standard time and drawn as steps: each
+        value holds until the next change.
       </p>
 
       <h2 className="section">Occupancy check</h2>
@@ -229,9 +230,10 @@ export default function LoadsTab({ dark, onSelect }: Props) {
                 people
               </div>
               <div className="detail">
-                {hourLabel(
-                  zone ? (zoneOcc?.peak.hour ?? 0) : occupancy.buildingPeak.hour,
+                {stepLabel(
+                  zone ? (zoneOcc?.peak.step ?? 0) : occupancy.buildingPeak.step,
                   calendar.dates,
+                  calendar.timestepsPerHour,
                 )}
               </div>
             </div>
@@ -291,7 +293,9 @@ export default function LoadsTab({ dark, onSelect }: Props) {
                   <td className="num">{formatNumber(z.design)}</td>
                   <td className="num">{formatNumber(z.peak.value)}</td>
                   <td className="count">
-                    {z.peak.value > 0 ? hourLabel(z.peak.hour, calendar.dates) : '—'}
+                    {z.peak.value > 0
+                      ? stepLabel(z.peak.step, calendar.dates, calendar.timestepsPerHour)
+                      : '—'}
                   </td>
                   <td>
                     {z.objects.length === 0
@@ -329,83 +333,87 @@ function loadOptions(
   calendar: CalendarView,
   perArea: boolean,
 ): { power: ChartOption; people: ChartOption; ticks: HourTicks } {
+  const tph = calendar.timestepsPerHour;
   const area = perArea && view.floorArea > 0 ? view.floorArea : 1;
   const unit = perArea ? 'W/m²' : 'W';
   const present = TYPES.filter((t) => view.watts[t].some((v) => v !== 0));
-  const hours = view.people.length;
-  const total = new Float32Array(hours);
+  const steps = view.people.length;
+  const hours = steps / tph;
+  const total = new Float32Array(steps);
   for (const t of present)
-    for (let h = 0; h < hours; h++) total[h] = (total[h] as number) + (view.watts[t][h] as number);
-  const series = (values: Float32Array) =>
-    Array.from(values, (v, h) => [h, Number((v / area).toFixed(3))]);
+    for (let s = 0; s < steps; s++) total[s] = (total[s] as number) + (view.watts[t][s] as number);
+  // Only the timesteps where something changes; drawn as steps, never as ramps.
+  const power = stepData([...present.map((t) => view.watts[t]), total], tph, area, 3);
+  const people = stepData([view.people], tph, 1, 3);
   const xAxis = {
     type: 'value',
     min: 0,
     max: hours,
     axisLabel: { formatter: (h: number) => hourTickLabel(h, calendar.dates) },
   };
-  const tooltip = {
+  const tooltip = (data: StepData, names: string[]) => ({
     trigger: 'axis',
-    formatter: (params: { seriesName: string; value: [number, number]; color: string }[]) => {
+    formatter: (params: { axisValue: number }[]) => {
       const first = params[0];
       if (!first) return '';
+      const { step, index } = stepAt(data, first.axisValue);
       return [
-        hourLabel(first.value[0], calendar.dates),
-        ...params.map((p) => `${p.seriesName}: <b>${formatNumber(p.value[1])}</b>`),
+        stepLabel(step, calendar.dates, tph),
+        ...names.map((n, i) => `${n}: <b>${formatNumber(data.columns[i]?.[index] ?? 0)}</b>`),
       ].join('<br/>');
     },
-  };
+  });
+  // Step data keeps only the changes: zooming must not drop the point before the window.
   const zoom = [
-    { type: 'inside', xAxisIndex: 0 },
-    { type: 'slider', xAxisIndex: 0, height: 16, bottom: 6 },
+    { type: 'inside', xAxisIndex: 0, filterMode: 'none' },
+    { type: 'slider', xAxisIndex: 0, height: 16, bottom: 6, filterMode: 'none' },
   ];
   return {
     power: {
-      tooltip,
+      tooltip: tooltip(power, [...present.map((t) => LOAD_LABELS[t]), 'Total']),
       legend: { top: 0, type: 'scroll' },
       grid: { left: 64, right: 20, top: 34, bottom: 52 },
       xAxis,
       yAxis: { type: 'value', name: unit },
       dataZoom: zoom,
       series: [
-        ...present.map((t) => ({
+        ...present.map((t, i) => ({
           name: LOAD_LABELS[t],
           type: 'line',
+          step: 'end',
           stack: 'loads',
           areaStyle: { opacity: 0.75 },
           lineStyle: { width: 0 },
           showSymbol: false,
-          sampling: 'lttb',
           color: TYPE_COLORS[t],
-          data: series(view.watts[t]),
+          data: stepPoints(power, i),
         })),
         {
           name: 'Total',
           type: 'line',
+          step: 'end',
           showSymbol: false,
-          sampling: 'lttb',
           color: '#333',
           lineStyle: { width: 1 },
-          data: series(total),
+          data: stepPoints(power, present.length),
         },
       ],
     },
     people: {
-      tooltip,
+      tooltip: tooltip(people, ['Occupants']),
       grid: { left: 64, right: 20, top: 16, bottom: 52 },
       xAxis,
-      yAxis: { type: 'value', name: 'people' },
+      yAxis: { type: 'value', name: 'people', minInterval: 1 },
       dataZoom: zoom,
       series: [
         {
           name: 'Occupants',
           type: 'line',
           showSymbol: false,
-          sampling: 'lttb',
           step: 'end',
           color: TYPE_COLORS.people,
           areaStyle: { opacity: 0.25 },
-          data: Array.from(view.people, (v, h) => [h, Number(v.toFixed(3))]),
+          data: stepPoints(people, 0),
         },
       ],
     },

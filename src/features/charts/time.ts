@@ -1,11 +1,25 @@
 import { MONTH_LABELS } from '../../core/schedules/calendar';
 
-/** "Mar 10 14:00" for an hour of the year (the hour ending at that time). */
-export function hourLabel(hour: number, dates: [number, number][]): string {
-  const day = Math.floor(hour / 24);
-  const [month, dayOfMonth] = dates[day] ?? [1, 1];
-  const h = (hour % 24) + 1;
-  return `${MONTH_LABELS[month - 1]} ${dayOfMonth} ${String(h).padStart(2, '0')}:00`;
+/** "07:30" for a minute of the day (1440 is "24:00"). */
+function clock(minute: number): string {
+  return `${String(Math.floor(minute / 60)).padStart(2, '0')}:${String(minute % 60).padStart(2, '0')}`;
+}
+
+/**
+ * "Mar 10 07:30–07:40" for a timestep of the year: the interval it covers, in
+ * standard time. The value of an "Until: 07:30" belongs to the step ending at 07:30.
+ */
+export function stepLabel(
+  step: number,
+  dates: [number, number][],
+  timestepsPerHour: number,
+): string {
+  const perDay = 24 * timestepsPerHour;
+  const day = Math.floor(step / perDay);
+  const s = step - day * perDay;
+  const from = Math.round((s * 60) / timestepsPerHour);
+  const to = Math.round(((s + 1) * 60) / timestepsPerHour);
+  return `${dayLabel(day, dates)} ${clock(from)}–${clock(to)}`;
 }
 
 export function dayLabel(day: number, dates: [number, number][]): string {
@@ -20,8 +34,7 @@ export function monthStarts(dates: [number, number][]): number[] {
 
 /** Start time of a timestep, "07:30". */
 export function timeOfStep(step: number, timestepsPerHour: number): string {
-  const minutes = Math.round((step * 60) / timestepsPerHour);
-  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+  return clock(Math.round((step * 60) / timestepsPerHour));
 }
 
 /** Ticks of an hourly axis: function of the zoom window (percent) and the chart width. */
@@ -30,7 +43,8 @@ export type HourTicks = (startPct: number, endPct: number, width: number) => num
 /**
  * Ticks for an axis of hours of the run period, always on the start of a day
  * (or of a month when the window is long), so each label names the day it
- * marks. Under two days the ticks fall on whole hours.
+ * marks. Under two days the ticks fall on whole hours, and under a few hours
+ * on 10, 15 or 30 minutes.
  */
 export function hourTicks(dates: [number, number][], hours: number): HourTicks {
   return (startPct, endPct, width) => {
@@ -38,7 +52,7 @@ export function hourTicks(dates: [number, number][], hours: number): HourTicks {
     const end = (hours * endPct) / 100;
     const max = Math.max(2, Math.floor(width / 80));
     if (end - start < 48) {
-      for (const step of [1, 2, 3, 6, 12, 24]) {
+      for (const step of [1 / 6, 1 / 4, 1 / 2, 1, 2, 3, 6, 12, 24]) {
         if ((end - start) / step <= max) return range(Math.ceil(start / step) * step, end, step);
       }
     }
@@ -57,14 +71,15 @@ export function hourTicks(dates: [number, number][], hours: number): HourTicks {
   };
 }
 
-/** Label of a tick of an hourly axis: the date at midnight, the time otherwise. */
+/** Label of a tick of an axis in hours: the date at midnight, the time otherwise. */
 export function hourTickLabel(hour: number, dates: [number, number][]): string {
-  const h = Math.round(hour) % 24;
-  return h === 0 ? dayLabel(Math.round(hour) / 24, dates) : `${String(h).padStart(2, '0')}:00`;
+  const minutes = Math.round(hour * 60);
+  const m = minutes % 1440;
+  return m === 0 ? dayLabel(minutes / 1440, dates) : clock(m);
 }
 
 function range(from: number, to: number, step: number): number[] {
   const out: number[] = [];
-  for (let v = from; v <= to + 1e-9; v += step) out.push(v);
+  for (let i = 0; from + i * step <= to + 1e-9; i++) out.push(from + i * step);
   return out;
 }

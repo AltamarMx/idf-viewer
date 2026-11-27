@@ -132,11 +132,23 @@ export function dayFromUntils(
   return values;
 }
 
+/** Mean of the timesteps of each hour (EnergyPlus' hourly reporting). */
+export function hourlyMean(values: Float32Array, timestepsPerHour: number): Float32Array {
+  const hours = Math.floor(values.length / timestepsPerHour);
+  const result = new Float32Array(hours);
+  for (let h = 0; h < hours; h++) {
+    let sum = 0;
+    for (let s = 0; s < timestepsPerHour; s++) sum += values[h * timestepsPerHour + s] as number;
+    result[h] = sum / timestepsPerHour;
+  }
+  return result;
+}
+
 export class ScheduleSet {
   private readonly compiled = new Map<string, Compiled | null>();
   private readonly days = new Map<string, DaySchedule | null>();
   private readonly weeks = new Map<string, WeekSchedule | null>();
-  private readonly hourlyCache = new Map<string, Float32Array | null>();
+  private readonly stepCache = new Map<string, Float32Array | null>();
   private readonly objects = new Map<string, IdfObject>();
   readonly steps: number;
 
@@ -390,38 +402,47 @@ export class ScheduleSet {
   }
 
   /**
-   * Hourly values for the whole year (mean of the timesteps of each hour), with
-   * daylight saving time applied as EnergyPlus does: on DST days hour h uses the
-   * schedule's hour h + 1. Null when the schedule cannot be evaluated.
+   * Values at every timestep of the year (24 × timesteps per hour per day), with
+   * daylight saving time applied as EnergyPlus does: on DST days the hour h of
+   * standard time uses the schedule's hour h + 1. Step s of a day covers the
+   * interval [s, s + 1) × 60 / timesteps per hour minutes, standard time. Null
+   * when the schedule cannot be evaluated.
    */
-  hourly(name: string): Float32Array | null {
+  timesteps(name: string): Float32Array | null {
     const key = name.toLowerCase();
-    if (this.hourlyCache.has(key)) return this.hourlyCache.get(key) ?? null;
+    if (this.stepCache.has(key)) return this.stepCache.get(key) ?? null;
     const compiled = this.compile(name);
     let result: Float32Array | null = null;
     if (compiled?.info.evaluable) {
-      const { dayTypes, dst, timestepsPerHour: tph } = this.calendar;
+      const { dayTypes, dst } = this.calendar;
+      const steps = this.steps;
       const days = dayTypes.length;
-      result = new Float32Array(days * 24);
+      result = new Float32Array(days * steps);
       for (let d = 0; d < days; d++) {
         const today = this.dayValues(name, d, dayTypes[d] as DayType) as Float64Array;
-        const shift = dst[d] ? 1 : 0;
+        const shift = dst[d] ? this.calendar.timestepsPerHour : 0;
         const tomorrow =
           shift && d + 1 < days
             ? (this.dayValues(name, d + 1, dayTypes[d + 1] as DayType) as Float64Array)
             : today;
-        for (let h = 0; h < 24; h++) {
-          const hour = h + shift;
-          const source = hour >= 24 ? tomorrow : today;
-          const base = (hour % 24) * tph;
-          let sum = 0;
-          for (let s = 0; s < tph; s++) sum += source[base + s] as number;
-          result[d * 24 + h] = sum / tph;
+        for (let s = 0; s < steps; s++) {
+          const step = s + shift;
+          result[d * steps + s] = (step >= steps ? tomorrow : today)[step % steps] as number;
         }
       }
     }
-    this.hourlyCache.set(key, result);
+    this.stepCache.set(key, result);
     return result;
+  }
+
+  /**
+   * Hourly values for the whole year: the mean of the timesteps of each hour,
+   * which is what EnergyPlus reports at hourly frequency. Use `timesteps` to
+   * show values; this is for comparisons with hourly EnergyPlus output.
+   */
+  hourly(name: string): Float32Array | null {
+    const values = this.timesteps(name);
+    return values ? hourlyMean(values, this.calendar.timestepsPerHour) : null;
   }
 
   /** Hourly values on a design day (its date picks the period, its day type the day schedule). */

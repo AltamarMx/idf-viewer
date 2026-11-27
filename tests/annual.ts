@@ -10,7 +10,14 @@ export interface Series {
 export interface AnnualOracle {
   calendar: { dayTypes: string[]; dates: string[]; dstDays: number[] };
   schedules: Record<string, Series>;
+  zones: Record<string, Record<string, Series>>;
   designDays: Record<string, Record<string, number[]>>;
+  /** Only for tests/fixtures/schedules: the same series at every zone timestep. */
+  timestep?: {
+    timestepsPerHour: number;
+    schedules: Record<string, Series>;
+    zones: Record<string, Record<string, Series>>;
+  };
 }
 
 export function expand(series: Series): number[] {

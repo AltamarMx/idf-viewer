@@ -93,8 +93,8 @@ export function zoneRows(
 
 export interface Peak {
   value: number;
-  /** Hour of the year (0-based). */
-  hour: number;
+  /** Timestep of the year (0-based). */
+  step: number;
 }
 
 export interface OccupancyAlert {
@@ -111,7 +111,7 @@ export interface OccupancyReport {
     peak: Peak;
     objects: { id: number; name: string; design: number; via?: string }[];
   }[];
-  /** Occupants of the whole building per hour, with zone multipliers. */
+  /** Occupants of the whole building at every timestep, with zone multipliers. */
   building: Float32Array;
   buildingPeak: Peak;
   buildingDesign: number;
@@ -119,10 +119,10 @@ export interface OccupancyReport {
 }
 
 function peakOf(values: Float32Array): Peak {
-  let hour = 0;
-  for (let h = 1; h < values.length; h++)
-    if ((values[h] as number) > (values[hour] as number)) hour = h;
-  return { value: values[hour] ?? 0, hour };
+  let step = 0;
+  for (let s = 1; s < values.length; s++)
+    if ((values[s] as number) > (values[step] as number)) step = s;
+  return { value: values[step] ?? 0, step };
 }
 
 export function occupancyReport(
@@ -130,8 +130,8 @@ export function occupancyReport(
   schedules: ScheduleSet,
   rows: ZoneRow[],
 ): OccupancyReport {
-  const hours = schedules.calendar.dayTypes.length * 24;
-  const building = new Float32Array(hours);
+  const steps = schedules.calendar.dayTypes.length * schedules.steps;
+  const building = new Float32Array(steps);
   const alerts: OccupancyAlert[] = [];
   const zones: OccupancyReport['zones'] = [];
   let buildingDesign = 0;
@@ -140,8 +140,8 @@ export function occupancyReport(
   for (const zone of loads.zones) {
     const people = zone.instances.filter((i) => i.type === 'people');
     const series = zoneSeries(zone, schedules).people;
-    for (let h = 0; h < hours; h++)
-      building[h] = (building[h] as number) + (series[h] as number) * zone.multiplier;
+    for (let s = 0; s < steps; s++)
+      building[s] = (building[s] as number) + (series[s] as number) * zone.multiplier;
     buildingDesign += zone.people * zone.multiplier;
     zones.push({
       name: zone.name,
@@ -188,7 +188,7 @@ export function occupancyReport(
       const occ = p.schedule.toLowerCase();
       if (!checked.has(`o:${occ}`)) {
         checked.add(`o:${occ}`);
-        const values = schedules.hourly(p.schedule);
+        const values = schedules.timesteps(p.schedule);
         if (values) {
           let min = Infinity;
           let max = -Infinity;
@@ -208,7 +208,7 @@ export function occupancyReport(
       const act = p.activitySchedule?.toLowerCase();
       if (act && !checked.has(`a:${act}`)) {
         checked.add(`a:${act}`);
-        const values = schedules.hourly(p.activitySchedule as string);
+        const values = schedules.timesteps(p.activitySchedule as string);
         if (values) {
           let min = Infinity;
           let max = -Infinity;

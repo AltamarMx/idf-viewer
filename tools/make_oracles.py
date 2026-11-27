@@ -21,7 +21,9 @@ values used do not depend on the weather) and writes ``<stem>.annual.json``:
 - calendar: the day type EnergyPlus used for each day and the daylight saving days;
 - schedules: hourly value of every schedule;
 - zones: hourly occupants and internal gains of every zone;
-- design days: hourly schedule values on each design day.
+- design days: hourly schedule values on each design day;
+- timestep (only for ``tests/fixtures/schedules/``): schedules and zone series at
+  every zone timestep, to check values that change within the hour.
 
 Hourly series are stored as the distinct daily profiles plus one index per day.
 
@@ -281,9 +283,10 @@ def object_fields(text: str, start: int, end: int) -> list[str]:
     return [f.strip() for f in body.rstrip().rstrip(";").split(",")]
 
 
-def prepare_annual_input(text: str) -> str:
+def prepare_annual_input(text: str, timestep: bool = False) -> str:
     """Copy of the IDF with one full-year RunPeriod (keeping the first one's
-    options, such as the day of week of January 1) and hourly outputs."""
+    options, such as the day of week of January 1) and hourly outputs (and
+    timestep outputs too with ``timestep``)."""
     parts = []
     last = 0
     first_run_period = None
@@ -313,17 +316,20 @@ def prepare_annual_input(text: str) -> str:
     while fields and not fields[-1]:
         fields.pop()
     run_period = ",\n  ".join(fields) + ";"
-    outputs = "\n".join(f"Output:Variable, *, {v}, Hourly;" for v in ANNUAL_VARIABLES)
+    frequencies = ["Hourly", "Timestep"] if timestep else ["Hourly"]
+    outputs = "\n".join(
+        f"Output:Variable, *, {v}, {f};" for f in frequencies for v in ANNUAL_VARIABLES
+    )
     return "".join(parts) + "\n" + run_period + "\nOutput:SQLite, Simple;\n" + outputs + "\n"
 
 
-def compress(values: list[float]) -> dict:
-    """Hourly series → distinct daily profiles + index per day."""
+def compress(values: list[float], per_day: int = 24) -> dict:
+    """Hourly (or timestep) series → distinct daily profiles + index per day."""
     profiles: list[list[float]] = []
     index: dict[tuple, int] = {}
     days = []
-    for d in range(0, len(values), 24):
-        day = tuple(rounded(v) for v in values[d : d + 24])
+    for d in range(0, len(values), per_day):
+        day = tuple(rounded(v) for v in values[d : d + per_day])
         if day not in index:
             index[day] = len(profiles)
             profiles.append(list(day))
@@ -339,23 +345,29 @@ def read_annual_sql(sql: Path) -> dict:
     run_env = [k for k, (_, kind) in environments.items() if kind == 3]
     times = {}
     calendar = []
-    for row in db.execute("SELECT * FROM Time WHERE IntervalType = 1 ORDER BY TimeIndex"):
+    for row in db.execute("SELECT * FROM Time ORDER BY TimeIndex"):
         times[row["TimeIndex"]] = row
+        if row["IntervalType"] != 1:
+            continue
         if row["EnvironmentPeriodIndex"] in run_env and row["Hour"] == 1:
             calendar.append({"month": row["Month"], "day": row["Day"], "dayType": row["DayType"], "dst": row["Dst"]})
     series: dict[tuple, list[float]] = {}
+    steps: dict[tuple, list[float]] = {}
     design: dict[str, dict[str, list[float]]] = {}
     query = (
-        "SELECT d.Name, d.KeyValue, r.TimeIndex, r.Value FROM ReportData r "
+        "SELECT d.Name, d.KeyValue, d.ReportingFrequency, r.TimeIndex, r.Value FROM ReportData r "
         "JOIN ReportDataDictionary d ON d.ReportDataDictionaryIndex = r.ReportDataDictionaryIndex "
-        "WHERE d.ReportingFrequency = 'Hourly' ORDER BY r.TimeIndex"
+        "WHERE d.ReportingFrequency IN ('Hourly', 'Zone Timestep') ORDER BY r.TimeIndex"
     )
     for row in db.execute(query):
         time = times.get(row["TimeIndex"])
         if time is None or time["WarmupFlag"]:
             continue
         env = time["EnvironmentPeriodIndex"]
-        if env in run_env:
+        if row["ReportingFrequency"] != "Hourly":
+            if env in run_env:
+                steps.setdefault((row["Name"], row["KeyValue"]), []).append(row["Value"])
+        elif env in run_env:
             series.setdefault((row["Name"], row["KeyValue"]), []).append(row["Value"])
         elif row["Name"] == "Schedule Value":
             name = environments[env][0]
@@ -368,6 +380,15 @@ def read_annual_sql(sql: Path) -> dict:
             schedules[key] = compress(values)
         else:
             zones.setdefault(key, {})[name] = compress(values)
+    timestep = None
+    if steps and calendar:
+        per_day = len(next(iter(steps.values()))) // len(calendar)
+        timestep = {"timestepsPerHour": per_day // 24, "schedules": {}, "zones": {}}
+        for (name, key), values in steps.items():
+            if name == "Schedule Value":
+                timestep["schedules"][key] = compress(values, per_day)
+            else:
+                timestep["zones"].setdefault(key, {})[name] = compress(values, per_day)
     design_days = {
         dd: {k: [rounded(v) for v in vals[:24]] for k, vals in values.items()} for dd, values in design.items()
     }
@@ -380,6 +401,7 @@ def read_annual_sql(sql: Path) -> dict:
         "schedules": schedules,
         "zones": zones,
         "designDays": design_days,
+        **({"timestep": timestep} if timestep else {}),
     }
 
 
@@ -398,7 +420,9 @@ def run_annual(idf: Path, energyplus: Path) -> Path:
         shutil.rmtree(run_dir)
     run_dir.mkdir(parents=True)
     text = idf.read_bytes().decode("utf-8", errors="replace")
-    (run_dir / "in.idf").write_text(prepare_annual_input(text), encoding="utf-8")
+    # The schedule fixtures also keep every timestep (too large for the examples).
+    timestep = idf.resolve().parent == ROOT / "tests" / "fixtures" / "schedules"
+    (run_dir / "in.idf").write_text(prepare_annual_input(text, timestep), encoding="utf-8")
     command = [
         str(energyplus / "energyplus"),
         "--annual",

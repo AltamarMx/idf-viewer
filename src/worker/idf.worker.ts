@@ -52,7 +52,7 @@ const api: WorkerApi = {
   },
   async scheduleDetail(name) {
     const detail = current().scheduleDetail(name);
-    return detail?.hourly ? transfer(detail, [detail.hourly.buffer as ArrayBuffer]) : detail;
+    return detail?.values ? transfer(detail, [detail.values.buffer as ArrayBuffer]) : detail;
   },
   async dayProfiles(name, day) {
     return current().dayProfiles(name, day);

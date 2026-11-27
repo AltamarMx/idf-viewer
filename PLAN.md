@@ -292,8 +292,8 @@ La fase de cada feature está en §6.
 
 ### F. Horarios y cargas
 
-- **F1 · Evaluador de horarios:** calcula los valores hora por hora de todo el año para `Schedule:Compact`, `Schedule:Year`, `Week:*`, `Day:*` y `Schedule:Constant`. Toma en cuenta el día de la semana del 1 de enero según `RunPeriod`, los días festivos, el horario de verano y los días de diseño. Los `Schedule:File` aparecen en la lista con su archivo y columna, pero sin gráfica.
-- **F2 · Mapa de calor anual:** día del año contra hora del día.
+- **F1 · Evaluador de horarios:** calcula los valores de cada timestep (60/N min, según `Timestep`) de todo el año para `Schedule:Compact`, `Schedule:Year`, `Week:*`, `Day:*` y `Schedule:Constant`. Toma en cuenta el día de la semana del 1 de enero según `RunPeriod`, los días festivos, el horario de verano y los días de diseño. Los `Schedule:File` aparecen en la lista con su archivo y columna, pero sin gráfica.
+- **F2 · Mapa de calor anual:** día del año contra hora del día, con una fila por timestep.
 - **F3 · Perfiles:** semana típica y días tipo (laborable, sábado, domingo, festivo, días de diseño).
 - **F7 · Rastreo de uso de cada horario:**
   - para cada horario, qué objetos lo usan y en qué campo, es decir, con qué función;
@@ -487,6 +487,17 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - `Other Equipment` reporta el calor descontando `Fraction Lost`, y los demás equipos reportan el consumo.
 - Lo que el visor no puede reproducir y por eso avisa en pantalla: horarios que cambia EMS durante la simulación (actuadores sobre `Schedule:*`), iluminación atenuada por `Daylighting:Controls`, y días de inicio, festivos u horario de verano que vienen del archivo de clima.
 - Pestañas nuevas: **Schedules** (por horario y por zona) y **Loads** (tabla de zonas, cargas en el tiempo y verificación de ocupación).
+
+**Corrección 2026-11-27 · valores dentro de la hora:** las gráficas de Loads (ocupantes y potencias) y de Schedules promediaban por hora. Con un horario OnOff que cambia a las 17:30 y Timestep 6, la gráfica de ocupantes marcaba 2.5 personas de 17:00 a 18:00, y la de potencia unía las horas con rampas.
+- Ahora horarios, ocupantes y potencias se calculan y se grafican en cada timestep (60/N min), en hora estándar. Las gráficas de línea y de áreas apiladas son de escalones: cada valor se mantiene hasta el siguiente cambio, sin interpolar ni promediar. Para no cargar de más la gráfica solo se guardan los timesteps donde algo cambia; eso no pierde información.
+- El mapa de calor tiene una fila por timestep. Con más de 6 timesteps por hora agrupa filas y muestra el **máximo** del grupo (lo dice en la etiqueta), nunca el promedio.
+- La hora pico de ocupación ahora dice el intervalo del timestep ("Jan 8 17:30–17:40").
+- Reglas confirmadas contra EnergyPlus timestep por timestep, todo el año (salida `Zone Timestep`):
+  - el valor de un `Until: HH:MM` aplica al intervalo que **termina** en HH:MM; el timestep 07:20–07:30 todavía tiene el valor anterior y el de 07:30–07:40 ya tiene el nuevo;
+  - con horario de verano el desplazamiento es de una hora completa (tantos timesteps como haya por hora);
+  - el calor de personas de cada timestep es ocupantes × actividad de ese mismo timestep; el valor horario de EnergyPlus es el promedio de esos productos.
+- Archivo de prueba nuevo `tests/fixtures/schedules/HalfHour.idf`: 5 zonas con 1 persona cada una, ocupación `OnOff` que sale a las 07:30 y regresa a las 17:30, actividad, `Schedule:Day:Interval` y `Schedule:Day:List` (30 min) con cambios fuera de la hora en punto, y Timestep 6. `make_oracles.py --annual` guarda además los valores por timestep (`timestep` en el JSON) para los archivos de `tests/fixtures/schedules/`; para los ejemplos no, porque sus referencias crecerían varias veces (la del hospital ya pesa 4 MB).
+- El visor no lee resultados de simulación (SQL/ESO), así que no aplica distinguir entre datos `Hourly` y `Zone Timestep` en las gráficas: todo se calcula a partir de los horarios del IDF.
 
 ### Fase 2b · Ventanas, ventilación natural e infiltración
 
@@ -686,9 +697,9 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 - …
 
-## 9. Dónde vamos (2026-11-26)
+## 9. Dónde vamos (2026-11-27)
 
-**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1 y 2a terminadas; 2b, 2c y 3 hechas salvo lo que necesita EnergyPlus. Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
+**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1 y 2a terminadas; 2b, 2c y 3 hechas salvo lo que necesita EnergyPlus. Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
 
 **Todo lo que falta de las fases 2b, 2c y 3 necesita EnergyPlus 26.2**, que no está en la computadora donde se trabajó hasta el 2026-11-26. En la computadora que lo tiene, en este orden:
 

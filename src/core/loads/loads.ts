@@ -192,23 +192,25 @@ export function resolveLoads(
 }
 
 export interface LoadSeries {
-  /** Occupants per hour. */
+  /** Occupants at every timestep of the year. */
   people: Float32Array;
-  /** W per hour by type; people = occupants × activity level. */
+  /** W at every timestep by type; people = occupants × activity level. */
   watts: Record<LoadType, Float32Array>;
 }
 
 /**
- * Hourly occupants and power of one zone (F9). With `discountLost`, equipment
- * counts only the heat that reaches the zone (1 − Fraction Lost).
+ * Occupants and power of one zone at every timestep (F9), so values that change
+ * within the hour (an "Until: 07:30") keep their exact time. With
+ * `discountLost`, equipment counts only the heat that reaches the zone
+ * (1 − Fraction Lost).
  */
 export function zoneSeries(
   zone: ZoneLoads,
   schedules: ScheduleSet,
   discountLost = false,
 ): LoadSeries {
-  const hours = schedules.calendar.dayTypes.length * 24;
-  const empty = () => new Float32Array(hours);
+  const steps = schedules.calendar.dayTypes.length * schedules.steps;
+  const empty = () => new Float32Array(steps);
   const series: LoadSeries = {
     people: empty(),
     watts: {
@@ -222,21 +224,21 @@ export function zoneSeries(
     },
   };
   for (const i of zone.instances) {
-    const values = schedules.hourly(i.schedule);
+    const values = schedules.timesteps(i.schedule);
     if (!values) continue;
     if (i.type === 'people') {
-      const activity = i.activitySchedule ? schedules.hourly(i.activitySchedule) : null;
-      for (let h = 0; h < hours; h++) {
-        const count = i.design * (values[h] as number);
-        series.people[h] = (series.people[h] as number) + count;
-        series.watts.people[h] = (series.watts.people[h] as number) + count * (activity?.[h] ?? 0);
+      const activity = i.activitySchedule ? schedules.timesteps(i.activitySchedule) : null;
+      for (let s = 0; s < steps; s++) {
+        const count = i.design * (values[s] as number);
+        series.people[s] = (series.people[s] as number) + count;
+        series.watts.people[s] = (series.watts.people[s] as number) + count * (activity?.[s] ?? 0);
       }
     } else {
       // Other equipment reports only the heat gain; the rest report consumption.
       const factor = i.type === 'other' || discountLost ? 1 - i.fractionLost : 1;
       const target = series.watts[i.type];
-      for (let h = 0; h < hours; h++)
-        target[h] = (target[h] as number) + i.design * factor * (values[h] as number);
+      for (let s = 0; s < steps; s++)
+        target[s] = (target[s] as number) + i.design * factor * (values[s] as number);
     }
   }
   return series;

@@ -105,3 +105,16 @@ def test_read_eio_site(tmp_path):
             {"Wind Sensor Height Above Ground {m}": 12.0, "Wind Speed Profile Exponent {}": 0.14}
         ],
     }
+
+
+def test_prepare_annual_input_adds_timestep_outputs_on_request():
+    text = "Version,26.2;\nZone, Z1;\n"
+    assert "Timestep;" not in make_oracles.prepare_annual_input(text)
+    prepared = make_oracles.prepare_annual_input(text, timestep=True)
+    assert "Output:Variable, *, Schedule Value, Hourly;" in prepared
+    assert "Output:Variable, *, Zone People Occupant Count, Timestep;" in prepared
+
+
+def test_compress_timestep_days():
+    day = [0.0] * 45 + [1.0] * 60 + [0.0] * 39  # 6 timesteps per hour
+    assert make_oracles.compress(day + day, per_day=144) == {"profiles": [day], "days": [0, 0]}

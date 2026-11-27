@@ -173,7 +173,7 @@ function ScheduleView(props: {
   }, [props.name, day]);
 
   const heatmap = useMemo(
-    () => (detail?.hourly ? heatmapOption(detail.hourly, calendar, detail.info.name) : null),
+    () => (detail?.values ? heatmapOption(detail.values, calendar, detail.info.name) : null),
     [detail, calendar],
   );
   const profile = useMemo(
@@ -194,8 +194,8 @@ function ScheduleView(props: {
       </h2>
       <p className="count">
         {info.typeLimits ? `Type limits: ${info.typeLimits} · ` : ''}
-        {detail.hourly
-          ? `Hourly values from ${formatNumber(detail.min)} to ${formatNumber(detail.max)}`
+        {detail.values
+          ? `Values from ${formatNumber(detail.min)} to ${formatNumber(detail.max)}`
           : ''}
       </p>
       {info.note && <div className="notice warn">{info.note}</div>}
@@ -208,12 +208,12 @@ function ScheduleView(props: {
 
       {heatmap && (
         <>
-          <h3>Year (hourly, standard time)</h3>
+          <h3>Year (every {60 / calendar.timestepsPerHour} min, standard time)</h3>
           <Chart option={heatmap} height={300} dark={props.dark} />
         </>
       )}
 
-      {profile && detail.hourly && (
+      {profile && detail.values && (
         <>
           <h3>
             Day types on{' '}
@@ -439,22 +439,25 @@ function ZonePanels(props: {
                     </button>
                   )}
                 </div>
-                {d?.hourly ? (
+                {d?.values ? (
                   p.view === 'profiles' ? (
                     <ProfilesPanel name={p.schedule} calendar={props.calendar} dark={props.dark} />
                   ) : (
                     <Chart
                       option={
                         p.view === 'line'
-                          ? lineOption(d.hourly, props.calendar, p.schedule)
-                          : heatmapOption(d.hourly, props.calendar, p.schedule)
+                          ? lineOption(d.values, props.calendar, p.schedule)
+                          : heatmapOption(d.values, props.calendar, p.schedule)
                       }
                       height={p.view === 'line' ? 180 : 240}
                       dark={props.dark}
                       group="zone-subpanels"
                       xTicks={
                         p.view === 'line'
-                          ? hourTicks(props.calendar.dates, d.hourly.length)
+                          ? hourTicks(
+                              props.calendar.dates,
+                              d.values.length / props.calendar.timestepsPerHour,
+                            )
                           : undefined
                       }
                     />

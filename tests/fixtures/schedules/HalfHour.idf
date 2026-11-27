@@ -1,0 +1,419 @@
+! Five 5 x 5 x 3 m zones with one person each and schedules that change on the
+! half hour (Schedule:Compact, Schedule:Day:Interval, Schedule:Day:List), with
+! 6 timesteps per hour. Built from 1ZoneUncontrolled.idf (see README.md).
+
+  Version,26.2;
+
+  Timestep,6;
+
+  Building,
+    Five zones with half-hour schedules,  !- Name
+    0,                       !- North Axis {deg}
+    Suburbs,                 !- Terrain
+    0.04,                    !- Loads Convergence Tolerance Value {W}
+    0.004,                   !- Temperature Convergence Tolerance Value {deltaC}
+    MinimalShadowing,        !- Solar Distribution
+    30,                      !- Maximum Number of Warmup Days
+    6;                       !- Minimum Number of Warmup Days
+
+  HeatBalanceAlgorithm,ConductionTransferFunction;
+
+  SurfaceConvectionAlgorithm:Inside,TARP;
+
+  SurfaceConvectionAlgorithm:Outside,DOE-2;
+
+  SimulationControl,
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    Yes,                     !- Run Simulation for Sizing Periods
+    Yes,                     !- Run Simulation for Weather File Run Periods
+    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
+    1;                       !- Maximum Number of HVAC Sizing Simulation Passes
+
+  RunPeriod,
+    Run Period 1,            !- Name
+    1,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    ,                        !- Begin Year
+    12,                      !- End Month
+    31,                      !- End Day of Month
+    ,                        !- End Year
+    Tuesday,                 !- Day of Week for Start Day
+    Yes,                     !- Use Weather File Holidays and Special Days
+    Yes,                     !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
+
+  Site:Location,
+    Denver Centennial  Golden   N_CO_USA Design_Conditions,  !- Name
+    39.74,                   !- Latitude {deg}
+    -105.18,                 !- Longitude {deg}
+    -7.00,                   !- Time Zone {hr}
+    1829.00;                 !- Elevation {m}
+
+ !  WMO=724666 Time Zone=NAM: (GMT-07:00) Mountain Time (US & Canada)
+ !  Data Source=ASHRAE 2009 Annual Design Conditions
+ ! Denver Centennial  Golden   N_CO_USA Annual Heating Design Conditions Wind Speed=3m/s Wind Dir=340
+ ! Coldest Month=DEC
+ ! Denver Centennial  Golden   N_CO_USA Annual Heating 99%, MaxDB=-15.5°C
+
+  SizingPeriod:DesignDay,
+    Denver Centennial  Golden   N Ann Htg 99% Condns DB,  !- Name
+    12,                      !- Month
+    21,                      !- Day of Month
+    WinterDesignDay,         !- Day Type
+    -15.5,                   !- Maximum Dry-Bulb Temperature {C}
+    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+    ,                        !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,                 !- Humidity Condition Type
+    -15.5,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    81198.,                  !- Barometric Pressure {Pa}
+    3,                       !- Wind Speed {m/s}
+    340,                     !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAEClearSky,          !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+    0.00;                    !- Sky Clearness
+
+ ! Denver Centennial  Golden   N Annual Cooling Design Conditions Wind Speed=4.9m/s Wind Dir=0
+ ! Hottest Month=JUL
+ ! Denver Centennial  Golden   N_CO_USA Annual Cooling (DB=>MWB) 1%, MaxDB=32°C MWB=15.5°C
+
+  SizingPeriod:DesignDay,
+    Denver Centennial  Golden   N Ann Clg 1% Condns DB=>MWB,  !- Name
+    7,                       !- Month
+    21,                      !- Day of Month
+    SummerDesignDay,         !- Day Type
+    32,                      !- Maximum Dry-Bulb Temperature {C}
+    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+    ,                        !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,                 !- Humidity Condition Type
+    15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    81198.,                  !- Barometric Pressure {Pa}
+    4.9,                     !- Wind Speed {m/s}
+    0,                       !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAEClearSky,          !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+    1.00;                    !- Sky Clearness
+
+  Material:NoMass,
+    R13LAYER,                !- Name
+    Rough,                   !- Roughness
+    2.290965,                !- Thermal Resistance {m2-K/W}
+    0.9000000,               !- Thermal Absorptance
+    0.7500000,               !- Solar Absorptance
+    0.7500000;               !- Visible Absorptance
+
+  Material:NoMass,
+    R31LAYER,                !- Name
+    Rough,                   !- Roughness
+    5.456,                   !- Thermal Resistance {m2-K/W}
+    0.9000000,               !- Thermal Absorptance
+    0.7500000,               !- Solar Absorptance
+    0.7500000;               !- Visible Absorptance
+
+  Material,
+    C5 - 4 IN HW CONCRETE,   !- Name
+    MediumRough,             !- Roughness
+    0.1014984,               !- Thickness {m}
+    1.729577,                !- Conductivity {W/m-K}
+    2242.585,                !- Density {kg/m3}
+    836.8000,                !- Specific Heat {J/kg-K}
+    0.9000000,               !- Thermal Absorptance
+    0.6500000,               !- Solar Absorptance
+    0.6500000;               !- Visible Absorptance
+
+  Construction,
+    R13WALL,                 !- Name
+    R13LAYER;                !- Outside Layer
+
+  Construction,
+    FLOOR,                   !- Name
+    C5 - 4 IN HW CONCRETE;   !- Outside Layer
+
+  Construction,
+    ROOF31,                  !- Name
+    R31LAYER;                !- Outside Layer
+
+  ScheduleTypeLimits,
+    Fraction,                !- Name
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    CONTINUOUS;              !- Numeric Type
+
+  GlobalGeometryRules,
+    UpperLeftCorner,         !- Starting Vertex Position
+    CounterClockWise,        !- Vertex Entry Direction
+    World;                   !- Coordinate System
+
+  Zone,
+    Zone 1;
+
+  BuildingSurface:Detailed,
+    Zone 1 South,Wall,R13WALL,Zone 1,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    0,0,3, 0,0,0, 5,0,0, 5,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 1 East,Wall,R13WALL,Zone 1,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    5,0,3, 5,0,0, 5,5,0, 5,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 1 North,Wall,R13WALL,Zone 1,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    5,5,3, 5,5,0, 0,5,0, 0,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 1 West,Wall,R13WALL,Zone 1,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    0,5,3, 0,5,0, 0,0,0, 0,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 1 Floor,Floor,FLOOR,Zone 1,,Adiabatic,,NoSun,NoWind,0.5,4,
+    5,0,0, 0,0,0, 0,5,0, 5,5,0;
+
+  BuildingSurface:Detailed,
+    Zone 1 Roof,Roof,ROOF31,Zone 1,,Outdoors,,SunExposed,WindExposed,0,4,
+    0,0,3, 5,0,3, 5,5,3, 0,5,3;
+
+  Zone,
+    Zone 2;
+
+  BuildingSurface:Detailed,
+    Zone 2 South,Wall,R13WALL,Zone 2,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    10,0,3, 10,0,0, 15,0,0, 15,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 2 East,Wall,R13WALL,Zone 2,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    15,0,3, 15,0,0, 15,5,0, 15,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 2 North,Wall,R13WALL,Zone 2,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    15,5,3, 15,5,0, 10,5,0, 10,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 2 West,Wall,R13WALL,Zone 2,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    10,5,3, 10,5,0, 10,0,0, 10,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 2 Floor,Floor,FLOOR,Zone 2,,Adiabatic,,NoSun,NoWind,0.5,4,
+    15,0,0, 10,0,0, 10,5,0, 15,5,0;
+
+  BuildingSurface:Detailed,
+    Zone 2 Roof,Roof,ROOF31,Zone 2,,Outdoors,,SunExposed,WindExposed,0,4,
+    10,0,3, 15,0,3, 15,5,3, 10,5,3;
+
+  Zone,
+    Zone 3;
+
+  BuildingSurface:Detailed,
+    Zone 3 South,Wall,R13WALL,Zone 3,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    20,0,3, 20,0,0, 25,0,0, 25,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 3 East,Wall,R13WALL,Zone 3,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    25,0,3, 25,0,0, 25,5,0, 25,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 3 North,Wall,R13WALL,Zone 3,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    25,5,3, 25,5,0, 20,5,0, 20,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 3 West,Wall,R13WALL,Zone 3,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    20,5,3, 20,5,0, 20,0,0, 20,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 3 Floor,Floor,FLOOR,Zone 3,,Adiabatic,,NoSun,NoWind,0.5,4,
+    25,0,0, 20,0,0, 20,5,0, 25,5,0;
+
+  BuildingSurface:Detailed,
+    Zone 3 Roof,Roof,ROOF31,Zone 3,,Outdoors,,SunExposed,WindExposed,0,4,
+    20,0,3, 25,0,3, 25,5,3, 20,5,3;
+
+  Zone,
+    Zone 4;
+
+  BuildingSurface:Detailed,
+    Zone 4 South,Wall,R13WALL,Zone 4,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    30,0,3, 30,0,0, 35,0,0, 35,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 4 East,Wall,R13WALL,Zone 4,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    35,0,3, 35,0,0, 35,5,0, 35,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 4 North,Wall,R13WALL,Zone 4,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    35,5,3, 35,5,0, 30,5,0, 30,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 4 West,Wall,R13WALL,Zone 4,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    30,5,3, 30,5,0, 30,0,0, 30,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 4 Floor,Floor,FLOOR,Zone 4,,Adiabatic,,NoSun,NoWind,0.5,4,
+    35,0,0, 30,0,0, 30,5,0, 35,5,0;
+
+  BuildingSurface:Detailed,
+    Zone 4 Roof,Roof,ROOF31,Zone 4,,Outdoors,,SunExposed,WindExposed,0,4,
+    30,0,3, 35,0,3, 35,5,3, 30,5,3;
+
+  Zone,
+    Zone 5;
+
+  BuildingSurface:Detailed,
+    Zone 5 South,Wall,R13WALL,Zone 5,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    40,0,3, 40,0,0, 45,0,0, 45,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 5 East,Wall,R13WALL,Zone 5,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    45,0,3, 45,0,0, 45,5,0, 45,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 5 North,Wall,R13WALL,Zone 5,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    45,5,3, 45,5,0, 40,5,0, 40,5,3;
+
+  BuildingSurface:Detailed,
+    Zone 5 West,Wall,R13WALL,Zone 5,,Outdoors,,SunExposed,WindExposed,0.5,4,
+    40,5,3, 40,5,0, 40,0,0, 40,0,3;
+
+  BuildingSurface:Detailed,
+    Zone 5 Floor,Floor,FLOOR,Zone 5,,Adiabatic,,NoSun,NoWind,0.5,4,
+    45,0,0, 40,0,0, 40,5,0, 45,5,0;
+
+  BuildingSurface:Detailed,
+    Zone 5 Roof,Roof,ROOF31,Zone 5,,Outdoors,,SunExposed,WindExposed,0,4,
+    40,0,3, 45,0,3, 45,5,3, 40,5,3;
+
+  ZoneList,
+    All Zones, Zone 1, Zone 2, Zone 3, Zone 4, Zone 5;
+
+  ScheduleTypeLimits,
+    OnOff,                   !- Name
+    0,                       !- Lower Limit Value
+    1,                       !- Upper Limit Value
+    Discrete,                !- Numeric Type
+    Availability;            !- Unit Type
+
+  ScheduleTypeLimits,
+    Any Number;              !- Name
+
+  ! Home occupancy: everyone leaves at 07:30 and comes back at 17:30 on weekdays.
+  Schedule:Compact,
+    Occupancy,               !- Name
+    OnOff,                   !- Schedule Type Limits Name
+    Through: 12/31,
+    For: Weekdays SummerDesignDay WinterDesignDay,
+    Until: 07:30, 1,
+    Until: 17:30, 0,
+    Until: 24:00, 1,
+    For: AllOtherDays,
+    Until: 24:00, 1;
+
+  People,
+    People,                  !- Name
+    All Zones,               !- Zone or ZoneList or Space or SpaceList Name
+    Occupancy,               !- Number of People Schedule Name
+    People,                  !- Number of People Calculation Method
+    1,                       !- Number of People
+    ,                        !- People per Floor Area {person/m2}
+    ,                        !- Floor Area per Person {m2/person}
+    0.3,                     !- Fraction Radiant
+    ,                        !- Sensible Heat Fraction
+    Activity;                !- Activity Level Schedule Name
+
+  ! Activity level that also changes on the half hour (meal at 12:30, evening at 19:10).
+  Schedule:Compact,
+    Activity,                !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 12/31,
+    For: AllDays,
+    Until: 06:30, 80,
+    Until: 12:30, 120,
+    Until: 13:30, 160,
+    Until: 19:10, 120,
+    Until: 22:40, 140,
+    Until: 24:00, 80;
+
+  ! Lights: Schedule:Year -> Schedule:Week:Daily -> Schedule:Day:Interval.
+  Schedule:Year,
+    Lighting,                !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Lighting Week,           !- Schedule:Week Name 1
+    1, 1, 12, 31;            !- Start Month, Day, End Month, Day 1
+
+  Schedule:Week:Daily,
+    Lighting Week,
+    Lighting Weekend, Lighting Weekday, Lighting Weekday, Lighting Weekday,
+    Lighting Weekday, Lighting Weekday, Lighting Weekend, Lighting Weekend,
+    Lighting Weekday, Lighting Weekday, Lighting Weekend, Lighting Weekend;
+
+  Schedule:Day:Interval,
+    Lighting Weekday,        !- Name
+    Fraction,                !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    06:20, 0.05,
+    07:30, 0.8,
+    17:30, 0.1,
+    22:50, 0.9,
+    24:00, 0.05;
+
+  Schedule:Day:Interval,
+    Lighting Weekend,        !- Name
+    Fraction,                !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    08:40, 0.05,
+    23:30, 0.6,
+    24:00, 0.05;
+
+  Lights,
+    Lights,                  !- Name
+    All Zones,               !- Zone or ZoneList or Space or SpaceList Name
+    Lighting,                !- Schedule Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Lighting Level {W}
+    8;                       !- Watts per Floor Area {W/m2}
+
+  ! Equipment: Schedule:Week:Compact -> Schedule:Day:List, 30-minute items.
+  Schedule:Year,
+    Equipment,               !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Equipment Week,          !- Schedule:Week Name 1
+    1, 1, 12, 31;            !- Start Month, Day, End Month, Day 1
+
+  Schedule:Week:Compact,
+    Equipment Week,
+    For: AllDays, Equipment Day;
+
+  Schedule:Day:List,
+    Equipment Day,           !- Name
+    Fraction,                !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    30,                      !- Minutes per Item
+    0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5;
+
+  ElectricEquipment,
+    Equipment,               !- Name
+    All Zones,               !- Zone or ZoneList or Space or SpaceList Name
+    Equipment,               !- Schedule Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    300;                     !- Design Level {W}

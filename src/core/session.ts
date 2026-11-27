@@ -208,7 +208,8 @@ export interface ScheduleListItem extends ScheduleInfo {
 
 export interface ScheduleDetail {
   info: ScheduleInfo;
-  hourly: Float32Array | null;
+  /** Values at every timestep of the year (standard time). */
+  values: Float32Array | null;
   min: number;
   max: number;
   uses: ScheduleUse[];
@@ -240,6 +241,7 @@ export interface ZoneLoadView {
   /** null for the whole building (with zone multipliers). */
   zone: string | null;
   floorArea: number;
+  /** Values at every timestep of the year (calendar.timestepsPerHour per hour). */
   people: Float32Array;
   watts: Record<LoadType, Float32Array>;
   daylighting: boolean;
@@ -650,20 +652,20 @@ export class Session {
   scheduleDetail(name: string): ScheduleDetail | null {
     const info = this.schedules.info(name);
     if (!info) return null;
-    const hourly = this.schedules.hourly(name);
+    const values = this.schedules.timesteps(name);
     let min = 0;
     let max = 0;
-    if (hourly?.length) {
+    if (values?.length) {
       min = Infinity;
       max = -Infinity;
-      for (const v of hourly) {
+      for (const v of values) {
         if (v < min) min = v;
         if (v > max) max = v;
       }
     }
     return {
       info,
-      hourly: hourly ? hourly.slice() : null,
+      values: values ? values.slice() : null,
       min,
       max,
       uses: this.usage.usesOf(info.id),
@@ -716,13 +718,13 @@ export class Session {
     return this._rows;
   }
 
-  /** Hourly occupants and power of a zone, or of the building with multipliers (F9). */
+  /** Occupants and power of a zone at every timestep, or of the building with multipliers (F9). */
   zoneLoads(zone: string | null, discountLost: boolean): ZoneLoadView {
     const zones = zone
       ? this.loads.zones.filter((z) => z.name.toLowerCase() === zone.toLowerCase())
       : this.loads.zones;
-    const hours = this.calendar.dayTypes.length * 24;
-    const sum = () => new Float32Array(hours);
+    const steps = this.calendar.dayTypes.length * this.schedules.steps;
+    const sum = () => new Float32Array(steps);
     const view: ZoneLoadView = {
       zone,
       floorArea: 0,
@@ -749,13 +751,13 @@ export class Session {
       for (const i of z.instances)
         if (this.schedules.info(i.schedule)?.emsActuators) ems.add(i.schedule);
       const series = zoneSeries(z, this.schedules, discountLost);
-      for (let h = 0; h < hours; h++)
-        view.people[h] = (view.people[h] as number) + (series.people[h] as number) * factor;
+      for (let s = 0; s < steps; s++)
+        view.people[s] = (view.people[s] as number) + (series.people[s] as number) * factor;
       for (const type of Object.keys(view.watts) as LoadType[]) {
         const target = view.watts[type];
         const source = series.watts[type];
-        for (let h = 0; h < hours; h++)
-          target[h] = (target[h] as number) + (source[h] as number) * factor;
+        for (let s = 0; s < steps; s++)
+          target[s] = (target[s] as number) + (source[s] as number) * factor;
       }
     }
     view.emsSchedules = [...ems];
