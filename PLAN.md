@@ -581,6 +581,10 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
     - un `AirflowNetwork:MultiZone:Surface` cubre los dos lados de un par interzona (EnergyPlus cuenta la escotilla de `Network.idf` como superficie de las dos zonas).
     - Ojo al leer resultados de EnergyPlus: las variables del AFN se calculan en cada subpaso de HVAC y la salida "Timestep" es su promedio, así que una ventana que abre o cierra a mitad del paso aparece con factores intermedios (0.4 = promedio de 0.8 y 0).
   - Sin comprobar contra EnergyPlus (no hay salida que los muestre): la interpolación del Cd y del área abierta de un `DetailedOpening` entre sus juegos, el rectángulo equivalente de aberturas no rectangulares, qué zona manda en un par interzona y los modos `Enthalpy` y adaptativos. Siguen como dice la documentación.
+  - **Disponibilidad en el año (2026-11-27, después del cierre):** el plan pedía graficar la apertura del modo `Constant` y no se había hecho. Ahora la ficha de cada abertura operable con horario de disponibilidad tiene una gráfica anual por timestep, en escalones: en `Constant` es el factor de apertura que usa EnergyPlus (el máximo mientras el horario es mayor que cero, 0 si no); en los otros modos es lo más que puede abrir, y la simulación decide el resto. El conteo de disponibilidad pasó de horas (que usaban el promedio de cada hora) a timesteps. Confirmado con un año a paso de tiempo de `tests/fixtures/schedules/Venting.idf` (referencia `Venting.annual.json`, salida "AFN Surface Venting Window or Door Opening Factor"):
+    - cualquier valor del horario mayor que cero habilita la apertura completa: con 0.5 abre al factor máximo, no a la mitad;
+    - en `Constant` la serie del visor coincide con EnergyPlus en los 35 040 timesteps del año, con cambios fuera de la hora (07:30, 17:45, 10:15, 21:30) y horario de verano;
+    - en `Temperature`, EnergyPlus nunca abre fuera de la disponibilidad ni más allá del factor máximo.
   - Archivos de prueba: el tragaluz de `Windows.idf` y `Wind.idf` pasó a área de fuga (EnergyPlus no permite ahí ninguna abertura operable); la abertura horizontal ahora es una escotilla entre la Zona 1 y el plenum de `Network.idf`, donde SB12 pasó a grieta. `AfnErrors.idf` conserva el tragaluz con `HorizontalOpening` como un error sembrado más.
 
 ### Fase 2c · Construcciones, validación y complementos
@@ -738,7 +742,7 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 ## 9. Dónde vamos (2026-11-27, tarde)
 
-**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1, 2a, 2b y 3 terminadas; de la 2c solo falta A5 (epJSON). Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): diagnóstico de geometría (C8/H5), cierre de las fases 2b y 3, y horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
+**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1, 2a, 2b y 3 terminadas; de la 2c solo falta A5 (epJSON). Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): gráfica anual de cuándo puede abrir cada ventana del AFN (notas de la fase 2b), diagnóstico de geometría (C8/H5), cierre de las fases 2b y 3, y horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
 
 **Fases 2b y 3 cerradas el 2026-11-27** con EnergyPlus 26.2 (ver sus notas): referencias regeneradas, las 3 pruebas que se saltaban ahora comparan, reglas confirmadas o corregidas, y cinco validaciones nuevas del AFN que EnergyPlus exige.
 

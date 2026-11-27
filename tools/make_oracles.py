@@ -30,7 +30,8 @@ values used do not depend on the weather) and writes ``<stem>.annual.json``:
 - zones: hourly occupants and internal gains of every zone;
 - design days: hourly schedule values on each design day;
 - timestep (only for ``tests/fixtures/schedules/``): schedules and zone series at
-  every zone timestep, to check values that change within the hour.
+  every zone timestep, to check values that change within the hour, and the opening
+  factor of each AirflowNetwork opening (``surfaces``).
 
 Hourly series are stored as the distinct daily profiles plus one index per day.
 
@@ -374,6 +375,8 @@ ANNUAL_VARIABLES = [
     "Zone Steam Equipment District Heating Steam Rate",
     "Zone Other Equipment Total Heating Rate",
 ]
+# Only at every zone timestep: how much each AirflowNetwork opening opens.
+TIMESTEP_VARIABLES = ["AFN Surface Venting Window or Door Opening Factor"]
 
 
 def object_fields(text: str, start: int, end: int) -> list[str]:
@@ -418,6 +421,8 @@ def prepare_annual_input(text: str, timestep: bool = False) -> str:
     outputs = "\n".join(
         f"Output:Variable, *, {v}, {f};" for f in frequencies for v in ANNUAL_VARIABLES
     )
+    if timestep:
+        outputs += "".join(f"\nOutput:Variable, *, {v}, Timestep;" for v in TIMESTEP_VARIABLES)
     return "".join(parts) + "\n" + run_period + "\nOutput:SQLite, Simple;\n" + outputs + "\n"
 
 
@@ -485,6 +490,8 @@ def read_annual_sql(sql: Path) -> dict:
         for (name, key), values in steps.items():
             if name == "Schedule Value":
                 timestep["schedules"][key] = compress(values, per_day)
+            elif name in TIMESTEP_VARIABLES:
+                timestep.setdefault("surfaces", {}).setdefault(key, {})[name] = compress(values, per_day)
             else:
                 timestep["zones"].setdefault(key, {})[name] = compress(values, per_day)
     design_days = {

@@ -79,7 +79,9 @@ const api: WorkerApi = {
     return current().afnOverview();
   },
   async afnCard(surface) {
-    return current().afnCard(surface);
+    const card = current().afnCard(surface);
+    const openable = card?.availability?.openable;
+    return card && openable ? transfer(card, [openable.buffer as ArrayBuffer]) : card;
   },
   async zoneFlows() {
     return current().zoneFlows();

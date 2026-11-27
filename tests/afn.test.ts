@@ -164,15 +164,16 @@ describe('opening rules (L6)', () => {
     expect(card?.rule?.conditions.join(' ')).toContain('WindowVentSched');
     const availability = card?.availability;
     expect(availability).toMatchObject({ schedule: 'VentingSched', evaluable: true });
-    expect(availability?.hours).toBeGreaterThan(0);
-    expect(availability?.hours).toBeLessThanOrEqual(availability?.total ?? 0);
+    expect(availability?.steps).toBeGreaterThan(0);
+    expect(availability?.steps).toBeLessThanOrEqual(availability?.total ?? 0);
   });
 
   it('a Constant opening without schedule is always available', async () => {
     const session = await open('tests/fixtures/windows/Windows.idf');
     const card = session.afnCard('GlassDoor:North');
     expect(card?.rule?.kind).toBe('constant');
-    expect(card?.availability).toMatchObject({ hours: 8760, total: 8760 });
+    expect(card?.availability).toMatchObject({ steps: 35040, total: 35040, timestepsPerHour: 4 });
+    expect(new Set(card?.availability?.openable)).toEqual(new Set([0.25]));
     // ZoneLevel resolves to NoVent here: closed, no availability.
     const east = session.afnCard('Win:East');
     expect(east?.rule?.kind).toBe('closed');

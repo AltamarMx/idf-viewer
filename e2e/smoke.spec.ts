@@ -131,9 +131,10 @@ test('airflow network: summary and opening card with ZoneLevel values', async ({
   await expect(card).toContainText('WindowVentSched');
   await expect(card.locator('.tag.zone').first()).toBeVisible();
   await expect(card.locator('.opening-diagram')).toHaveCount(3);
-  await expect(card).toContainText('VentingSched is above zero');
-  // Modulation, opening sets and the Cp of the external node.
-  await expect(card.locator('canvas')).toHaveCount(3);
+  await expect(card).toContainText(/VentingSched is above zero during [\d,]+ of 52,560 timesteps/);
+  await expect(card).toContainText('it never opens outside these times');
+  // When it may open over the year, modulation, opening sets and the Cp of the external node.
+  await expect(card.locator('canvas')).toHaveCount(4);
   expect(errors).toEqual([]);
 });
 

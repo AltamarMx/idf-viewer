@@ -508,12 +508,22 @@ export class Session {
     const schedule =
       card?.control.find((f) => f.label === 'Venting availability schedule')?.value || undefined;
     if (card?.rule && card.rule.kind !== 'closed') {
-      // Hours the opening may open: the availability schedule above zero.
-      const hourly = schedule ? this.schedules.hourly(schedule) : null;
-      const total = this.calendar.dayTypes.length * 24;
-      let hours = schedule ? 0 : total;
-      if (hourly) for (const v of hourly) if (v > 0) hours++;
-      card.availability = { schedule, hours, total, evaluable: !schedule || Boolean(hourly) };
+      // Timesteps the opening may open: the availability schedule above zero.
+      const values = schedule ? this.schedules.timesteps(schedule) : null;
+      const { timestepsPerHour } = this.calendar;
+      const total = this.calendar.dayTypes.length * 24 * timestepsPerHour;
+      const evaluable = !schedule || Boolean(values);
+      let openable: Float32Array | undefined;
+      let steps = 0;
+      if (evaluable) {
+        openable = new Float32Array(total);
+        for (let s = 0; s < total; s++) {
+          if (values && !((values[s] as number) > 0)) continue;
+          openable[s] = card.rule.maxFactor;
+          steps++;
+        }
+      }
+      card.availability = { schedule, steps, total, timestepsPerHour, evaluable, openable };
     }
     return card;
   }

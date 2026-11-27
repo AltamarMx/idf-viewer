@@ -17,5 +17,12 @@ one person each, an `OnOff` occupancy schedule that empties the zones at 07:30 a
 again at 17:30 on weekdays, an activity schedule, `Schedule:Day:Interval` and
 `Schedule:Day:List` (30-minute items) that change off the hour, and 6 timesteps per hour.
 
+`Venting.idf` is `tests/fixtures/windows/Windows.idf` with daylight saving time and venting
+availability schedules that change off the hour: `Win:South` (Constant 0.5) opens on
+weekdays 07:30–17:45 and on weekends 10:15–14:00 with a value of 0.5, `GlassDoor:North`
+(Constant 0.25) on summer nights until 06:00 and from 21:30, and `Win:East` (Temperature 0.8)
+with the weekday schedule. Its annual reference also keeps the AirflowNetwork opening
+factor of each opening at every timestep (`timestep.surfaces`).
+
 `tools/make_oracles.py --annual` runs them for a whole year to get reference values. For the
 files in this folder it also keeps every zone timestep (`timestep` in the JSON).

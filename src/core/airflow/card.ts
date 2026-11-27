@@ -130,8 +130,28 @@ export interface AfnCard {
   notes: AfnNote[];
   /** When and how much the opening opens (L6), for operable openings. */
   rule?: OpeningRule;
-  /** Hours of the year the venting availability schedule is above zero. */
-  availability?: { schedule?: string; hours: number; total: number; evaluable: boolean };
+  /** When the venting availability schedule lets the opening open (L6). */
+  availability?: Availability;
+}
+
+/**
+ * The venting availability schedule over the year, at every timestep. EnergyPlus
+ * lets the opening open when the schedule is above zero, whatever the value (0.5
+ * opens it as much as 1); checked with 26.2.
+ */
+export interface Availability {
+  schedule?: string;
+  /** Timesteps of the year the schedule is above zero, and all of them. */
+  steps: number;
+  total: number;
+  timestepsPerHour: number;
+  evaluable: boolean;
+  /**
+   * Opening factor at every timestep when the opening is allowed to open: the
+   * maximum opening factor when available, 0 when not. In Constant mode it is
+   * the opening factor EnergyPlus uses; in other modes, its upper limit.
+   */
+  openable?: Float32Array;
 }
 
 type ControlUse = 'setpoint' | 'minimum' | 'deltaT' | 'deltaH' | 'availability' | 'occupant';

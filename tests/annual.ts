@@ -17,6 +17,8 @@ export interface AnnualOracle {
     timestepsPerHour: number;
     schedules: Record<string, Series>;
     zones: Record<string, Record<string, Series>>;
+    /** Opening factor of each AirflowNetwork opening, by surface (upper case). */
+    surfaces?: Record<string, Record<string, Series>>;
   };
 }
 

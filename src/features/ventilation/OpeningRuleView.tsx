@@ -1,8 +1,12 @@
-import { useMemo } from 'react';
-import type { AfnCard } from '../../core/airflow/card';
+import { useEffect, useMemo, useState } from 'react';
+import type { AfnCard, Availability } from '../../core/airflow/card';
 import { modulatedFactor, type OpeningRule } from '../../core/airflow/rules';
+import type { CalendarView } from '../../core/session';
 import { formatInt, formatNumber } from '../../ui/format';
+import { idf } from '../../worker/client';
 import { Chart, type ChartOption } from '../charts/Chart';
+import { lineOption } from '../charts/options';
+import { hourTicks } from '../charts/time';
 
 /** When the opening opens and how much (L6). */
 export function OpeningRuleView({
@@ -31,14 +35,78 @@ export function OpeningRuleView({
       {availability && (
         <p className="count">
           {!availability.schedule
-            ? 'Available every hour of the year.'
+            ? 'Available at every timestep of the year.'
             : availability.evaluable
-              ? `${availability.schedule} is above zero ${formatInt(availability.hours)} of ${formatInt(availability.total)} hours of the year (${formatNumber((100 * availability.hours) / availability.total)} %).`
+              ? `${availability.schedule} is above zero during ${formatInt(availability.steps)} of ${formatInt(availability.total)} timesteps of the year (${formatNumber(availability.steps / availability.timestepsPerHour)} h, ${formatNumber((100 * availability.steps) / availability.total)} %).`
               : `${availability.schedule} cannot be evaluated by the viewer (for example a Schedule:File).`}
         </p>
       )}
+      {availability?.schedule && availability.openable && (
+        <AvailabilityChart rule={rule} availability={availability} dark={dark} />
+      )}
       {rule.kind === 'modulated' && <ModulationChart rule={rule} dark={dark} />}
     </div>
+  );
+}
+
+/**
+ * The opening factor over the year, at every timestep: the maximum opening
+ * factor while the availability schedule is above zero, 0 otherwise. In
+ * Constant mode this is what EnergyPlus uses; in the other modes it is the most
+ * the opening can open, and the simulation decides the rest.
+ */
+function AvailabilityChart({
+  rule,
+  availability,
+  dark,
+}: {
+  rule: OpeningRule;
+  availability: Availability;
+  dark: boolean;
+}) {
+  const [calendar, setCalendar] = useState<CalendarView | null>(null);
+  useEffect(() => {
+    idf.calendar().then(setCalendar);
+  }, []);
+  const values = availability.openable;
+  const exact = rule.kind === 'constant' && !rule.occupantControl;
+  const title = exact ? 'Opening factor' : 'Most it can open';
+  const option = useMemo<ChartOption | null>(() => {
+    if (!calendar || !values) return null;
+    const base = lineOption(values, calendar, title);
+    return {
+      ...base,
+      grid: { left: 48, right: 20, top: 30, bottom: 52 },
+      yAxis: {
+        type: 'value',
+        min: 0,
+        max: 1,
+        name: 'Opening factor',
+        axisLine: { show: true },
+        splitLine: { lineStyle: { opacity: 0.4 } },
+      },
+    };
+  }, [calendar, values, title]);
+  if (!option || !calendar || !values) return <p className="count">Evaluating…</p>;
+  const schedule = availability.schedule;
+  const max = formatNumber(rule.maxFactor);
+  return (
+    <>
+      <Chart
+        option={option}
+        height={200}
+        dark={dark}
+        xTicks={hourTicks(calendar.dates, values.length / calendar.timestepsPerHour)}
+      />
+      <p className="count chart-caption">
+        {rule.kind === 'constant'
+          ? `Opening factor at every timestep: ${max} while ${schedule} is above zero, closed otherwise.`
+          : `Times when ${schedule} lets the opening open, drawn at its maximum opening factor (${max}). Whether it opens, and how much, depends on the temperatures of the simulation; it never opens outside these times.`}{' '}
+        Any value above zero makes it available: 0.5 opens it as much as 1.
+        {rule.occupantControl &&
+          ` The occupant ventilation control (${rule.occupantControl}) can also keep it closed or open at some of these times.`}
+      </p>
+    </>
   );
 }
 

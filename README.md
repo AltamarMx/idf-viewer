@@ -33,7 +33,9 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
 - Schedules, internal loads and occupancy over the year, per zone, at every timestep.
 - Windows, natural ventilation, AirflowNetwork and infiltration settings, wind pressure
   coefficients, the site wind profile and a diagram of the flow network between zones
-  (AirflowNetwork connections and zone mixing).
+  (AirflowNetwork connections and zone mixing). Each operable opening shows its opening
+  rule and, at every timestep of the year, when its venting availability schedule lets it
+  open.
 
 It does not edit files, run simulations or read simulation results.
 

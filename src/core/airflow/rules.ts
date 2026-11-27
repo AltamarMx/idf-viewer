@@ -31,6 +31,8 @@ export interface OpeningRule {
    * this is the value written in the IDF.
    */
   inputUpper?: number;
+  /** AirflowNetwork:OccupantVentilationControl that also applies. */
+  occupantControl?: string;
   /** What must be true for the opening to open, in order. */
   conditions: string[];
 }
@@ -61,7 +63,12 @@ export function modulatedFactor(rule: OpeningRule, d: number): number {
 
 export function openingRule(input: RuleInput): OpeningRule {
   const mode = input.mode;
-  const base = { mode, maxFactor: input.maxFactor, minFactor: input.minFactor };
+  const base = {
+    mode,
+    maxFactor: input.maxFactor,
+    minFactor: input.minFactor,
+    occupantControl: input.occupantControl || undefined,
+  };
   const available = input.availabilitySchedule
     ? `The venting availability schedule ${input.availabilitySchedule} is above zero.`
     : 'No venting availability schedule: always available.';
