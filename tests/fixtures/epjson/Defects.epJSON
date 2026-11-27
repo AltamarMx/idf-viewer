@@ -1,0 +1,3225 @@
+{
+    "Building": {
+        "Geometry defects": {
+            "loads_convergence_tolerance_value": 0.04,
+            "maximum_number_of_warmup_days": 30,
+            "minimum_number_of_warmup_days": 6,
+            "north_axis": 0,
+            "solar_distribution": "MinimalShadowing",
+            "temperature_convergence_tolerance_value": 0.004,
+            "terrain": "Suburbs"
+        }
+    },
+    "BuildingSurface:Detailed": {
+        "Not Planar East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Not Planar"
+        },
+        "Not Planar Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Not Planar"
+        },
+        "Not Planar North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 3.3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Not Planar"
+        },
+        "Not Planar Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Not Planar"
+        },
+        "Not Planar South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 23,
+                    "vertex_y_coordinate": -0.05,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Not Planar"
+        },
+        "Not Planar West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 20,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Not Planar"
+        },
+        "Open East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Open"
+        },
+        "Open Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Open"
+        },
+        "Open North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Open"
+        },
+        "Open South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 93,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Open"
+        },
+        "Open West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 90,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Open"
+        },
+        "Open With Volume East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Open With Volume"
+        },
+        "Open With Volume Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Open With Volume"
+        },
+        "Open With Volume North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Open With Volume"
+        },
+        "Open With Volume South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 143,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Open With Volume"
+        },
+        "Open With Volume West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 140,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Open With Volume"
+        },
+        "Pair A East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Surface",
+            "outside_boundary_condition_object": "Pair B West",
+            "sun_exposure": "NoSun",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Pair A"
+        },
+        "Pair A Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Pair A"
+        },
+        "Pair A North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Pair A"
+        },
+        "Pair A Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Pair A"
+        },
+        "Pair A South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Pair A"
+        },
+        "Pair A West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 50,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Pair A"
+        },
+        "Pair B East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Pair B"
+        },
+        "Pair B Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Pair B"
+        },
+        "Pair B North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Pair B"
+        },
+        "Pair B Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Pair B"
+        },
+        "Pair B South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 56,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Pair B"
+        },
+        "Pair B West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Surface",
+            "outside_boundary_condition_object": "Pair A East",
+            "sun_exposure": "NoSun",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 53,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Pair B"
+        },
+        "Shared A East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Zone",
+            "outside_boundary_condition_object": "Shared B",
+            "sun_exposure": "NoSun",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Shared A"
+        },
+        "Shared A Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Shared A"
+        },
+        "Shared A North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Shared A"
+        },
+        "Shared A Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Shared A"
+        },
+        "Shared A South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Shared A"
+        },
+        "Shared A West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 150,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Shared A"
+        },
+        "Shared B East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Shared B"
+        },
+        "Shared B Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Shared B"
+        },
+        "Shared B North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Shared B"
+        },
+        "Shared B Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Shared B"
+        },
+        "Shared B South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 153,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 156,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Shared B"
+        },
+        "Size A East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Surface",
+            "outside_boundary_condition_object": "Size B West",
+            "sun_exposure": "NoSun",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 2.9
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 2.9
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Size A"
+        },
+        "Size A East Top": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 2.9
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 2.9
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Size A"
+        },
+        "Size A Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Size A"
+        },
+        "Size A North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Size A"
+        },
+        "Size A Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Size A"
+        },
+        "Size A South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Size A"
+        },
+        "Size A West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 70,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Size A"
+        },
+        "Size B East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Size B"
+        },
+        "Size B Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Size B"
+        },
+        "Size B North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Size B"
+        },
+        "Size B Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Size B"
+        },
+        "Size B South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 76,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Size B"
+        },
+        "Size B West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Surface",
+            "outside_boundary_condition_object": "Size A East",
+            "sun_exposure": "NoSun",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 73,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Size B"
+        },
+        "Small East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 2.9997,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 2.9997,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Small"
+        },
+        "Small East Sliver": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 2.9997,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 2.9997,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Small"
+        },
+        "Small Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Small"
+        },
+        "Small North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 6,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 31.5,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 31.505,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Small"
+        },
+        "Small Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Small"
+        },
+        "Small South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 33,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Small"
+        },
+        "Small West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 5,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 1.5,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 30,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Small"
+        },
+        "Steep Roof East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Steep Roof"
+        },
+        "Steep Roof Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Steep Roof"
+        },
+        "Steep Roof North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Steep Roof"
+        },
+        "Steep Roof Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 1.63073,
+                    "vertex_z_coordinate": 4.49429
+                },
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 1.36927,
+                    "vertex_z_coordinate": 1.50571
+                },
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 1.36927,
+                    "vertex_z_coordinate": 1.50571
+                },
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 1.63073,
+                    "vertex_z_coordinate": 4.49429
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Steep Roof"
+        },
+        "Steep Roof South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 103,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Steep Roof"
+        },
+        "Steep Roof West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 100,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Steep Roof"
+        },
+        "Tilt A East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Surface",
+            "outside_boundary_condition_object": "Tilt B West",
+            "sun_exposure": "NoSun",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Tilt A"
+        },
+        "Tilt A Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Tilt A"
+        },
+        "Tilt A North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tilt A"
+        },
+        "Tilt A Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tilt A"
+        },
+        "Tilt A South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tilt A"
+        },
+        "Tilt A West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 110,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tilt A"
+        },
+        "Tilt B East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tilt B"
+        },
+        "Tilt B Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Tilt B"
+        },
+        "Tilt B North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tilt B"
+        },
+        "Tilt B Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tilt B"
+        },
+        "Tilt B South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 116,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tilt B"
+        },
+        "Tilt B West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Surface",
+            "outside_boundary_condition_object": "Tilt A East",
+            "sun_exposure": "NoSun",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 112.895,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 2.99817
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 113,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 112.895,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 2.99817
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Tilt B"
+        },
+        "Tiny Window East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tiny Window"
+        },
+        "Tiny Window Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Tiny Window"
+        },
+        "Tiny Window North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tiny Window"
+        },
+        "Tiny Window Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tiny Window"
+        },
+        "Tiny Window South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 133,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tiny Window"
+        },
+        "Tiny Window West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 130,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Tiny Window"
+        },
+        "Upside Down East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Upside Down"
+        },
+        "Upside Down Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Upside Down"
+        },
+        "Upside Down North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Upside Down"
+        },
+        "Upside Down Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Upside Down"
+        },
+        "Upside Down South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 13,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Upside Down"
+        },
+        "Upside Down West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 10,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Upside Down"
+        },
+        "Windows East": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Windows"
+        },
+        "Windows Floor": {
+            "construction_name": "FLOOR",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Ground",
+            "sun_exposure": "NoSun",
+            "surface_type": "Floor",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                }
+            ],
+            "wind_exposure": "NoWind",
+            "zone_name": "Windows"
+        },
+        "Windows North": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Windows"
+        },
+        "Windows Roof": {
+            "construction_name": "ROOF31",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Roof",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Windows"
+        },
+        "Windows South": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 43,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Windows"
+        },
+        "Windows West": {
+            "construction_name": "R13WALL",
+            "number_of_vertices": 4,
+            "outside_boundary_condition": "Outdoors",
+            "sun_exposure": "SunExposed",
+            "surface_type": "Wall",
+            "vertices": [
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 3
+                },
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 3,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 0
+                },
+                {
+                    "vertex_x_coordinate": 40,
+                    "vertex_y_coordinate": 0,
+                    "vertex_z_coordinate": 3
+                }
+            ],
+            "wind_exposure": "WindExposed",
+            "zone_name": "Windows"
+        }
+    },
+    "Construction": {
+        "FLOOR": {
+            "outside_layer": "C5 - 4 IN HW CONCRETE"
+        },
+        "R13WALL": {
+            "outside_layer": "R13LAYER"
+        },
+        "ROOF31": {
+            "outside_layer": "R31LAYER"
+        },
+        "WINDOW": {
+            "outside_layer": "GLAZING"
+        }
+    },
+    "FenestrationSurface:Detailed": {
+        "Tiny Window": {
+            "building_surface_name": "Tiny Window South",
+            "construction_name": "WINDOW",
+            "multiplier": 1,
+            "number_of_vertices": 4,
+            "surface_type": "Window",
+            "vertex_1_x_coordinate": 131,
+            "vertex_1_y_coordinate": 0,
+            "vertex_1_z_coordinate": 1.03,
+            "vertex_2_x_coordinate": 131,
+            "vertex_2_y_coordinate": 0,
+            "vertex_2_z_coordinate": 1,
+            "vertex_3_x_coordinate": 131.03,
+            "vertex_3_y_coordinate": 0,
+            "vertex_3_z_coordinate": 1,
+            "vertex_4_x_coordinate": 131.03,
+            "vertex_4_y_coordinate": 0,
+            "vertex_4_z_coordinate": 1.03
+        },
+        "Window Off Plane": {
+            "building_surface_name": "Windows North",
+            "construction_name": "WINDOW",
+            "multiplier": 1,
+            "number_of_vertices": 4,
+            "surface_type": "Window",
+            "vertex_1_x_coordinate": 42,
+            "vertex_1_y_coordinate": 3.1,
+            "vertex_1_z_coordinate": 2,
+            "vertex_2_x_coordinate": 42,
+            "vertex_2_y_coordinate": 3.1,
+            "vertex_2_z_coordinate": 1,
+            "vertex_3_x_coordinate": 41,
+            "vertex_3_y_coordinate": 3.1,
+            "vertex_3_z_coordinate": 1,
+            "vertex_4_x_coordinate": 41,
+            "vertex_4_y_coordinate": 3.1,
+            "vertex_4_z_coordinate": 2
+        },
+        "Window Outside": {
+            "building_surface_name": "Windows South",
+            "construction_name": "WINDOW",
+            "multiplier": 1,
+            "number_of_vertices": 4,
+            "surface_type": "Window",
+            "vertex_1_x_coordinate": 42,
+            "vertex_1_y_coordinate": 0,
+            "vertex_1_z_coordinate": 2,
+            "vertex_2_x_coordinate": 42,
+            "vertex_2_y_coordinate": 0,
+            "vertex_2_z_coordinate": 1,
+            "vertex_3_x_coordinate": 43.5,
+            "vertex_3_y_coordinate": 0,
+            "vertex_3_z_coordinate": 1,
+            "vertex_4_x_coordinate": 43.5,
+            "vertex_4_y_coordinate": 0,
+            "vertex_4_z_coordinate": 2
+        }
+    },
+    "GlobalGeometryRules": {
+        "GlobalGeometryRules 1": {
+            "coordinate_system": "World",
+            "starting_vertex_position": "UpperLeftCorner",
+            "vertex_entry_direction": "Counterclockwise"
+        }
+    },
+    "HeatBalanceAlgorithm": {
+        "HeatBalanceAlgorithm 1": {
+            "algorithm": "ConductionTransferFunction"
+        }
+    },
+    "Material": {
+        "C5 - 4 IN HW CONCRETE": {
+            "conductivity": 1.729577,
+            "density": 2242.585,
+            "roughness": "MediumRough",
+            "solar_absorptance": 0.65,
+            "specific_heat": 836.8,
+            "thermal_absorptance": 0.9,
+            "thickness": 0.1014984,
+            "visible_absorptance": 0.65
+        }
+    },
+    "Material:NoMass": {
+        "R13LAYER": {
+            "roughness": "Rough",
+            "solar_absorptance": 0.75,
+            "thermal_absorptance": 0.9,
+            "thermal_resistance": 2.290965,
+            "visible_absorptance": 0.75
+        },
+        "R31LAYER": {
+            "roughness": "Rough",
+            "solar_absorptance": 0.75,
+            "thermal_absorptance": 0.9,
+            "thermal_resistance": 5.456,
+            "visible_absorptance": 0.75
+        }
+    },
+    "RunPeriod": {
+        "Run Period 1": {
+            "apply_weekend_holiday_rule": "No",
+            "begin_day_of_month": 1,
+            "begin_month": 1,
+            "day_of_week_for_start_day": "Tuesday",
+            "end_day_of_month": 31,
+            "end_month": 12,
+            "use_weather_file_daylight_saving_period": "Yes",
+            "use_weather_file_holidays_and_special_days": "Yes",
+            "use_weather_file_rain_indicators": "Yes",
+            "use_weather_file_snow_indicators": "Yes"
+        }
+    },
+    "ScheduleTypeLimits": {
+        "Fraction": {
+            "lower_limit_value": 0,
+            "numeric_type": "Continuous",
+            "upper_limit_value": 1
+        }
+    },
+    "SimulationControl": {
+        "SimulationControl 1": {
+            "do_hvac_sizing_simulation_for_sizing_periods": "No",
+            "do_plant_sizing_calculation": "No",
+            "do_system_sizing_calculation": "No",
+            "do_zone_sizing_calculation": "No",
+            "maximum_number_of_hvac_sizing_simulation_passes": 1,
+            "run_simulation_for_sizing_periods": "Yes",
+            "run_simulation_for_weather_file_run_periods": "Yes"
+        }
+    },
+    "Site:Location": {
+        "Denver Centennial  Golden   N_CO_USA Design_Conditions": {
+            "elevation": 1829.0,
+            "latitude": 39.74,
+            "longitude": -105.18,
+            "time_zone": -7.0
+        }
+    },
+    "SizingPeriod:DesignDay": {
+        "Denver Centennial  Golden   N Ann Clg 1% Condns DB=>MWB": {
+            "barometric_pressure": 81198.0,
+            "daily_dry_bulb_temperature_range": 15.2,
+            "day_of_month": 21,
+            "day_type": "SummerDesignDay",
+            "daylight_saving_time_indicator": "No",
+            "humidity_condition_type": "WetBulb",
+            "maximum_dry_bulb_temperature": 32,
+            "month": 7,
+            "rain_indicator": "No",
+            "sky_clearness": 1.0,
+            "snow_indicator": "No",
+            "solar_model_indicator": "ASHRAEClearSky",
+            "wetbulb_or_dewpoint_at_maximum_dry_bulb": 15.5,
+            "wind_direction": 0,
+            "wind_speed": 4.9
+        },
+        "Denver Centennial  Golden   N Ann Htg 99% Condns DB": {
+            "barometric_pressure": 81198.0,
+            "daily_dry_bulb_temperature_range": 0.0,
+            "day_of_month": 21,
+            "day_type": "WinterDesignDay",
+            "daylight_saving_time_indicator": "No",
+            "humidity_condition_type": "WetBulb",
+            "maximum_dry_bulb_temperature": -15.5,
+            "month": 12,
+            "rain_indicator": "No",
+            "sky_clearness": 0.0,
+            "snow_indicator": "No",
+            "solar_model_indicator": "ASHRAEClearSky",
+            "wetbulb_or_dewpoint_at_maximum_dry_bulb": -15.5,
+            "wind_direction": 340,
+            "wind_speed": 3
+        }
+    },
+    "SurfaceConvectionAlgorithm:Inside": {
+        "SurfaceConvectionAlgorithm:Inside 1": {
+            "algorithm": "TARP"
+        }
+    },
+    "SurfaceConvectionAlgorithm:Outside": {
+        "SurfaceConvectionAlgorithm:Outside 1": {
+            "algorithm": "DOE-2"
+        }
+    },
+    "Timestep": {
+        "Timestep 1": {
+            "number_of_timesteps_per_hour": 4
+        }
+    },
+    "Version": {
+        "Version 1": {
+            "version_identifier": "26.2"
+        }
+    },
+    "WindowMaterial:SimpleGlazingSystem": {
+        "GLAZING": {
+            "solar_heat_gain_coefficient": 0.6,
+            "u_factor": 2.8,
+            "visible_transmittance": 0.7
+        }
+    },
+    "Zone": {
+        "Not Planar": {},
+        "Open": {},
+        "Open With Volume": {
+            "ceiling_height": "Autocalculate",
+            "direction_of_relative_north": 0,
+            "multiplier": 1,
+            "type": 1,
+            "volume": 27,
+            "x_origin": 0,
+            "y_origin": 0,
+            "z_origin": 0
+        },
+        "Pair A": {},
+        "Pair B": {},
+        "Shared A": {},
+        "Shared B": {},
+        "Size A": {},
+        "Size B": {},
+        "Small": {},
+        "Steep Roof": {},
+        "Tilt A": {},
+        "Tilt B": {},
+        "Tiny Window": {},
+        "Upside Down": {},
+        "Windows": {}
+    }
+}

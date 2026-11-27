@@ -3,6 +3,10 @@
     "title": "One zone, uncontrolled",
     "description": "The smallest example: a single zone without HVAC."
   },
+  "1ZoneUncontrolled.epJSON": {
+    "title": "One zone, uncontrolled (epJSON)",
+    "description": "The same model as an epJSON file, converted with EnergyPlus' ConvertInputFormat."
+  },
   "4ZoneWithShading_Simple_1.idf": {
     "title": "Four zones with shading",
     "description": "Simplified geometry (Wall:Exterior, Window, Shading:Overhang)."

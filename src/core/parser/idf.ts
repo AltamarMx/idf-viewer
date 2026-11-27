@@ -17,6 +17,8 @@ export interface IdfObject {
   line: number;
   /** 1-based line of each field. */
   fieldLines: number[];
+  /** 1-based line where the object ends, when it is not that of its last field (epJSON). */
+  endLine?: number;
 }
 
 export interface ParseWarning {

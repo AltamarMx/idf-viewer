@@ -1,6 +1,6 @@
 # Example gallery
 
-Every `.idf` file in this folder appears on the viewer's start page.
+Every `.idf` and `.epJSON` file in this folder appears on the viewer's start page.
 
 To add one, copy the file here and push to `main`. The site is rebuilt and the
 file shows up in the gallery, sorted by size.

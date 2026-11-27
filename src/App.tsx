@@ -249,7 +249,7 @@ export function App() {
         <input
           ref={inputRef}
           type="file"
-          accept=".idf,.IDF,.imf,.txt"
+          accept=".idf,.IDF,.imf,.txt,.epJSON,.epjson,.json"
           hidden
           onChange={(e) => {
             const file = e.target.files?.[0];
@@ -459,8 +459,9 @@ function LoadingOverlay({ name, progress }: { name: string; progress: LoadProgre
 
 function versionLabel(summary: FileSummary): string {
   const r = summary.resolution;
-  if (r.kind === 'none') return 'no version';
-  return `v${r.fileVersion}`;
+  const format = summary.format === 'epjson' ? ' · epJSON' : '';
+  if (r.kind === 'none') return `no version${format}`;
+  return `v${r.fileVersion}${format}`;
 }
 
 function messageOf(error: unknown): string {

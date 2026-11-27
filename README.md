@@ -1,6 +1,6 @@
 # IDF Viewer
 
-A read-only viewer for EnergyPlus input files (`.idf`), from version 8.0 to the current release.
+A read-only viewer for EnergyPlus input files (`.idf` and `.epJSON`), from version 8.0 to the current release.
 It runs entirely in your browser: **your file is never uploaded to any server**.
 
 **Open it:** https://altamarmx.github.io/idf-viewer/
@@ -9,7 +9,8 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
 
 ## What it does
 
-- Opens `.idf` files from EnergyPlus 8.0 to 26.2, using the field names of each version.
+- Opens `.idf` files from EnergyPlus 8.0 to 26.2, using the field names of each version, and
+  `.epJSON` files, which it reads into the same model.
 - Opens a file from your disk, from pasted text or from a web address. A link such as
   `https://altamarmx.github.io/idf-viewer/?url=https://github.com/user/repository/blob/main/model.idf`
   opens that file directly; the server must allow other sites to read it (CORS), as GitHub and
@@ -42,7 +43,7 @@ It does not edit files, run simulations or read simulation results.
 
 ## Add an example to the gallery
 
-Copy an `.idf` file into [`examples/`](examples/) and push. Optionally, give it a title in `examples/examples.json`.
+Copy an `.idf` or `.epJSON` file into [`examples/`](examples/) and push. Optionally, give it a title in `examples/examples.json`.
 
 ## Development
 

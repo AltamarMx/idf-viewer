@@ -36,6 +36,13 @@ import { type ClassSummary, IdfModel, objectName, summarizeClasses } from './mod
 import { buildReferences, type ReferenceIndex } from './model/references';
 import { type WindowInventory, windowInventory } from './openings/windows';
 import { type OutputsView, outputsView } from './outputs';
+import {
+  epJsonObjects,
+  epJsonVersion,
+  type JsonNode,
+  JsonSyntaxError,
+  parseJson,
+} from './parser/epjson';
 import { decodeIdf, type IdfObject, type ParseWarning, parseIdf } from './parser/idf';
 import { buildCalendar, DAY_TYPES, type DayType, type YearCalendar } from './schedules/calendar';
 import { type ScheduleInfo, ScheduleSet } from './schedules/evaluate';
@@ -66,8 +73,12 @@ export interface LoadProgress {
   message: string;
 }
 
+export type FileFormat = 'idf' | 'epjson';
+
 export interface FileSummary {
   fileName: string;
+  /** IDF text or epJSON (A5). */
+  format: FileFormat;
   size: number;
   encoding: string;
   lineCount: number;
@@ -244,6 +255,7 @@ export interface TextView {
   /** First and last line (1-based) of the object with that id. */
   starts: Int32Array;
   ends: Int32Array;
+  format: FileFormat;
 }
 
 export interface ZoneLoadView {
@@ -659,10 +671,10 @@ export class Session {
     const ends = new Int32Array(n);
     this.model.objects.forEach((obj, i) => {
       starts[i] = obj.line;
-      // Field lines grow, so the last one is the end of the object.
-      ends[i] = obj.fieldLines[obj.fieldLines.length - 1] ?? obj.line;
+      // Field lines grow, so the last one is the end of the object (epJSON gives it).
+      ends[i] = obj.endLine ?? obj.fieldLines[obj.fieldLines.length - 1] ?? obj.line;
     });
-    return { text: this.sourceText, starts, ends };
+    return { text: this.sourceText, starts, ends, format: this.summary.format };
   }
 
   buildingSummary(): BuildingSummary {
@@ -871,20 +883,32 @@ export async function openFile(
     size = text.length;
   }
 
-  if (/^\s*\{/.test(text)) {
-    throw new Error('epJSON files are not supported yet. Please open an .idf file.');
+  // epJSON (A5): a JSON object; its fields are put in IDD order once the schema is known.
+  const format: FileFormat = /^\uFEFF?\s*\{/.test(text) ? 'epjson' : 'idf';
+  const parsing = (fraction: number) =>
+    onProgress({ stage: 'parsing', fraction, message: 'Reading objects' });
+  let json: JsonNode | undefined;
+  let parsed: { objects: IdfObject[]; warnings: ParseWarning[]; lineCount: number } | undefined;
+  let fileVersion: string | undefined;
+  if (format === 'epjson') {
+    try {
+      json = parseJson(text, parsing);
+    } catch (error) {
+      if (error instanceof JsonSyntaxError)
+        throw new Error(`This epJSON file is not valid JSON: ${error.message}.`);
+      throw error;
+    }
+    fileVersion = epJsonVersion(json);
+  } else {
+    parsed = parseIdf(text, parsing);
+    fileVersion = new IdfModel(parsed.objects).version();
   }
-
-  const parsed = parseIdf(text, (fraction) =>
-    onProgress({ stage: 'parsing', fraction, message: 'Reading objects' }),
-  );
-  const model = new IdfModel(parsed.objects);
 
   let resolution: Resolution;
   let schema: Schema | undefined;
   try {
     const available = await loader.availableVersions();
-    resolution = resolveVersion(model.version(), available);
+    resolution = resolveVersion(fileVersion, available);
     if (resolution.kind !== 'none') {
       onProgress({ stage: 'schema', message: `Loading schema ${resolution.schemaVersion}` });
       schema = await loader.schema(resolution.schemaVersion);
@@ -892,10 +916,16 @@ export async function openFile(
   } catch (error) {
     resolution = {
       kind: 'none',
-      fileVersion: model.version(),
+      fileVersion,
       message: `Schemas could not be loaded (${String(error)}). Fields are shown without names.`,
     };
   }
+  if (json) {
+    const converted = epJsonObjects(json, schema);
+    parsed = { ...converted, lineCount: text.split(/\r\n|\n|\r/).length };
+  }
+  if (!parsed) throw new Error('The file could not be read.');
+  const model = new IdfModel(parsed.objects);
 
   onProgress({ stage: 'indexing', message: 'Indexing references and geometry' });
   const classes = summarizeClasses(model, schema);
@@ -913,6 +943,7 @@ export async function openFile(
 
   const summary: FileSummary = {
     fileName: source.name,
+    format,
     size,
     encoding,
     lineCount: parsed.lineCount,

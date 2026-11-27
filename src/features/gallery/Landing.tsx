@@ -51,7 +51,7 @@ export function Landing({ error, lastUrl, onPickFile, onOpenUrl, onOpenText }: P
 
       <div className="dropzone">
         <p>
-          <strong>Drop an .idf file anywhere on this page</strong>
+          <strong>Drop an .idf or .epJSON file anywhere on this page</strong>
         </p>
         <p>
           <button type="button" className="btn primary" onClick={onPickFile}>
@@ -64,7 +64,7 @@ export function Landing({ error, lastUrl, onPickFile, onOpenUrl, onOpenText }: P
       </div>
 
       <details className="paste">
-        <summary>Or paste IDF text</summary>
+        <summary>Or paste IDF or epJSON text</summary>
         <textarea
           value={pasted}
           onChange={(e) => setPasted(e.target.value)}

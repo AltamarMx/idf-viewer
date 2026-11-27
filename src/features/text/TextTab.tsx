@@ -74,12 +74,31 @@ const idfLanguage = StreamLanguage.define<IdfState>({
   copyState: (s) => ({ ...s }),
 });
 
+/** epJSON (A5): class names, field names, text and numbers. */
+const jsonLanguage = StreamLanguage.define<null>({
+  name: 'epjson',
+  token(stream: StringStream) {
+    if (stream.eatSpace()) return null;
+    if (stream.match(/^"(?:[^"\\]|\\.)*"/)) {
+      if (!/^\s*:/.test(stream.string.slice(stream.pos))) return 'string';
+      // Classes are the first level of keys; objects and fields go deeper.
+      return stream.indentation() <= 4 ? 'keyword' : 'propertyName';
+    }
+    if (stream.match(/^-?\d+(\.\d+)?([eE][-+]?\d+)?/)) return 'number';
+    if (stream.match(/^(true|false|null)\b/)) return 'atom';
+    stream.next();
+    return 'punctuation';
+  },
+});
+
 const lightColors = HighlightStyle.define([
   { tag: tags.keyword, color: '#1f6fb2', fontWeight: '600' },
   { tag: tags.number, color: '#0b7a5a' },
   { tag: tags.comment, color: '#7a8591', fontStyle: 'italic' },
   { tag: tags.meta, color: '#9aa3ad' },
   { tag: tags.punctuation, color: '#56616d' },
+  { tag: tags.propertyName, color: '#6a4c93' },
+  { tag: tags.string, color: '#2b2f33' },
 ]);
 
 const darkColors = HighlightStyle.define([
@@ -88,6 +107,8 @@ const darkColors = HighlightStyle.define([
   { tag: tags.comment, color: '#8a96a3', fontStyle: 'italic' },
   { tag: tags.meta, color: '#6f7b87' },
   { tag: tags.punctuation, color: '#9aa6b2' },
+  { tag: tags.propertyName, color: '#c9a7f0' },
+  { tag: tags.string, color: '#dde3e9' },
 ]);
 
 const editorTheme = EditorView.theme({
@@ -180,7 +201,7 @@ export default function TextTab({ selectedId, onSelect, dark }: Props) {
           highlightSpecialChars(),
           drawSelection(),
           EditorState.readOnly.of(true),
-          idfLanguage,
+          text.format === 'epjson' ? jsonLanguage : idfLanguage,
           themeRef.current.of(themed(darkRef.current)),
           search({ top: true }),
           highlightSelectionMatches(),

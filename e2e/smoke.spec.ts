@@ -3,7 +3,7 @@ import { expect, type Page, test } from '@playwright/test';
 
 async function openExample(page: Page, title: string) {
   await page.goto('./');
-  await page.getByText(title).click();
+  await page.getByText(title, { exact: true }).click();
   await expect(page.getByRole('tab', { name: 'Summary' })).toBeVisible();
 }
 
@@ -249,6 +249,30 @@ test('problems: field values against the IDD and unused objects', async ({ page 
   await expect(panel.locator('table.problems tr')).toHaveCount(6);
   await panel.getByRole('button', { name: /UNUSED CURVE/ }).click();
   await expect(page.locator('.inspector')).toContainText('Curve:Linear');
+  expect(errors).toEqual([]);
+});
+
+test('opens an epJSON file: same model, its own text', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'One zone, uncontrolled (epJSON)');
+  await expect(page.locator('.file-meta')).toContainText('v26.2 · epJSON');
+  await expect(page.locator('.file-meta')).toContainText('88 objects');
+  await page.getByRole('tab', { name: '3D' }).click();
+  await expect(page.locator('.viewer-canvas canvas')).toBeVisible();
+  await page.getByRole('tab', { name: 'Text' }).click();
+  const editor = page.locator('.text-editor .cm-editor');
+  await expect(editor).toContainText('"BuildingSurface:Detailed"');
+  // A click on an object's key opens it, as in an IDF.
+  await editor.locator('.cm-line', { hasText: '"Simple One Zone (Wireframe DXF)"' }).click();
+  await expect(page.locator('.inspector-head h2')).toHaveText('Simple One Zone (Wireframe DXF)');
+  // Choosing an object jumps to its lines.
+  await page.keyboard.press('ControlOrMeta+K');
+  await page.locator('.search-dialog input').fill('zn001:wall001');
+  await expect(page.locator('.search-results')).toContainText('Zn001:Wall001');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.inspector-head h2')).toHaveText('Zn001:Wall001');
+  await expect(editor.locator('.cm-selected-object').first()).toContainText('"Zn001:Wall001"');
   expect(errors).toEqual([]);
 });
 

@@ -600,12 +600,12 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 - [x] 2c.2 Capas y cortes 3D (C7), diagnóstico visual de geometría (C8) y elementos adicionales (C9).
 - [x] 2c.3 Validación contra el IDD (H3), objetos sin uso (H4) y problemas de geometría (H5).
 - [x] 2c.4 Vista de texto sincronizada (B6).
-- [ ] 2c.5 Lectura de epJSON (A5) y apertura desde una URL (A6). *A6 hecho; A5 va en la computadora con EnergyPlus.*
+- [x] 2c.5 Lectura de epJSON (A5) y apertura desde una URL (A6).
 - [x] 2c.6 Ubicación y días de diseño (D5) y salidas solicitadas (D6).
 
 **Listo cuando:** todos los features de esta fase funcionan con los ejemplos y con archivos de las versiones 8.x y 9.x.
 
-**Avance de la fase 2c (se completa al cerrar la fase):**
+**Notas de la fase 2c** (cerrada el 2026-11-27):
 - 2c.1 (2026-11-23): pestaña nueva **Constructions**, entre Table y Ventilation.
   - Lista de construcciones con número de capas, superficies y área, y etiquetas "window", "missing layer" y "not used" (ninguna superficie ni otro objeto la usa). Filtro por nombre. Si el inspector muestra una construcción, la pestaña la selecciona.
   - Corte de capas de exterior (izquierda) a interior (derecha), con espesores a escala. Las capas que solo tienen resistencia térmica (`Material:NoMass`, `Material:AirGap`, `Material:InfraredTransparent`) tienen ancho fijo y van rayadas; las muy delgadas se dibujan más anchas para que se vean, y la nota lo dice. La fuente de calor interna se marca con una línea punteada después de su capa.
@@ -682,6 +682,18 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - Con "Daylighting Reference Point Coordinate System" Relative (el valor por omisión) el punto se transforma como los vértices de su zona: rotación y origen de la zona y luego el norte del edificio. Con World se usa tal cual.
   - Z en blanco usa el valor por omisión del IDD (0.8 m).
   - `make_oracles.py` lee la posición de cada punto del DXF que escribe EnergyPlus (un círculo con el nombre del punto en un comentario). `RotatedRelative.idf` tiene ahora dos puntos en su zona girada (−20°, origen (30, 0, 0.5), norte del edificio 30°), uno con Z en blanco: EnergyPlus lo pone a 0.5 + 0.8 m.
+- 2c.5, parte A5 (2026-11-27): **lectura de epJSON**. Se abre igual que un IDF (elegir, arrastrar, pegar el texto o `?url=`) y se convierte al mismo modelo interno, así que todas las pestañas funcionan igual. El encabezado dice "epJSON", la pestaña Text muestra el JSON con sus colores y sigue al inspector, y los problemas apuntan a la línea del objeto o del campo en el JSON. La galería tiene `1ZoneUncontrolled.epJSON`.
+  - Núcleo: `src/core/parser/epjson.ts`, un lector de JSON propio que guarda la línea de cada clave y los números tal como están escritos ("0.0" sigue siendo "0.0"). `openFile` lee primero la versión (`Version` → `version_identifier`), carga el esquema de esa versión y con él pone cada campo en su lugar del IDD.
+  - Abrir `HospitalLowEnergy` en epJSON (4.4 MB) tarda lo mismo que el IDF, unos 80 ms en las pruebas.
+  - Avisos: un campo que no existe en la clase (con su línea) y un JSON roto ("not valid JSON… (line N)"). Una clase que no está en el esquema, o un archivo sin versión, conserva sus campos en el orden del archivo.
+- Reglas de epJSON **confirmadas** con EnergyPlus 26.2:
+  - Nombre de cada campo: el del IDD en minúsculas, con cada grupo de otros caracteres cambiado por "_" (un paréntesis al final deja "_" al final: "(taub)" → "taub_"). En los campos extensibles se quita el número ("Vertex 1 X-coordinate" → "vertex_x_coordinate") y van en un arreglo de grupos (`vertices`, `data`, `extensions`…; el visor no necesita el nombre del arreglo). Coincide con `Energy+.schema.epJSON` en todas las clases (la prueba lo revisa cuando EnergyPlus está instalado).
+  - La clave de cada objeto es su campo Name; en las clases sin Name la clave no se usa. Excepciones: en `ZoneHVAC:TerminalUnit:VariableRefrigerantFlow` y `AirConditioner:VariableRefrigerantFlow` la clave es el primer campo aunque no se llame Name.
+  - `MaterialProperty:GlazingSpectralData` y `Site:SpectrumData` escriben sus primeros grupos como campos sueltos (`wavelength_1`… o `wavelength_1`, `spectrum_2`) y el arreglo sigue después de ellos.
+  - `GroundHeatTransfer:*:XFACE`/`YFACE`/`ZFACE` no tienen campos en epJSON (son del preprocesador de suelo).
+  - EnergyPlus ordena clases, objetos y campos alfabéticamente. Tanto el visor como EnergyPlus usan ese orden, así que no cambia nada que dependa del orden.
+  - Comprobado con 20 archivos (los 8 ejemplos y 12 de prueba) convertidos con `ConvertInputFormat`: mismos objetos que su IDF, y en los 6 que se guardan (`tests/fixtures/epjson/` y la galería) también la misma geometría, horarios, ocupantes y problemas. La única diferencia la pone el convertidor: escribe "Autosize" en algunos campos que decían "AUTOCALCULATE", que EnergyPlus toma igual.
+  - Limitación: solo hay convertidor de 26.2 en esta computadora, así que no se probó un epJSON de 9.x o 22.x. La regla de nombres es la misma en todas las versiones que tienen epJSON (EnergyPlus genera el esquema epJSON del IDD con el mismo programa desde la 9.0).
 
 ### Fase 3 · Extras de ventilación
 
@@ -749,15 +761,13 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 ## 9. Dónde vamos (2026-11-27, tarde)
 
-**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1, 2a, 2b y 3 terminadas; de la 2c solo falta A5 (epJSON). Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): aperturas de ventanas en el 3D, al máximo o en una fecha y hora, y gráfica anual de cuándo puede abrir cada ventana del AFN (notas de la fase 2b), diagnóstico de geometría (C8/H5), cierre de las fases 2b y 3, y horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
+**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1, 2a, 2b, 2c y 3 terminadas. Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): lectura de epJSON (A5), con la que se cerró la fase 2c; aperturas de ventanas en el 3D, al máximo o en una fecha y hora, y gráfica anual de cuándo puede abrir cada ventana del AFN (notas de la fase 2b), diagnóstico de geometría (C8/H5), cierre de las fases 2b y 3, y horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
 
 **Fases 2b y 3 cerradas el 2026-11-27** con EnergyPlus 26.2 (ver sus notas): referencias regeneradas, las 3 pruebas que se saltaban ahora comparan, reglas confirmadas o corregidas, y cinco validaciones nuevas del AFN que EnergyPlus exige.
 
 Lo que sigue (EnergyPlus 26.2 ya está en esta computadora):
 
-1. **Lo que queda de la fase 2c** (al terminarlo se cierra la fase):
-   - **Lectura de epJSON (A5):** los archivos de prueba se generan con el convertidor de EnergyPlus (`ConvertInputFormat`).
-2. **Fase 4 (instalable):** no necesita EnergyPlus. Antes de empezar hay que decidir si al instalar se descargan los esquemas de las 27 versiones (unos MB más, una sola vez) o solo los de las versiones que se vayan abriendo.
+1. **Fase 4 (instalable):** no necesita EnergyPlus. Antes de empezar hay que decidir si al instalar se descargan los esquemas de las 27 versiones (unos MB más, una sola vez) o solo los de las versiones que se vayan abriendo.
 
 **Pendiente menor:** la rama de desarrollo de EnergyPlus ya está en la versión 27.1. Hoy el visor la abre con el esquema de 26.2 y lo avisa. Cuando salga la 27.1 oficial, instalarla y correr `tools/fetch_idds.py` y `tools/idd2json.py`.
 

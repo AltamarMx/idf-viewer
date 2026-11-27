@@ -132,7 +132,7 @@ export async function downloadIdf(url: string, base: string): Promise<FileSource
   const buffer = await response.arrayBuffer();
   if (isWebPage(buffer)) {
     throw new Error(
-      'the address returned a web page, not an IDF file. ' +
+      'the address returned a web page, not an IDF or epJSON file. ' +
         'Use the address of the file itself (on GitHub, its "Raw" link)',
     );
   }

@@ -72,6 +72,8 @@ cada fase en `PLAN.md`.
 - Las dependencias de `package.json` llevan versión exacta; mantenlo así.
 - En el buscador, el resultado activo cambia con `onMouseMove`, no con `onMouseEnter`
   (con `onMouseEnter` el ratón quieto cambiaba la selección y fallaba la prueba e2e).
+- En las pruebas e2e, `openExample` busca el título exacto de la galería: "One zone, uncontrolled" y
+  "One zone, uncontrolled (epJSON)" empiezan igual.
 - Una gráfica grande de ECharts (p. ej. el mapa de calor con una fila por timestep) se dibuja en
   varios cuadros; si se destruye a la mitad, zrender truena con `layerStack` en el siguiente
   cuadro. `Chart.tsx` limpia y redibuja vacía la gráfica antes de `dispose`. Solo se veía en
