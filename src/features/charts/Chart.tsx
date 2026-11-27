@@ -73,6 +73,11 @@ export function Chart({ option, height, dark, group, xTicks, onClick }: Props) {
     observer.observe(el);
     return () => {
       observer.disconnect();
+      // A large chart (a heat map with a row per timestep) may still be painting
+      // over several frames; zrender would paint the next frame after dispose and
+      // throw. Repainting an empty chart first cancels that pending frame.
+      chart.clear();
+      chart.getZr().refreshImmediately();
       chart.dispose();
       chartRef.current = null;
     };

@@ -497,6 +497,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - con horario de verano el desplazamiento es de una hora completa (tantos timesteps como haya por hora);
   - el calor de personas de cada timestep es ocupantes × actividad de ese mismo timestep; el valor horario de EnergyPlus es el promedio de esos productos.
 - Archivo de prueba nuevo `tests/fixtures/schedules/HalfHour.idf`: 5 zonas con 1 persona cada una, ocupación `OnOff` que sale a las 07:30 y regresa a las 17:30, actividad, `Schedule:Day:Interval` y `Schedule:Day:List` (30 min) con cambios fuera de la hora en punto, y Timestep 6. `make_oracles.py --annual` guarda además los valores por timestep (`timestep` en el JSON) para los archivos de `tests/fixtures/schedules/`; para los ejemplos no, porque sus referencias crecerían varias veces (la del hospital ya pesa 4 MB).
+- Con 6 veces más celdas, el mapa de calor puede tardar varios cuadros en dibujarse; al cambiar de vista a la mitad, la librería de gráficas fallaba. Se corrigió en `Chart.tsx`.
 - El visor no lee resultados de simulación (SQL/ESO), así que no aplica distinguir entre datos `Hourly` y `Zone Timestep` en las gráficas: todo se calcula a partir de los horarios del IDF.
 
 ### Fase 2b · Ventanas, ventilación natural e infiltración
