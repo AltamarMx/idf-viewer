@@ -1,0 +1,506 @@
+! One geometry mistake per zone, made on purpose, to compare the viewer's geometry
+! checks with the warnings EnergyPlus writes (see README.md).
+
+  Version,26.2;
+
+  Timestep,4;
+
+  Building,
+    Geometry defects,  !- Name
+    0,                       !- North Axis {deg}
+    Suburbs,                 !- Terrain
+    0.04,                    !- Loads Convergence Tolerance Value {W}
+    0.004,                   !- Temperature Convergence Tolerance Value {deltaC}
+    MinimalShadowing,        !- Solar Distribution
+    30,                      !- Maximum Number of Warmup Days
+    6;                       !- Minimum Number of Warmup Days
+
+  HeatBalanceAlgorithm,ConductionTransferFunction;
+
+  SurfaceConvectionAlgorithm:Inside,TARP;
+
+  SurfaceConvectionAlgorithm:Outside,DOE-2;
+
+  SimulationControl,
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    Yes,                     !- Run Simulation for Sizing Periods
+    Yes,                     !- Run Simulation for Weather File Run Periods
+    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
+    1;                       !- Maximum Number of HVAC Sizing Simulation Passes
+
+  RunPeriod,
+    Run Period 1,            !- Name
+    1,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    ,                        !- Begin Year
+    12,                      !- End Month
+    31,                      !- End Day of Month
+    ,                        !- End Year
+    Tuesday,                 !- Day of Week for Start Day
+    Yes,                     !- Use Weather File Holidays and Special Days
+    Yes,                     !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
+
+  Site:Location,
+    Denver Centennial  Golden   N_CO_USA Design_Conditions,  !- Name
+    39.74,                   !- Latitude {deg}
+    -105.18,                 !- Longitude {deg}
+    -7.00,                   !- Time Zone {hr}
+    1829.00;                 !- Elevation {m}
+
+ !  WMO=724666 Time Zone=NAM: (GMT-07:00) Mountain Time (US & Canada)
+ !  Data Source=ASHRAE 2009 Annual Design Conditions
+ ! Denver Centennial  Golden   N_CO_USA Annual Heating Design Conditions Wind Speed=3m/s Wind Dir=340
+ ! Coldest Month=DEC
+ ! Denver Centennial  Golden   N_CO_USA Annual Heating 99%, MaxDB=-15.5°C
+
+  SizingPeriod:DesignDay,
+    Denver Centennial  Golden   N Ann Htg 99% Condns DB,  !- Name
+    12,                      !- Month
+    21,                      !- Day of Month
+    WinterDesignDay,         !- Day Type
+    -15.5,                   !- Maximum Dry-Bulb Temperature {C}
+    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+    ,                        !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,                 !- Humidity Condition Type
+    -15.5,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    81198.,                  !- Barometric Pressure {Pa}
+    3,                       !- Wind Speed {m/s}
+    340,                     !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAEClearSky,          !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+    0.00;                    !- Sky Clearness
+
+ ! Denver Centennial  Golden   N Annual Cooling Design Conditions Wind Speed=4.9m/s Wind Dir=0
+ ! Hottest Month=JUL
+ ! Denver Centennial  Golden   N_CO_USA Annual Cooling (DB=>MWB) 1%, MaxDB=32°C MWB=15.5°C
+
+  SizingPeriod:DesignDay,
+    Denver Centennial  Golden   N Ann Clg 1% Condns DB=>MWB,  !- Name
+    7,                       !- Month
+    21,                      !- Day of Month
+    SummerDesignDay,         !- Day Type
+    32,                      !- Maximum Dry-Bulb Temperature {C}
+    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+    ,                        !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,                 !- Humidity Condition Type
+    15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    81198.,                  !- Barometric Pressure {Pa}
+    4.9,                     !- Wind Speed {m/s}
+    0,                       !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAEClearSky,          !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+    1.00;                    !- Sky Clearness
+
+  Material:NoMass,
+    R13LAYER,                !- Name
+    Rough,                   !- Roughness
+    2.290965,                !- Thermal Resistance {m2-K/W}
+    0.9000000,               !- Thermal Absorptance
+    0.7500000,               !- Solar Absorptance
+    0.7500000;               !- Visible Absorptance
+
+  Material:NoMass,
+    R31LAYER,                !- Name
+    Rough,                   !- Roughness
+    5.456,                   !- Thermal Resistance {m2-K/W}
+    0.9000000,               !- Thermal Absorptance
+    0.7500000,               !- Solar Absorptance
+    0.7500000;               !- Visible Absorptance
+
+  Material,
+    C5 - 4 IN HW CONCRETE,   !- Name
+    MediumRough,             !- Roughness
+    0.1014984,               !- Thickness {m}
+    1.729577,                !- Conductivity {W/m-K}
+    2242.585,                !- Density {kg/m3}
+    836.8000,                !- Specific Heat {J/kg-K}
+    0.9000000,               !- Thermal Absorptance
+    0.6500000,               !- Solar Absorptance
+    0.6500000;               !- Visible Absorptance
+
+  Construction,
+    R13WALL,                 !- Name
+    R13LAYER;                !- Outside Layer
+
+  Construction,
+    FLOOR,                   !- Name
+    C5 - 4 IN HW CONCRETE;   !- Outside Layer
+
+  Construction,
+    ROOF31,                  !- Name
+    R31LAYER;                !- Outside Layer
+
+  ScheduleTypeLimits, Fraction, 0, 1, Continuous;
+
+  GlobalGeometryRules, UpperLeftCorner, CounterClockWise, World;
+
+  WindowMaterial:SimpleGlazingSystem, GLAZING, 2.8, 0.6, 0.7;
+  Construction, WINDOW, GLAZING;
+
+! Roof and floor entered in the wrong order (upside down).
+  Zone, Upside Down;
+
+  BuildingSurface:Detailed, Upside Down South, Wall, R13WALL, Upside Down, , Outdoors, , SunExposed, WindExposed, , 4,
+    10,0,3, 10,0,0, 13,0,0, 13,0,3;
+
+  BuildingSurface:Detailed, Upside Down East, Wall, R13WALL, Upside Down, , Outdoors, , SunExposed, WindExposed, , 4,
+    13,0,3, 13,0,0, 13,3,0, 13,3,3;
+
+  BuildingSurface:Detailed, Upside Down North, Wall, R13WALL, Upside Down, , Outdoors, , SunExposed, WindExposed, , 4,
+    13,3,3, 13,3,0, 10,3,0, 10,3,3;
+
+  BuildingSurface:Detailed, Upside Down West, Wall, R13WALL, Upside Down, , Outdoors, , SunExposed, WindExposed, , 4,
+    10,3,3, 10,3,0, 10,0,0, 10,0,3;
+
+  BuildingSurface:Detailed, Upside Down Roof, Roof, ROOF31, Upside Down, , Outdoors, , SunExposed, WindExposed, , 4,
+    13,3,3, 13,0,3, 10,0,3, 10,3,3;
+
+  BuildingSurface:Detailed, Upside Down Floor, Floor, FLOOR, Upside Down, , Ground, , NoSun, NoWind, , 4,
+    10,3,0, 10,0,0, 13,0,0, 13,3,0;
+
+! South wall: one corner 5 cm out of plane; north wall: 30 cm.
+  Zone, Not Planar;
+
+  BuildingSurface:Detailed, Not Planar South, Wall, R13WALL, Not Planar, , Outdoors, , SunExposed, WindExposed, , 4,
+    20,0,3, 20,0,0, 23,0,0, 23,-0.05,3;
+
+  BuildingSurface:Detailed, Not Planar East, Wall, R13WALL, Not Planar, , Outdoors, , SunExposed, WindExposed, , 4,
+    23,0,3, 23,0,0, 23,3,0, 23,3,3;
+
+  BuildingSurface:Detailed, Not Planar North, Wall, R13WALL, Not Planar, , Outdoors, , SunExposed, WindExposed, , 4,
+    23,3,3, 23,3,0, 20,3,0, 20,3.3,3;
+
+  BuildingSurface:Detailed, Not Planar West, Wall, R13WALL, Not Planar, , Outdoors, , SunExposed, WindExposed, , 4,
+    20,3,3, 20,3,0, 20,0,0, 20,0,3;
+
+  BuildingSurface:Detailed, Not Planar Roof, Roof, ROOF31, Not Planar, , Outdoors, , SunExposed, WindExposed, , 4,
+    20,3,3, 20,0,3, 23,0,3, 23,3,3;
+
+  BuildingSurface:Detailed, Not Planar Floor, Floor, FLOOR, Not Planar, , Ground, , NoSun, NoWind, , 4,
+    23,3,0, 23,0,0, 20,0,0, 20,3,0;
+
+! East wall split into a 2.9997 m wall and a 0.3 mm sliver; north wall with a repeated
+! vertex 5 mm away; west wall with an extra vertex in the middle of its bottom edge.
+  Zone, Small;
+
+  BuildingSurface:Detailed, Small South, Wall, R13WALL, Small, , Outdoors, , SunExposed, WindExposed, , 4,
+    30,0,3, 30,0,0, 33,0,0, 33,0,3;
+
+  BuildingSurface:Detailed, Small North, Wall, R13WALL, Small, , Outdoors, , SunExposed, WindExposed, , 6,
+    33,3,3, 33,3,0, 31.5,3,0, 31.505,3,0, 30,3,0, 30,3,3;
+
+  BuildingSurface:Detailed, Small West, Wall, R13WALL, Small, , Outdoors, , SunExposed, WindExposed, , 5,
+    30,3,3, 30,3,0, 30,1.5,0, 30,0,0, 30,0,3;
+
+  BuildingSurface:Detailed, Small Roof, Roof, ROOF31, Small, , Outdoors, , SunExposed, WindExposed, , 4,
+    30,3,3, 30,0,3, 33,0,3, 33,3,3;
+
+  BuildingSurface:Detailed, Small Floor, Floor, FLOOR, Small, , Ground, , NoSun, NoWind, , 4,
+    33,3,0, 33,0,0, 30,0,0, 30,3,0;
+
+  BuildingSurface:Detailed, Small East, Wall, R13WALL, Small, , Outdoors, , SunExposed, WindExposed, , 4,
+    33,0,3, 33,0,0, 33,2.9997,0, 33,2.9997,3;
+
+  BuildingSurface:Detailed, Small East Sliver, Wall, R13WALL, Small, , Outdoors, , SunExposed, WindExposed, , 4,
+    33,2.9997,3, 33,2.9997,0, 33,3,0, 33,3,3;
+
+! South window goes 0.5 m past the end of its wall; north window is 10 cm off the wall.
+  Zone, Windows;
+
+  BuildingSurface:Detailed, Windows South, Wall, R13WALL, Windows, , Outdoors, , SunExposed, WindExposed, , 4,
+    40,0,3, 40,0,0, 43,0,0, 43,0,3;
+
+  BuildingSurface:Detailed, Windows East, Wall, R13WALL, Windows, , Outdoors, , SunExposed, WindExposed, , 4,
+    43,0,3, 43,0,0, 43,3,0, 43,3,3;
+
+  BuildingSurface:Detailed, Windows North, Wall, R13WALL, Windows, , Outdoors, , SunExposed, WindExposed, , 4,
+    43,3,3, 43,3,0, 40,3,0, 40,3,3;
+
+  BuildingSurface:Detailed, Windows West, Wall, R13WALL, Windows, , Outdoors, , SunExposed, WindExposed, , 4,
+    40,3,3, 40,3,0, 40,0,0, 40,0,3;
+
+  BuildingSurface:Detailed, Windows Roof, Roof, ROOF31, Windows, , Outdoors, , SunExposed, WindExposed, , 4,
+    40,3,3, 40,0,3, 43,0,3, 43,3,3;
+
+  BuildingSurface:Detailed, Windows Floor, Floor, FLOOR, Windows, , Ground, , NoSun, NoWind, , 4,
+    43,3,0, 43,0,0, 40,0,0, 40,3,0;
+
+  FenestrationSurface:Detailed, Window Outside, Window, WINDOW, Windows South, , , , 1, 4,
+    42,0,2, 42,0,1, 43.5,0,1, 43.5,0,2;
+
+  FenestrationSurface:Detailed, Window Off Plane, Window, WINDOW, Windows North, , , , 1, 4,
+    42,3.1,2, 42,3.1,1, 41,3.1,1, 41,3.1,2;
+
+! Interzone pair whose second side faces the same way as the first.
+  Zone, Pair A;
+
+  BuildingSurface:Detailed, Pair A South, Wall, R13WALL, Pair A, , Outdoors, , SunExposed, WindExposed, , 4,
+    50,0,3, 50,0,0, 53,0,0, 53,0,3;
+
+  BuildingSurface:Detailed, Pair A East, Wall, R13WALL, Pair A, , Surface, Pair B West, NoSun, NoWind, , 4,
+    53,0,3, 53,0,0, 53,3,0, 53,3,3;
+
+  BuildingSurface:Detailed, Pair A North, Wall, R13WALL, Pair A, , Outdoors, , SunExposed, WindExposed, , 4,
+    53,3,3, 53,3,0, 50,3,0, 50,3,3;
+
+  BuildingSurface:Detailed, Pair A West, Wall, R13WALL, Pair A, , Outdoors, , SunExposed, WindExposed, , 4,
+    50,3,3, 50,3,0, 50,0,0, 50,0,3;
+
+  BuildingSurface:Detailed, Pair A Roof, Roof, ROOF31, Pair A, , Outdoors, , SunExposed, WindExposed, , 4,
+    50,3,3, 50,0,3, 53,0,3, 53,3,3;
+
+  BuildingSurface:Detailed, Pair A Floor, Floor, FLOOR, Pair A, , Ground, , NoSun, NoWind, , 4,
+    53,3,0, 53,0,0, 50,0,0, 50,3,0;
+
+  Zone, Pair B;
+
+  BuildingSurface:Detailed, Pair B South, Wall, R13WALL, Pair B, , Outdoors, , SunExposed, WindExposed, , 4,
+    53,0,3, 53,0,0, 56,0,0, 56,0,3;
+
+  BuildingSurface:Detailed, Pair B East, Wall, R13WALL, Pair B, , Outdoors, , SunExposed, WindExposed, , 4,
+    56,0,3, 56,0,0, 56,3,0, 56,3,3;
+
+  BuildingSurface:Detailed, Pair B North, Wall, R13WALL, Pair B, , Outdoors, , SunExposed, WindExposed, , 4,
+    56,3,3, 56,3,0, 53,3,0, 53,3,3;
+
+  BuildingSurface:Detailed, Pair B West, Wall, R13WALL, Pair B, , Surface, Pair A East, NoSun, NoWind, , 4,
+    53,0,3, 53,0,0, 53,3,0, 53,3,3;
+
+  BuildingSurface:Detailed, Pair B Roof, Roof, ROOF31, Pair B, , Outdoors, , SunExposed, WindExposed, , 4,
+    53,3,3, 53,0,3, 56,0,3, 56,3,3;
+
+  BuildingSurface:Detailed, Pair B Floor, Floor, FLOOR, Pair B, , Ground, , NoSun, NoWind, , 4,
+    56,3,0, 56,0,0, 53,0,0, 53,3,0;
+
+! Interzone pair of different sizes: 3 x 2.9 m on one side, 3 x 3 m on the other.
+  Zone, Size A;
+
+  BuildingSurface:Detailed, Size A South, Wall, R13WALL, Size A, , Outdoors, , SunExposed, WindExposed, , 4,
+    70,0,3, 70,0,0, 73,0,0, 73,0,3;
+
+  BuildingSurface:Detailed, Size A North, Wall, R13WALL, Size A, , Outdoors, , SunExposed, WindExposed, , 4,
+    73,3,3, 73,3,0, 70,3,0, 70,3,3;
+
+  BuildingSurface:Detailed, Size A West, Wall, R13WALL, Size A, , Outdoors, , SunExposed, WindExposed, , 4,
+    70,3,3, 70,3,0, 70,0,0, 70,0,3;
+
+  BuildingSurface:Detailed, Size A Roof, Roof, ROOF31, Size A, , Outdoors, , SunExposed, WindExposed, , 4,
+    70,3,3, 70,0,3, 73,0,3, 73,3,3;
+
+  BuildingSurface:Detailed, Size A Floor, Floor, FLOOR, Size A, , Ground, , NoSun, NoWind, , 4,
+    73,3,0, 73,0,0, 70,0,0, 70,3,0;
+
+  BuildingSurface:Detailed, Size A East, Wall, R13WALL, Size A, , Surface, Size B West, NoSun, NoWind, , 4,
+    73,0,2.9, 73,0,0, 73,3,0, 73,3,2.9;
+
+  BuildingSurface:Detailed, Size A East Top, Wall, R13WALL, Size A, , Outdoors, , SunExposed, WindExposed, , 4,
+    73,0,3, 73,0,2.9, 73,3,2.9, 73,3,3;
+
+  Zone, Size B;
+
+  BuildingSurface:Detailed, Size B South, Wall, R13WALL, Size B, , Outdoors, , SunExposed, WindExposed, , 4,
+    73,0,3, 73,0,0, 76,0,0, 76,0,3;
+
+  BuildingSurface:Detailed, Size B East, Wall, R13WALL, Size B, , Outdoors, , SunExposed, WindExposed, , 4,
+    76,0,3, 76,0,0, 76,3,0, 76,3,3;
+
+  BuildingSurface:Detailed, Size B North, Wall, R13WALL, Size B, , Outdoors, , SunExposed, WindExposed, , 4,
+    76,3,3, 76,3,0, 73,3,0, 73,3,3;
+
+  BuildingSurface:Detailed, Size B West, Wall, R13WALL, Size B, , Surface, Size A East, NoSun, NoWind, , 4,
+    73,3,3, 73,3,0, 73,0,0, 73,0,3;
+
+  BuildingSurface:Detailed, Size B Roof, Roof, ROOF31, Size B, , Outdoors, , SunExposed, WindExposed, , 4,
+    73,3,3, 73,0,3, 76,0,3, 76,3,3;
+
+  BuildingSurface:Detailed, Size B Floor, Floor, FLOOR, Size B, , Ground, , NoSun, NoWind, , 4,
+    76,3,0, 76,0,0, 73,0,0, 73,3,0;
+
+! Zone without a roof.
+  Zone, Open;
+
+  BuildingSurface:Detailed, Open South, Wall, R13WALL, Open, , Outdoors, , SunExposed, WindExposed, , 4,
+    90,0,3, 90,0,0, 93,0,0, 93,0,3;
+
+  BuildingSurface:Detailed, Open East, Wall, R13WALL, Open, , Outdoors, , SunExposed, WindExposed, , 4,
+    93,0,3, 93,0,0, 93,3,0, 93,3,3;
+
+  BuildingSurface:Detailed, Open North, Wall, R13WALL, Open, , Outdoors, , SunExposed, WindExposed, , 4,
+    93,3,3, 93,3,0, 90,3,0, 90,3,3;
+
+  BuildingSurface:Detailed, Open West, Wall, R13WALL, Open, , Outdoors, , SunExposed, WindExposed, , 4,
+    90,3,3, 90,3,0, 90,0,0, 90,0,3;
+
+  BuildingSurface:Detailed, Open Floor, Floor, FLOOR, Open, , Ground, , NoSun, NoWind, , 4,
+    93,3,0, 93,0,0, 90,0,0, 90,3,0;
+
+! Roof that leans 85 degrees (EnergyPlus: not oriented correctly).
+  Zone, Steep Roof;
+
+  BuildingSurface:Detailed, Steep Roof South, Wall, R13WALL, Steep Roof, , Outdoors, , SunExposed, WindExposed, , 4,
+    100,0,3, 100,0,0, 103,0,0, 103,0,3;
+
+  BuildingSurface:Detailed, Steep Roof East, Wall, R13WALL, Steep Roof, , Outdoors, , SunExposed, WindExposed, , 4,
+    103,0,3, 103,0,0, 103,3,0, 103,3,3;
+
+  BuildingSurface:Detailed, Steep Roof North, Wall, R13WALL, Steep Roof, , Outdoors, , SunExposed, WindExposed, , 4,
+    103,3,3, 103,3,0, 100,3,0, 100,3,3;
+
+  BuildingSurface:Detailed, Steep Roof West, Wall, R13WALL, Steep Roof, , Outdoors, , SunExposed, WindExposed, , 4,
+    100,3,3, 100,3,0, 100,0,0, 100,0,3;
+
+  BuildingSurface:Detailed, Steep Roof Roof, Roof, ROOF31, Steep Roof, , Outdoors, , SunExposed, WindExposed, , 4,
+    100,1.63073,4.49429, 100,1.36927,1.50571, 103,1.36927,1.50571, 103,1.63073,4.49429;
+
+  BuildingSurface:Detailed, Steep Roof Floor, Floor, FLOOR, Steep Roof, , Ground, , NoSun, NoWind, , 4,
+    103,3,0, 103,0,0, 100,0,0, 100,3,0;
+
+! Interzone pair whose second side leans 2 degrees.
+  Zone, Tilt A;
+
+  BuildingSurface:Detailed, Tilt A South, Wall, R13WALL, Tilt A, , Outdoors, , SunExposed, WindExposed, , 4,
+    110,0,3, 110,0,0, 113,0,0, 113,0,3;
+
+  BuildingSurface:Detailed, Tilt A East, Wall, R13WALL, Tilt A, , Surface, Tilt B West, NoSun, NoWind, , 4,
+    113,0,3, 113,0,0, 113,3,0, 113,3,3;
+
+  BuildingSurface:Detailed, Tilt A North, Wall, R13WALL, Tilt A, , Outdoors, , SunExposed, WindExposed, , 4,
+    113,3,3, 113,3,0, 110,3,0, 110,3,3;
+
+  BuildingSurface:Detailed, Tilt A West, Wall, R13WALL, Tilt A, , Outdoors, , SunExposed, WindExposed, , 4,
+    110,3,3, 110,3,0, 110,0,0, 110,0,3;
+
+  BuildingSurface:Detailed, Tilt A Roof, Roof, ROOF31, Tilt A, , Outdoors, , SunExposed, WindExposed, , 4,
+    110,3,3, 110,0,3, 113,0,3, 113,3,3;
+
+  BuildingSurface:Detailed, Tilt A Floor, Floor, FLOOR, Tilt A, , Ground, , NoSun, NoWind, , 4,
+    113,3,0, 113,0,0, 110,0,0, 110,3,0;
+
+  Zone, Tilt B;
+
+  BuildingSurface:Detailed, Tilt B South, Wall, R13WALL, Tilt B, , Outdoors, , SunExposed, WindExposed, , 4,
+    113,0,3, 113,0,0, 116,0,0, 116,0,3;
+
+  BuildingSurface:Detailed, Tilt B East, Wall, R13WALL, Tilt B, , Outdoors, , SunExposed, WindExposed, , 4,
+    116,0,3, 116,0,0, 116,3,0, 116,3,3;
+
+  BuildingSurface:Detailed, Tilt B North, Wall, R13WALL, Tilt B, , Outdoors, , SunExposed, WindExposed, , 4,
+    116,3,3, 116,3,0, 113,3,0, 113,3,3;
+
+  BuildingSurface:Detailed, Tilt B West, Wall, R13WALL, Tilt B, , Surface, Tilt A East, NoSun, NoWind, , 4,
+    112.895,3,2.99817, 113,3,0, 113,0,0, 112.895,0,2.99817;
+
+  BuildingSurface:Detailed, Tilt B Roof, Roof, ROOF31, Tilt B, , Outdoors, , SunExposed, WindExposed, , 4,
+    113,3,3, 113,0,3, 116,0,3, 116,3,3;
+
+  BuildingSurface:Detailed, Tilt B Floor, Floor, FLOOR, Tilt B, , Ground, , NoSun, NoWind, , 4,
+    116,3,0, 116,0,0, 113,0,0, 113,3,0;
+
+! A 3 x 3 cm window (EnergyPlus: very small surface area).
+  Zone, Tiny Window;
+
+  BuildingSurface:Detailed, Tiny Window South, Wall, R13WALL, Tiny Window, , Outdoors, , SunExposed, WindExposed, , 4,
+    130,0,3, 130,0,0, 133,0,0, 133,0,3;
+
+  BuildingSurface:Detailed, Tiny Window East, Wall, R13WALL, Tiny Window, , Outdoors, , SunExposed, WindExposed, , 4,
+    133,0,3, 133,0,0, 133,3,0, 133,3,3;
+
+  BuildingSurface:Detailed, Tiny Window North, Wall, R13WALL, Tiny Window, , Outdoors, , SunExposed, WindExposed, , 4,
+    133,3,3, 133,3,0, 130,3,0, 130,3,3;
+
+  BuildingSurface:Detailed, Tiny Window West, Wall, R13WALL, Tiny Window, , Outdoors, , SunExposed, WindExposed, , 4,
+    130,3,3, 130,3,0, 130,0,0, 130,0,3;
+
+  BuildingSurface:Detailed, Tiny Window Roof, Roof, ROOF31, Tiny Window, , Outdoors, , SunExposed, WindExposed, , 4,
+    130,3,3, 130,0,3, 133,0,3, 133,3,3;
+
+  BuildingSurface:Detailed, Tiny Window Floor, Floor, FLOOR, Tiny Window, , Ground, , NoSun, NoWind, , 4,
+    133,3,0, 133,0,0, 130,0,0, 130,3,0;
+
+  FenestrationSurface:Detailed, Tiny Window, Window, WINDOW, Tiny Window South, , , , 1, 4,
+    131,0,1.03, 131,0,1, 131.03,0,1, 131.03,0,1.03;
+
+! Zone without a roof but with its volume written in the Zone object.
+  Zone, Open With Volume, 0, 0, 0, 0, 1, 1, autocalculate, 27;
+
+  BuildingSurface:Detailed, Open With Volume South, Wall, R13WALL, Open With Volume, , Outdoors, , SunExposed, WindExposed, , 4,
+    140,0,3, 140,0,0, 143,0,0, 143,0,3;
+
+  BuildingSurface:Detailed, Open With Volume East, Wall, R13WALL, Open With Volume, , Outdoors, , SunExposed, WindExposed, , 4,
+    143,0,3, 143,0,0, 143,3,0, 143,3,3;
+
+  BuildingSurface:Detailed, Open With Volume North, Wall, R13WALL, Open With Volume, , Outdoors, , SunExposed, WindExposed, , 4,
+    143,3,3, 143,3,0, 140,3,0, 140,3,3;
+
+  BuildingSurface:Detailed, Open With Volume West, Wall, R13WALL, Open With Volume, , Outdoors, , SunExposed, WindExposed, , 4,
+    140,3,3, 140,3,0, 140,0,0, 140,0,3;
+
+  BuildingSurface:Detailed, Open With Volume Floor, Floor, FLOOR, Open With Volume, , Ground, , NoSun, NoWind, , 4,
+    143,3,0, 143,0,0, 140,0,0, 140,3,0;
+
+! Zone B has no west wall: zone A's east wall has a Zone boundary that points to B,
+! and EnergyPlus makes the other side.
+  Zone, Shared A;
+
+  BuildingSurface:Detailed, Shared A South, Wall, R13WALL, Shared A, , Outdoors, , SunExposed, WindExposed, , 4,
+    150,0,3, 150,0,0, 153,0,0, 153,0,3;
+
+  BuildingSurface:Detailed, Shared A East, Wall, R13WALL, Shared A, , Zone, Shared B, NoSun, NoWind, , 4,
+    153,0,3, 153,0,0, 153,3,0, 153,3,3;
+
+  BuildingSurface:Detailed, Shared A North, Wall, R13WALL, Shared A, , Outdoors, , SunExposed, WindExposed, , 4,
+    153,3,3, 153,3,0, 150,3,0, 150,3,3;
+
+  BuildingSurface:Detailed, Shared A West, Wall, R13WALL, Shared A, , Outdoors, , SunExposed, WindExposed, , 4,
+    150,3,3, 150,3,0, 150,0,0, 150,0,3;
+
+  BuildingSurface:Detailed, Shared A Roof, Roof, ROOF31, Shared A, , Outdoors, , SunExposed, WindExposed, , 4,
+    150,3,3, 150,0,3, 153,0,3, 153,3,3;
+
+  BuildingSurface:Detailed, Shared A Floor, Floor, FLOOR, Shared A, , Ground, , NoSun, NoWind, , 4,
+    153,3,0, 153,0,0, 150,0,0, 150,3,0;
+
+  Zone, Shared B;
+
+  BuildingSurface:Detailed, Shared B South, Wall, R13WALL, Shared B, , Outdoors, , SunExposed, WindExposed, , 4,
+    153,0,3, 153,0,0, 156,0,0, 156,0,3;
+
+  BuildingSurface:Detailed, Shared B East, Wall, R13WALL, Shared B, , Outdoors, , SunExposed, WindExposed, , 4,
+    156,0,3, 156,0,0, 156,3,0, 156,3,3;
+
+  BuildingSurface:Detailed, Shared B North, Wall, R13WALL, Shared B, , Outdoors, , SunExposed, WindExposed, , 4,
+    156,3,3, 156,3,0, 153,3,0, 153,3,3;
+
+  BuildingSurface:Detailed, Shared B Roof, Roof, ROOF31, Shared B, , Outdoors, , SunExposed, WindExposed, , 4,
+    153,3,3, 153,0,3, 156,0,3, 156,3,3;
+
+  BuildingSurface:Detailed, Shared B Floor, Floor, FLOOR, Shared B, , Ground, , NoSun, NoWind, , 4,
+    156,3,0, 156,0,0, 153,0,0, 153,3,0;
+

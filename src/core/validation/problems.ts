@@ -5,6 +5,7 @@
  * A quick pre-check; it does not replace EnergyPlus' own validation.
  */
 import type { GeometryWarning } from '../geometry/build';
+import type { GeometryIssue } from '../geometry/checks';
 import type { ClassSummary, IdfModel } from '../model/model';
 import type { ReferenceIndex } from '../model/references';
 import type { IdfObject, ParseWarning } from '../parser/idf';
@@ -37,6 +38,7 @@ export function collectProblems(input: {
   classes: ClassSummary[];
   references: ReferenceIndex;
   geometryWarnings: GeometryWarning[];
+  geometryIssues?: GeometryIssue[];
 }): Problem[] {
   const { model } = input;
   const problems: Problem[] = [];
@@ -92,6 +94,16 @@ export function collectProblems(input: {
   for (const g of input.geometryWarnings) {
     problems.push({
       severity: 'warning',
+      category: 'Geometry',
+      message: g.message,
+      objectId: g.objectId,
+      line: objectLine(g.objectId),
+    });
+  }
+
+  for (const g of input.geometryIssues ?? []) {
+    problems.push({
+      severity: g.severity,
       category: 'Geometry',
       message: g.message,
       objectId: g.objectId,

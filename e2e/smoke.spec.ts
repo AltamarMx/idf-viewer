@@ -311,6 +311,30 @@ test('3D exploded zones with interzone pair lines', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test('geometry problems in the problems panel and in the 3D view', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('./');
+  await page.locator('input[type=file]').setInputFiles('tests/fixtures/geometry/Defects.idf');
+  await page.getByRole('tab', { name: /Problems/ }).click();
+  await page.getByLabel('Category').selectOption('Geometry');
+  await expect(page.locator('table.problems')).toContainText(
+    'Upside Down Roof (roof) is upside down',
+  );
+  await page.getByRole('button', { name: /Not Planar South is not planar/ }).click();
+  await page.getByRole('tab', { name: '3D' }).click();
+  await expect(page.locator('.viewer canvas')).toBeVisible();
+  await expect(page.locator('.surface-info')).toContainText('12.5 mm out of its plane');
+  await page.getByLabel('Color by').selectOption('issues');
+  await expect(page.locator('.legend')).toContainText('Error');
+  await page.getByRole('button', { name: 'Layers and cuts' }).click();
+  await page
+    .locator('.layers-panel')
+    .getByRole('checkbox', { name: /Normals/ })
+    .check();
+  expect(errors).toEqual([]);
+});
+
 test('?url= opens a file from GitHub through its raw address', async ({ page }) => {
   const idf = readFileSync('examples/1ZoneUncontrolled.idf');
   const requested: string[] = [];

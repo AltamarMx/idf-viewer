@@ -41,7 +41,7 @@ import { type SearchHit, search } from './search';
 import { type SiteView, siteView } from './site';
 import { type BuildingSummary, buildingSummary } from './summary';
 import { iddProblems, unusedProblems } from './validation/idd';
-import { collectProblems, type Problem, sortProblems } from './validation/problems';
+import { collectProblems, type Problem, type Severity, sortProblems } from './validation/problems';
 import { ventilationProblems } from './validation/ventilation';
 
 export interface FileSource {
@@ -156,6 +156,8 @@ export interface SurfaceView {
   afn?: AfnBrief;
   /** Floor level of its zone (m, world coordinates), for layers and the exploded view (C7). */
   level?: number;
+  /** Geometry problems of the surface (C8): the worst severity and the messages. */
+  issue?: { severity: Severity; messages: string[] };
   /** x, y, z of each vertex, relative to GeometryView.center. */
   positions: Float32Array;
   triangles: Uint32Array;
@@ -402,6 +404,17 @@ export class Session {
       if (s.kind === 'floor') entry.floor = Math.min(entry.floor, z);
       lowest.set(key, entry);
     }
+    // Geometry problems by surface; a zone that does not close marks its surfaces.
+    const rank = { error: 0, warning: 1, info: 2 } as const;
+    const issues = new Map<number, { severity: Severity; messages: string[] }>();
+    for (const i of this.geometry.issues) {
+      for (const id of i.surfaceIds) {
+        const entry = issues.get(id) ?? { severity: i.severity, messages: [] };
+        if (rank[i.severity] < rank[entry.severity]) entry.severity = i.severity;
+        if (!entry.messages.includes(i.message)) entry.messages.push(i.message);
+        issues.set(id, entry);
+      }
+    }
     const levelOf = (zone?: string) => {
       const entry = zone ? lowest.get(zone.toLowerCase()) : undefined;
       if (!entry) return undefined;
@@ -446,6 +459,7 @@ export class Session {
           },
           normal: normal as [number, number, number],
           level: levelOf(s.zone),
+          issue: issues.get(s.id),
           positions,
           triangles: Uint32Array.from(triangulate(s.vertices, s.normal)),
         };
@@ -825,6 +839,7 @@ export async function openFile(
     classes,
     references,
     geometryWarnings: geometry.warnings,
+    geometryIssues: geometry.issues,
   });
 
   const summary: FileSummary = {

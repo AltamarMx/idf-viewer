@@ -1,0 +1,3479 @@
+{
+ "source": {
+  "file": "Defects.idf",
+  "energyplus": "26.2.0"
+ },
+ "zones": {
+  "UPSIDE DOWN": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 36.0,
+   "extNetWallArea": 36.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "NOT PLANAR": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 36.0231,
+   "extNetWallArea": 36.0231,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "SMALL": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 35.9995,
+   "extNetWallArea": 35.9995,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "WINDOWS": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 36.0,
+   "extNetWallArea": 33.5,
+   "extWindowArea": 2.5,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PAIR A": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 27.0,
+   "extNetWallArea": 27.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PAIR B": {
+   "volume": 345.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 27.0,
+   "extNetWallArea": 27.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "SIZE A": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 27.3,
+   "extNetWallArea": 27.3,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "SIZE B": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 27.0,
+   "extNetWallArea": 27.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "OPEN": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 36.0,
+   "extNetWallArea": 36.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "STEEP ROOF": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 36.0,
+   "extNetWallArea": 36.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "TILT A": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 27.0,
+   "extNetWallArea": 27.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "TILT B": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 27.0,
+   "extNetWallArea": 27.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "TINY WINDOW": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 36.0,
+   "extNetWallArea": 35.9991,
+   "extWindowArea": 0.0009,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "OPEN WITH VOLUME": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 36.0,
+   "extNetWallArea": 36.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "SHARED A": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 27.0,
+   "extNetWallArea": 27.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "SHARED B": {
+   "volume": 27.0,
+   "floorArea": 9.0,
+   "ceilingHeight": 3.0,
+   "multiplier": 1.0,
+   "listMultiplier": 1.0,
+   "partOfTotalArea": true,
+   "extGrossWallArea": 27.0,
+   "extNetWallArea": 27.0,
+   "extWindowArea": 0.0,
+   "relNorth": 0.0,
+   "origin": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "surfaces": {
+  "UPSIDE DOWN SOUTH": {
+   "class": "Wall",
+   "zone": "UPSIDE DOWN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     10.0,
+     0.0,
+     3.0
+    ],
+    [
+     10.0,
+     0.0,
+     0.0
+    ],
+    [
+     13.0,
+     0.0,
+     0.0
+    ],
+    [
+     13.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "UPSIDE DOWN EAST": {
+   "class": "Wall",
+   "zone": "UPSIDE DOWN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     13.0,
+     0.0,
+     3.0
+    ],
+    [
+     13.0,
+     0.0,
+     0.0
+    ],
+    [
+     13.0,
+     3.0,
+     0.0
+    ],
+    [
+     13.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "UPSIDE DOWN NORTH": {
+   "class": "Wall",
+   "zone": "UPSIDE DOWN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     13.0,
+     3.0,
+     3.0
+    ],
+    [
+     13.0,
+     3.0,
+     0.0
+    ],
+    [
+     10.0,
+     3.0,
+     0.0
+    ],
+    [
+     10.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "UPSIDE DOWN WEST": {
+   "class": "Wall",
+   "zone": "UPSIDE DOWN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     10.0,
+     3.0,
+     3.0
+    ],
+    [
+     10.0,
+     3.0,
+     0.0
+    ],
+    [
+     10.0,
+     0.0,
+     0.0
+    ],
+    [
+     10.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "UPSIDE DOWN FLOOR": {
+   "class": "Floor",
+   "zone": "UPSIDE DOWN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     13.0,
+     3.0,
+     0.0
+    ],
+    [
+     13.0,
+     0.0,
+     0.0
+    ],
+    [
+     10.0,
+     0.0,
+     0.0
+    ],
+    [
+     10.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "UPSIDE DOWN ROOF": {
+   "class": "Roof",
+   "zone": "UPSIDE DOWN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     10.0,
+     3.0,
+     3.0
+    ],
+    [
+     10.0,
+     0.0,
+     3.0
+    ],
+    [
+     13.0,
+     0.0,
+     3.0
+    ],
+    [
+     13.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "NOT PLANAR SOUTH": {
+   "class": "Wall",
+   "zone": "NOT PLANAR",
+   "grossArea": 9.00062,
+   "netArea": 9.00062,
+   "azimuth": 180.477,
+   "tilt": 90.4774,
+   "vertices": [
+    [
+     20.0,
+     0.0,
+     3.0
+    ],
+    [
+     20.0,
+     0.0,
+     0.0
+    ],
+    [
+     23.0,
+     0.0,
+     0.0
+    ],
+    [
+     23.0,
+     -0.05,
+     3.0
+    ]
+   ]
+  },
+  "NOT PLANAR EAST": {
+   "class": "Wall",
+   "zone": "NOT PLANAR",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     23.0,
+     0.0,
+     3.0
+    ],
+    [
+     23.0,
+     0.0,
+     0.0
+    ],
+    [
+     23.0,
+     3.0,
+     0.0
+    ],
+    [
+     23.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "NOT PLANAR NORTH": {
+   "class": "Wall",
+   "zone": "NOT PLANAR",
+   "grossArea": 9.02247,
+   "netArea": 9.02247,
+   "azimuth": 2.86241,
+   "tilt": 92.8588,
+   "vertices": [
+    [
+     23.0,
+     3.0,
+     3.0
+    ],
+    [
+     23.0,
+     3.0,
+     0.0
+    ],
+    [
+     20.0,
+     3.0,
+     0.0
+    ],
+    [
+     20.0,
+     3.3,
+     3.0
+    ]
+   ]
+  },
+  "NOT PLANAR WEST": {
+   "class": "Wall",
+   "zone": "NOT PLANAR",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     20.0,
+     3.0,
+     3.0
+    ],
+    [
+     20.0,
+     3.0,
+     0.0
+    ],
+    [
+     20.0,
+     0.0,
+     0.0
+    ],
+    [
+     20.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "NOT PLANAR FLOOR": {
+   "class": "Floor",
+   "zone": "NOT PLANAR",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     23.0,
+     3.0,
+     0.0
+    ],
+    [
+     23.0,
+     0.0,
+     0.0
+    ],
+    [
+     20.0,
+     0.0,
+     0.0
+    ],
+    [
+     20.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "NOT PLANAR ROOF": {
+   "class": "Roof",
+   "zone": "NOT PLANAR",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     20.0,
+     3.0,
+     3.0
+    ],
+    [
+     20.0,
+     0.0,
+     3.0
+    ],
+    [
+     23.0,
+     0.0,
+     3.0
+    ],
+    [
+     23.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SMALL SOUTH": {
+   "class": "Wall",
+   "zone": "SMALL",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     30.0,
+     0.0,
+     3.0
+    ],
+    [
+     30.0,
+     0.0,
+     0.0
+    ],
+    [
+     33.0,
+     0.0,
+     0.0
+    ],
+    [
+     33.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SMALL NORTH": {
+   "class": "Wall",
+   "zone": "SMALL",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     33.0,
+     3.0,
+     3.0
+    ],
+    [
+     33.0,
+     3.0,
+     0.0
+    ],
+    [
+     30.0,
+     3.0,
+     0.0
+    ],
+    [
+     30.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SMALL WEST": {
+   "class": "Wall",
+   "zone": "SMALL",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     30.0,
+     3.0,
+     3.0
+    ],
+    [
+     30.0,
+     3.0,
+     0.0
+    ],
+    [
+     30.0,
+     0.0,
+     0.0
+    ],
+    [
+     30.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SMALL EAST": {
+   "class": "Wall",
+   "zone": "SMALL",
+   "grossArea": 8.9991,
+   "netArea": 8.9991,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     33.0,
+     0.0,
+     3.0
+    ],
+    [
+     33.0,
+     0.0,
+     0.0
+    ],
+    [
+     33.0,
+     3.0,
+     0.0
+    ],
+    [
+     33.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SMALL EAST SLIVER": {
+   "class": "Wall",
+   "zone": "SMALL",
+   "grossArea": 0.00045,
+   "netArea": 0.00045,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     33.0,
+     3.0,
+     0.0
+    ],
+    [
+     33.0,
+     3.0,
+     0.0
+    ],
+    [
+     33.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SMALL FLOOR": {
+   "class": "Floor",
+   "zone": "SMALL",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     33.0,
+     3.0,
+     0.0
+    ],
+    [
+     33.0,
+     0.0,
+     0.0
+    ],
+    [
+     30.0,
+     0.0,
+     0.0
+    ],
+    [
+     30.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "SMALL ROOF": {
+   "class": "Roof",
+   "zone": "SMALL",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     30.0,
+     3.0,
+     3.0
+    ],
+    [
+     30.0,
+     0.0,
+     3.0
+    ],
+    [
+     33.0,
+     0.0,
+     3.0
+    ],
+    [
+     33.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "WINDOWS SOUTH": {
+   "class": "Wall",
+   "zone": "WINDOWS",
+   "grossArea": 9.0,
+   "netArea": 7.5,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     40.0,
+     0.0,
+     3.0
+    ],
+    [
+     40.0,
+     0.0,
+     0.0
+    ],
+    [
+     43.0,
+     0.0,
+     0.0
+    ],
+    [
+     43.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "WINDOWS EAST": {
+   "class": "Wall",
+   "zone": "WINDOWS",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     43.0,
+     0.0,
+     3.0
+    ],
+    [
+     43.0,
+     0.0,
+     0.0
+    ],
+    [
+     43.0,
+     3.0,
+     0.0
+    ],
+    [
+     43.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "WINDOWS NORTH": {
+   "class": "Wall",
+   "zone": "WINDOWS",
+   "grossArea": 9.0,
+   "netArea": 8.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     43.0,
+     3.0,
+     3.0
+    ],
+    [
+     43.0,
+     3.0,
+     0.0
+    ],
+    [
+     40.0,
+     3.0,
+     0.0
+    ],
+    [
+     40.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "WINDOWS WEST": {
+   "class": "Wall",
+   "zone": "WINDOWS",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     40.0,
+     3.0,
+     3.0
+    ],
+    [
+     40.0,
+     3.0,
+     0.0
+    ],
+    [
+     40.0,
+     0.0,
+     0.0
+    ],
+    [
+     40.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "WINDOWS FLOOR": {
+   "class": "Floor",
+   "zone": "WINDOWS",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     43.0,
+     3.0,
+     0.0
+    ],
+    [
+     43.0,
+     0.0,
+     0.0
+    ],
+    [
+     40.0,
+     0.0,
+     0.0
+    ],
+    [
+     40.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "WINDOWS ROOF": {
+   "class": "Roof",
+   "zone": "WINDOWS",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     40.0,
+     3.0,
+     3.0
+    ],
+    [
+     40.0,
+     0.0,
+     3.0
+    ],
+    [
+     43.0,
+     0.0,
+     3.0
+    ],
+    [
+     43.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "WINDOW OUTSIDE": {
+   "class": "Window",
+   "zone": "WINDOWS",
+   "grossArea": 1.5,
+   "netArea": 1.5,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     42.0,
+     0.0,
+     2.0
+    ],
+    [
+     42.0,
+     0.0,
+     1.0
+    ],
+    [
+     43.5,
+     0.0,
+     1.0
+    ],
+    [
+     43.5,
+     0.0,
+     2.0
+    ]
+   ]
+  },
+  "WINDOW OFF PLANE": {
+   "class": "Window",
+   "zone": "WINDOWS",
+   "grossArea": 1.0,
+   "netArea": 1.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     42.0,
+     3.1,
+     2.0
+    ],
+    [
+     42.0,
+     3.1,
+     1.0
+    ],
+    [
+     41.0,
+     3.1,
+     1.0
+    ],
+    [
+     41.0,
+     3.1,
+     2.0
+    ]
+   ]
+  },
+  "PAIR A SOUTH": {
+   "class": "Wall",
+   "zone": "PAIR A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     50.0,
+     0.0,
+     3.0
+    ],
+    [
+     50.0,
+     0.0,
+     0.0
+    ],
+    [
+     53.0,
+     0.0,
+     0.0
+    ],
+    [
+     53.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "PAIR A EAST": {
+   "class": "Wall",
+   "zone": "PAIR A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     53.0,
+     0.0,
+     3.0
+    ],
+    [
+     53.0,
+     0.0,
+     0.0
+    ],
+    [
+     53.0,
+     3.0,
+     0.0
+    ],
+    [
+     53.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "PAIR A NORTH": {
+   "class": "Wall",
+   "zone": "PAIR A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     53.0,
+     3.0,
+     3.0
+    ],
+    [
+     53.0,
+     3.0,
+     0.0
+    ],
+    [
+     50.0,
+     3.0,
+     0.0
+    ],
+    [
+     50.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "PAIR A WEST": {
+   "class": "Wall",
+   "zone": "PAIR A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     50.0,
+     3.0,
+     3.0
+    ],
+    [
+     50.0,
+     3.0,
+     0.0
+    ],
+    [
+     50.0,
+     0.0,
+     0.0
+    ],
+    [
+     50.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "PAIR A FLOOR": {
+   "class": "Floor",
+   "zone": "PAIR A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     53.0,
+     3.0,
+     0.0
+    ],
+    [
+     53.0,
+     0.0,
+     0.0
+    ],
+    [
+     50.0,
+     0.0,
+     0.0
+    ],
+    [
+     50.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "PAIR A ROOF": {
+   "class": "Roof",
+   "zone": "PAIR A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     50.0,
+     3.0,
+     3.0
+    ],
+    [
+     50.0,
+     0.0,
+     3.0
+    ],
+    [
+     53.0,
+     0.0,
+     3.0
+    ],
+    [
+     53.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "PAIR B SOUTH": {
+   "class": "Wall",
+   "zone": "PAIR B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     53.0,
+     0.0,
+     3.0
+    ],
+    [
+     53.0,
+     0.0,
+     0.0
+    ],
+    [
+     56.0,
+     0.0,
+     0.0
+    ],
+    [
+     56.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "PAIR B EAST": {
+   "class": "Wall",
+   "zone": "PAIR B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     56.0,
+     0.0,
+     3.0
+    ],
+    [
+     56.0,
+     0.0,
+     0.0
+    ],
+    [
+     56.0,
+     3.0,
+     0.0
+    ],
+    [
+     56.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "PAIR B NORTH": {
+   "class": "Wall",
+   "zone": "PAIR B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     56.0,
+     3.0,
+     3.0
+    ],
+    [
+     56.0,
+     3.0,
+     0.0
+    ],
+    [
+     53.0,
+     3.0,
+     0.0
+    ],
+    [
+     53.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "PAIR B WEST": {
+   "class": "Wall",
+   "zone": "PAIR B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     53.0,
+     0.0,
+     3.0
+    ],
+    [
+     53.0,
+     0.0,
+     0.0
+    ],
+    [
+     53.0,
+     3.0,
+     0.0
+    ],
+    [
+     53.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "PAIR B FLOOR": {
+   "class": "Floor",
+   "zone": "PAIR B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     56.0,
+     3.0,
+     0.0
+    ],
+    [
+     56.0,
+     0.0,
+     0.0
+    ],
+    [
+     53.0,
+     0.0,
+     0.0
+    ],
+    [
+     53.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "PAIR B ROOF": {
+   "class": "Roof",
+   "zone": "PAIR B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     53.0,
+     3.0,
+     3.0
+    ],
+    [
+     53.0,
+     0.0,
+     3.0
+    ],
+    [
+     56.0,
+     0.0,
+     3.0
+    ],
+    [
+     56.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE A SOUTH": {
+   "class": "Wall",
+   "zone": "SIZE A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     70.0,
+     0.0,
+     3.0
+    ],
+    [
+     70.0,
+     0.0,
+     0.0
+    ],
+    [
+     73.0,
+     0.0,
+     0.0
+    ],
+    [
+     73.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE A NORTH": {
+   "class": "Wall",
+   "zone": "SIZE A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     73.0,
+     3.0,
+     3.0
+    ],
+    [
+     73.0,
+     3.0,
+     0.0
+    ],
+    [
+     70.0,
+     3.0,
+     0.0
+    ],
+    [
+     70.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE A WEST": {
+   "class": "Wall",
+   "zone": "SIZE A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     70.0,
+     3.0,
+     3.0
+    ],
+    [
+     70.0,
+     3.0,
+     0.0
+    ],
+    [
+     70.0,
+     0.0,
+     0.0
+    ],
+    [
+     70.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE A EAST": {
+   "class": "Wall",
+   "zone": "SIZE A",
+   "grossArea": 8.7,
+   "netArea": 8.7,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     73.0,
+     0.0,
+     2.9
+    ],
+    [
+     73.0,
+     0.0,
+     0.0
+    ],
+    [
+     73.0,
+     3.0,
+     0.0
+    ],
+    [
+     73.0,
+     3.0,
+     2.9
+    ]
+   ]
+  },
+  "SIZE A EAST TOP": {
+   "class": "Wall",
+   "zone": "SIZE A",
+   "grossArea": 0.3,
+   "netArea": 0.3,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     73.0,
+     0.0,
+     3.0
+    ],
+    [
+     73.0,
+     0.0,
+     2.9
+    ],
+    [
+     73.0,
+     3.0,
+     2.9
+    ],
+    [
+     73.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE A FLOOR": {
+   "class": "Floor",
+   "zone": "SIZE A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     73.0,
+     3.0,
+     0.0
+    ],
+    [
+     73.0,
+     0.0,
+     0.0
+    ],
+    [
+     70.0,
+     0.0,
+     0.0
+    ],
+    [
+     70.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "SIZE A ROOF": {
+   "class": "Roof",
+   "zone": "SIZE A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     70.0,
+     3.0,
+     3.0
+    ],
+    [
+     70.0,
+     0.0,
+     3.0
+    ],
+    [
+     73.0,
+     0.0,
+     3.0
+    ],
+    [
+     73.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE B SOUTH": {
+   "class": "Wall",
+   "zone": "SIZE B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     73.0,
+     0.0,
+     3.0
+    ],
+    [
+     73.0,
+     0.0,
+     0.0
+    ],
+    [
+     76.0,
+     0.0,
+     0.0
+    ],
+    [
+     76.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE B EAST": {
+   "class": "Wall",
+   "zone": "SIZE B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     76.0,
+     0.0,
+     3.0
+    ],
+    [
+     76.0,
+     0.0,
+     0.0
+    ],
+    [
+     76.0,
+     3.0,
+     0.0
+    ],
+    [
+     76.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE B NORTH": {
+   "class": "Wall",
+   "zone": "SIZE B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     76.0,
+     3.0,
+     3.0
+    ],
+    [
+     76.0,
+     3.0,
+     0.0
+    ],
+    [
+     73.0,
+     3.0,
+     0.0
+    ],
+    [
+     73.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE B WEST": {
+   "class": "Wall",
+   "zone": "SIZE B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     73.0,
+     3.0,
+     3.0
+    ],
+    [
+     73.0,
+     3.0,
+     0.0
+    ],
+    [
+     73.0,
+     0.0,
+     0.0
+    ],
+    [
+     73.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SIZE B FLOOR": {
+   "class": "Floor",
+   "zone": "SIZE B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     76.0,
+     3.0,
+     0.0
+    ],
+    [
+     76.0,
+     0.0,
+     0.0
+    ],
+    [
+     73.0,
+     0.0,
+     0.0
+    ],
+    [
+     73.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "SIZE B ROOF": {
+   "class": "Roof",
+   "zone": "SIZE B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     73.0,
+     3.0,
+     3.0
+    ],
+    [
+     73.0,
+     0.0,
+     3.0
+    ],
+    [
+     76.0,
+     0.0,
+     3.0
+    ],
+    [
+     76.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "OPEN SOUTH": {
+   "class": "Wall",
+   "zone": "OPEN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     90.0,
+     0.0,
+     3.0
+    ],
+    [
+     90.0,
+     0.0,
+     0.0
+    ],
+    [
+     93.0,
+     0.0,
+     0.0
+    ],
+    [
+     93.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "OPEN EAST": {
+   "class": "Wall",
+   "zone": "OPEN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     93.0,
+     0.0,
+     3.0
+    ],
+    [
+     93.0,
+     0.0,
+     0.0
+    ],
+    [
+     93.0,
+     3.0,
+     0.0
+    ],
+    [
+     93.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "OPEN NORTH": {
+   "class": "Wall",
+   "zone": "OPEN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     93.0,
+     3.0,
+     3.0
+    ],
+    [
+     93.0,
+     3.0,
+     0.0
+    ],
+    [
+     90.0,
+     3.0,
+     0.0
+    ],
+    [
+     90.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "OPEN WEST": {
+   "class": "Wall",
+   "zone": "OPEN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     90.0,
+     3.0,
+     3.0
+    ],
+    [
+     90.0,
+     3.0,
+     0.0
+    ],
+    [
+     90.0,
+     0.0,
+     0.0
+    ],
+    [
+     90.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "OPEN FLOOR": {
+   "class": "Floor",
+   "zone": "OPEN",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     93.0,
+     3.0,
+     0.0
+    ],
+    [
+     93.0,
+     0.0,
+     0.0
+    ],
+    [
+     90.0,
+     0.0,
+     0.0
+    ],
+    [
+     90.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "STEEP ROOF SOUTH": {
+   "class": "Wall",
+   "zone": "STEEP ROOF",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     100.0,
+     0.0,
+     3.0
+    ],
+    [
+     100.0,
+     0.0,
+     0.0
+    ],
+    [
+     103.0,
+     0.0,
+     0.0
+    ],
+    [
+     103.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "STEEP ROOF EAST": {
+   "class": "Wall",
+   "zone": "STEEP ROOF",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     103.0,
+     0.0,
+     3.0
+    ],
+    [
+     103.0,
+     0.0,
+     0.0
+    ],
+    [
+     103.0,
+     3.0,
+     0.0
+    ],
+    [
+     103.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "STEEP ROOF NORTH": {
+   "class": "Wall",
+   "zone": "STEEP ROOF",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     103.0,
+     3.0,
+     3.0
+    ],
+    [
+     103.0,
+     3.0,
+     0.0
+    ],
+    [
+     100.0,
+     3.0,
+     0.0
+    ],
+    [
+     100.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "STEEP ROOF WEST": {
+   "class": "Wall",
+   "zone": "STEEP ROOF",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     100.0,
+     3.0,
+     3.0
+    ],
+    [
+     100.0,
+     3.0,
+     0.0
+    ],
+    [
+     100.0,
+     0.0,
+     0.0
+    ],
+    [
+     100.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "STEEP ROOF FLOOR": {
+   "class": "Floor",
+   "zone": "STEEP ROOF",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     103.0,
+     3.0,
+     0.0
+    ],
+    [
+     103.0,
+     0.0,
+     0.0
+    ],
+    [
+     100.0,
+     0.0,
+     0.0
+    ],
+    [
+     100.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "STEEP ROOF ROOF": {
+   "class": "Roof",
+   "zone": "STEEP ROOF",
+   "grossArea": 8.99999,
+   "netArea": 8.99999,
+   "azimuth": 180.0,
+   "tilt": 85.0001,
+   "vertices": [
+    [
+     100.0,
+     1.63,
+     4.49
+    ],
+    [
+     100.0,
+     1.37,
+     1.51
+    ],
+    [
+     103.0,
+     1.37,
+     1.51
+    ],
+    [
+     103.0,
+     1.63,
+     4.49
+    ]
+   ]
+  },
+  "TILT A SOUTH": {
+   "class": "Wall",
+   "zone": "TILT A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     110.0,
+     0.0,
+     3.0
+    ],
+    [
+     110.0,
+     0.0,
+     0.0
+    ],
+    [
+     113.0,
+     0.0,
+     0.0
+    ],
+    [
+     113.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "TILT A EAST": {
+   "class": "Wall",
+   "zone": "TILT A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     113.0,
+     0.0,
+     3.0
+    ],
+    [
+     113.0,
+     0.0,
+     0.0
+    ],
+    [
+     113.0,
+     3.0,
+     0.0
+    ],
+    [
+     113.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "TILT A NORTH": {
+   "class": "Wall",
+   "zone": "TILT A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     113.0,
+     3.0,
+     3.0
+    ],
+    [
+     113.0,
+     3.0,
+     0.0
+    ],
+    [
+     110.0,
+     3.0,
+     0.0
+    ],
+    [
+     110.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "TILT A WEST": {
+   "class": "Wall",
+   "zone": "TILT A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     110.0,
+     3.0,
+     3.0
+    ],
+    [
+     110.0,
+     3.0,
+     0.0
+    ],
+    [
+     110.0,
+     0.0,
+     0.0
+    ],
+    [
+     110.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "TILT A FLOOR": {
+   "class": "Floor",
+   "zone": "TILT A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     113.0,
+     3.0,
+     0.0
+    ],
+    [
+     113.0,
+     0.0,
+     0.0
+    ],
+    [
+     110.0,
+     0.0,
+     0.0
+    ],
+    [
+     110.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "TILT A ROOF": {
+   "class": "Roof",
+   "zone": "TILT A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     110.0,
+     3.0,
+     3.0
+    ],
+    [
+     110.0,
+     0.0,
+     3.0
+    ],
+    [
+     113.0,
+     0.0,
+     3.0
+    ],
+    [
+     113.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "TILT B SOUTH": {
+   "class": "Wall",
+   "zone": "TILT B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     113.0,
+     0.0,
+     3.0
+    ],
+    [
+     113.0,
+     0.0,
+     0.0
+    ],
+    [
+     116.0,
+     0.0,
+     0.0
+    ],
+    [
+     116.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "TILT B EAST": {
+   "class": "Wall",
+   "zone": "TILT B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     116.0,
+     0.0,
+     3.0
+    ],
+    [
+     116.0,
+     0.0,
+     0.0
+    ],
+    [
+     116.0,
+     3.0,
+     0.0
+    ],
+    [
+     116.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "TILT B NORTH": {
+   "class": "Wall",
+   "zone": "TILT B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     116.0,
+     3.0,
+     3.0
+    ],
+    [
+     116.0,
+     3.0,
+     0.0
+    ],
+    [
+     113.0,
+     3.0,
+     0.0
+    ],
+    [
+     113.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "TILT B WEST": {
+   "class": "Wall",
+   "zone": "TILT B",
+   "grossArea": 9.00002,
+   "netArea": 9.00002,
+   "azimuth": 270.0,
+   "tilt": 92.0058,
+   "vertices": [
+    [
+     112.89,
+     3.0,
+     3.0
+    ],
+    [
+     113.0,
+     3.0,
+     0.0
+    ],
+    [
+     113.0,
+     0.0,
+     0.0
+    ],
+    [
+     112.89,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "TILT B FLOOR": {
+   "class": "Floor",
+   "zone": "TILT B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     116.0,
+     3.0,
+     0.0
+    ],
+    [
+     116.0,
+     0.0,
+     0.0
+    ],
+    [
+     113.0,
+     0.0,
+     0.0
+    ],
+    [
+     113.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "TILT B ROOF": {
+   "class": "Roof",
+   "zone": "TILT B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     113.0,
+     3.0,
+     3.0
+    ],
+    [
+     113.0,
+     0.0,
+     3.0
+    ],
+    [
+     116.0,
+     0.0,
+     3.0
+    ],
+    [
+     116.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "TINY WINDOW SOUTH": {
+   "class": "Wall",
+   "zone": "TINY WINDOW",
+   "grossArea": 9.0,
+   "netArea": 8.9991,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     130.0,
+     0.0,
+     3.0
+    ],
+    [
+     130.0,
+     0.0,
+     0.0
+    ],
+    [
+     133.0,
+     0.0,
+     0.0
+    ],
+    [
+     133.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "TINY WINDOW EAST": {
+   "class": "Wall",
+   "zone": "TINY WINDOW",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     133.0,
+     0.0,
+     3.0
+    ],
+    [
+     133.0,
+     0.0,
+     0.0
+    ],
+    [
+     133.0,
+     3.0,
+     0.0
+    ],
+    [
+     133.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "TINY WINDOW NORTH": {
+   "class": "Wall",
+   "zone": "TINY WINDOW",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     133.0,
+     3.0,
+     3.0
+    ],
+    [
+     133.0,
+     3.0,
+     0.0
+    ],
+    [
+     130.0,
+     3.0,
+     0.0
+    ],
+    [
+     130.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "TINY WINDOW WEST": {
+   "class": "Wall",
+   "zone": "TINY WINDOW",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     130.0,
+     3.0,
+     3.0
+    ],
+    [
+     130.0,
+     3.0,
+     0.0
+    ],
+    [
+     130.0,
+     0.0,
+     0.0
+    ],
+    [
+     130.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "TINY WINDOW FLOOR": {
+   "class": "Floor",
+   "zone": "TINY WINDOW",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     133.0,
+     3.0,
+     0.0
+    ],
+    [
+     133.0,
+     0.0,
+     0.0
+    ],
+    [
+     130.0,
+     0.0,
+     0.0
+    ],
+    [
+     130.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "TINY WINDOW ROOF": {
+   "class": "Roof",
+   "zone": "TINY WINDOW",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     130.0,
+     3.0,
+     3.0
+    ],
+    [
+     130.0,
+     0.0,
+     3.0
+    ],
+    [
+     133.0,
+     0.0,
+     3.0
+    ],
+    [
+     133.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "TINY WINDOW": {
+   "class": "Window",
+   "zone": "TINY WINDOW",
+   "grossArea": 0.0009,
+   "netArea": 0.0009,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     131.0,
+     0.0,
+     1.03
+    ],
+    [
+     131.0,
+     0.0,
+     1.0
+    ],
+    [
+     131.03,
+     0.0,
+     1.0
+    ],
+    [
+     131.03,
+     0.0,
+     1.03
+    ]
+   ]
+  },
+  "OPEN WITH VOLUME SOUTH": {
+   "class": "Wall",
+   "zone": "OPEN WITH VOLUME",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     140.0,
+     0.0,
+     3.0
+    ],
+    [
+     140.0,
+     0.0,
+     0.0
+    ],
+    [
+     143.0,
+     0.0,
+     0.0
+    ],
+    [
+     143.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "OPEN WITH VOLUME EAST": {
+   "class": "Wall",
+   "zone": "OPEN WITH VOLUME",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     143.0,
+     0.0,
+     3.0
+    ],
+    [
+     143.0,
+     0.0,
+     0.0
+    ],
+    [
+     143.0,
+     3.0,
+     0.0
+    ],
+    [
+     143.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "OPEN WITH VOLUME NORTH": {
+   "class": "Wall",
+   "zone": "OPEN WITH VOLUME",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     143.0,
+     3.0,
+     3.0
+    ],
+    [
+     143.0,
+     3.0,
+     0.0
+    ],
+    [
+     140.0,
+     3.0,
+     0.0
+    ],
+    [
+     140.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "OPEN WITH VOLUME WEST": {
+   "class": "Wall",
+   "zone": "OPEN WITH VOLUME",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     140.0,
+     3.0,
+     3.0
+    ],
+    [
+     140.0,
+     3.0,
+     0.0
+    ],
+    [
+     140.0,
+     0.0,
+     0.0
+    ],
+    [
+     140.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "OPEN WITH VOLUME FLOOR": {
+   "class": "Floor",
+   "zone": "OPEN WITH VOLUME",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     143.0,
+     3.0,
+     0.0
+    ],
+    [
+     143.0,
+     0.0,
+     0.0
+    ],
+    [
+     140.0,
+     0.0,
+     0.0
+    ],
+    [
+     140.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "SHARED A SOUTH": {
+   "class": "Wall",
+   "zone": "SHARED A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     150.0,
+     0.0,
+     3.0
+    ],
+    [
+     150.0,
+     0.0,
+     0.0
+    ],
+    [
+     153.0,
+     0.0,
+     0.0
+    ],
+    [
+     153.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SHARED A EAST": {
+   "class": "Wall",
+   "zone": "SHARED A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     153.0,
+     0.0,
+     3.0
+    ],
+    [
+     153.0,
+     0.0,
+     0.0
+    ],
+    [
+     153.0,
+     3.0,
+     0.0
+    ],
+    [
+     153.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SHARED A NORTH": {
+   "class": "Wall",
+   "zone": "SHARED A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     153.0,
+     3.0,
+     3.0
+    ],
+    [
+     153.0,
+     3.0,
+     0.0
+    ],
+    [
+     150.0,
+     3.0,
+     0.0
+    ],
+    [
+     150.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SHARED A WEST": {
+   "class": "Wall",
+   "zone": "SHARED A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     150.0,
+     3.0,
+     3.0
+    ],
+    [
+     150.0,
+     3.0,
+     0.0
+    ],
+    [
+     150.0,
+     0.0,
+     0.0
+    ],
+    [
+     150.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SHARED A FLOOR": {
+   "class": "Floor",
+   "zone": "SHARED A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     153.0,
+     3.0,
+     0.0
+    ],
+    [
+     153.0,
+     0.0,
+     0.0
+    ],
+    [
+     150.0,
+     0.0,
+     0.0
+    ],
+    [
+     150.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "SHARED A ROOF": {
+   "class": "Roof",
+   "zone": "SHARED A",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     150.0,
+     3.0,
+     3.0
+    ],
+    [
+     150.0,
+     0.0,
+     3.0
+    ],
+    [
+     153.0,
+     0.0,
+     3.0
+    ],
+    [
+     153.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SHARED B SOUTH": {
+   "class": "Wall",
+   "zone": "SHARED B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     153.0,
+     0.0,
+     3.0
+    ],
+    [
+     153.0,
+     0.0,
+     0.0
+    ],
+    [
+     156.0,
+     0.0,
+     0.0
+    ],
+    [
+     156.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SHARED B EAST": {
+   "class": "Wall",
+   "zone": "SHARED B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 90.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     156.0,
+     0.0,
+     3.0
+    ],
+    [
+     156.0,
+     0.0,
+     0.0
+    ],
+    [
+     156.0,
+     3.0,
+     0.0
+    ],
+    [
+     156.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "SHARED B NORTH": {
+   "class": "Wall",
+   "zone": "SHARED B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     156.0,
+     3.0,
+     3.0
+    ],
+    [
+     156.0,
+     3.0,
+     0.0
+    ],
+    [
+     153.0,
+     3.0,
+     0.0
+    ],
+    [
+     153.0,
+     3.0,
+     3.0
+    ]
+   ]
+  },
+  "iz-SHARED A EAST": {
+   "class": "Wall",
+   "zone": "SHARED B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 270.0,
+   "tilt": 90.0,
+   "vertices": [
+    [
+     153.0,
+     3.0,
+     3.0
+    ],
+    [
+     153.0,
+     3.0,
+     0.0
+    ],
+    [
+     153.0,
+     0.0,
+     0.0
+    ],
+    [
+     153.0,
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  "SHARED B FLOOR": {
+   "class": "Floor",
+   "zone": "SHARED B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 0.0,
+   "tilt": 180.0,
+   "vertices": [
+    [
+     156.0,
+     3.0,
+     0.0
+    ],
+    [
+     156.0,
+     0.0,
+     0.0
+    ],
+    [
+     153.0,
+     0.0,
+     0.0
+    ],
+    [
+     153.0,
+     3.0,
+     0.0
+    ]
+   ]
+  },
+  "SHARED B ROOF": {
+   "class": "Roof",
+   "zone": "SHARED B",
+   "grossArea": 9.0,
+   "netArea": 9.0,
+   "azimuth": 180.0,
+   "tilt": 0.0,
+   "vertices": [
+    [
+     153.0,
+     3.0,
+     3.0
+    ],
+    [
+     153.0,
+     0.0,
+     3.0
+    ],
+    [
+     156.0,
+     0.0,
+     3.0
+    ],
+    [
+     156.0,
+     3.0,
+     3.0
+    ]
+   ]
+  }
+ },
+ "building": {
+  "area": {},
+  "windowWallRatio": {
+   "Gross Wall Area": {
+    "Total": 513.32,
+    "North (315 to 45 deg)": 144.02,
+    "East (45 to 135 deg)": 108.3,
+    "South (135 to 225 deg)": 153.0,
+    "West (225 to 315 deg)": 108.0
+   },
+   "Above Ground Wall Area": {
+    "Total": 513.32,
+    "North (315 to 45 deg)": 144.02,
+    "East (45 to 135 deg)": 108.3,
+    "South (135 to 225 deg)": 153.0,
+    "West (225 to 315 deg)": 108.0
+   },
+   "Window Opening Area": {
+    "Total": 2.5,
+    "North (315 to 45 deg)": 1.0,
+    "East (45 to 135 deg)": 0.0,
+    "South (135 to 225 deg)": 1.5,
+    "West (225 to 315 deg)": 0.0
+   },
+   "Gross Window-Wall Ratio": {
+    "Total": 0.49,
+    "North (315 to 45 deg)": 0.69,
+    "East (45 to 135 deg)": 0.0,
+    "South (135 to 225 deg)": 0.98,
+    "West (225 to 315 deg)": 0.0
+   },
+   "Above Ground Window-Wall Ratio": {
+    "Total": 0.49,
+    "North (315 to 45 deg)": 0.69,
+    "East (45 to 135 deg)": 0.0,
+    "South (135 to 225 deg)": 0.98,
+    "West (225 to 315 deg)": 0.0
+   }
+  }
+ },
+ "fenestration": {
+  "WINDOW OUTSIDE": {
+   "Construction": "WINDOW",
+   "Construction Assignment Source": "Explicit",
+   "Zone": "WINDOWS",
+   "Space": "WINDOWS",
+   "Frame and Divider": "",
+   "Glass Area": 1.5,
+   "Frame Area": 0.0,
+   "Divider Area": 0.0,
+   "Area of One Opening": 1.5,
+   "Area of Multiplied Openings": 1.5,
+   "Glass U-Factor": 2.803,
+   "Glass SHGC": 0.601,
+   "Glass Visible Transmittance": 0.702,
+   "Frame Conductance": "",
+   "Divider Conductance": "",
+   "NFRC Product Type": "",
+   "Assembly U-Factor": "",
+   "Assembly SHGC": "",
+   "Assembly Visible Transmittance": "",
+   "Shade Control": "No",
+   "Parent Surface": "WINDOWS SOUTH",
+   "Azimuth": 180.0,
+   "Tilt": 90.0,
+   "Cardinal Direction": "S"
+  },
+  "WINDOW OFF PLANE": {
+   "Construction": "WINDOW",
+   "Construction Assignment Source": "Explicit",
+   "Zone": "WINDOWS",
+   "Space": "WINDOWS",
+   "Frame and Divider": "",
+   "Glass Area": 1.0,
+   "Frame Area": 0.0,
+   "Divider Area": 0.0,
+   "Area of One Opening": 1.0,
+   "Area of Multiplied Openings": 1.0,
+   "Glass U-Factor": 2.803,
+   "Glass SHGC": 0.601,
+   "Glass Visible Transmittance": 0.702,
+   "Frame Conductance": "",
+   "Divider Conductance": "",
+   "NFRC Product Type": "",
+   "Assembly U-Factor": "",
+   "Assembly SHGC": "",
+   "Assembly Visible Transmittance": "",
+   "Shade Control": "No",
+   "Parent Surface": "WINDOWS NORTH",
+   "Azimuth": 0.0,
+   "Tilt": 90.0,
+   "Cardinal Direction": "N"
+  },
+  "TINY WINDOW": {
+   "Construction": "WINDOW",
+   "Construction Assignment Source": "Explicit",
+   "Zone": "TINY WINDOW",
+   "Space": "TINY WINDOW",
+   "Frame and Divider": "",
+   "Glass Area": 0.0,
+   "Frame Area": 0.0,
+   "Divider Area": 0.0,
+   "Area of One Opening": 0.0,
+   "Area of Multiplied Openings": 0.0,
+   "Glass U-Factor": 2.803,
+   "Glass SHGC": 0.601,
+   "Glass Visible Transmittance": 0.702,
+   "Frame Conductance": "",
+   "Divider Conductance": "",
+   "NFRC Product Type": "",
+   "Assembly U-Factor": "",
+   "Assembly SHGC": "",
+   "Assembly Visible Transmittance": "",
+   "Shade Control": "No",
+   "Parent Surface": "TINY WINDOW SOUTH",
+   "Azimuth": 180.0,
+   "Tilt": 90.0,
+   "Cardinal Direction": "S"
+  }
+ },
+ "airflow": {},
+ "site": {
+  "Environment:Weather Station": [
+   {
+    "Wind Sensor Height Above Ground {m}": 10.0,
+    "Wind Speed Profile Exponent {}": 0.14,
+    "Wind Speed Profile Boundary Layer Thickness {m}": 270.0,
+    "Air Temperature Sensor Height Above Ground {m}": 1.5,
+    "Wind Speed Modifier Coefficient-Internal": 1.586,
+    "Temperature Modifier Coefficient-Internal": 0.01
+   }
+  ],
+  "Environment:Site Atmospheric Variation": [
+   {
+    "Wind Speed Profile Exponent {}": 0.22,
+    "Wind Speed Profile Boundary Layer Thickness {m}": 370.0,
+    "Air Temperature Gradient Coefficient {K/m}": 0.0065
+   }
+  ]
+ },
+ "windPressure": {},
+ "daylightingPoints": {},
+ "geometryWarnings": [
+  [
+   "coincident",
+   "SMALL EAST SLIVER"
+  ],
+  [
+   "coincident",
+   "SMALL NORTH"
+  ],
+  [
+   "collinear",
+   "SMALL NORTH"
+  ],
+  [
+   "collinear",
+   "SMALL WEST"
+  ],
+  [
+   "degenerate",
+   "SMALL EAST SLIVER"
+  ],
+  [
+   "interzoneArea",
+   "SIZE A EAST | SIZE B WEST"
+  ],
+  [
+   "interzoneAzimuth",
+   "PAIR A EAST | PAIR B WEST"
+  ],
+  [
+   "interzoneTilt",
+   "TILT A EAST | TILT B WEST"
+  ],
+  [
+   "nonPlanarSevere",
+   "NOT PLANAR NORTH"
+  ],
+  [
+   "nonPlanarSevere",
+   "NOT PLANAR SOUTH"
+  ],
+  [
+   "notEnclosed",
+   "NOT PLANAR"
+  ],
+  [
+   "notEnclosed",
+   "OPEN"
+  ],
+  [
+   "notEnclosed",
+   "OPEN WITH VOLUME"
+  ],
+  [
+   "notEnclosed",
+   "SMALL"
+  ],
+  [
+   "notEnclosed",
+   "STEEP ROOF"
+  ],
+  [
+   "notEnclosed",
+   "TILT B"
+  ],
+  [
+   "notOriented",
+   "STEEP ROOF ROOF"
+  ],
+  [
+   "smallArea",
+   "SMALL EAST SLIVER"
+  ],
+  [
+   "smallArea",
+   "TINY WINDOW"
+  ],
+  [
+   "subsurfaceOutside",
+   "WINDOW OUTSIDE"
+  ],
+  [
+   "upsideDown",
+   "UPSIDE DOWN FLOOR"
+  ],
+  [
+   "upsideDown",
+   "UPSIDE DOWN ROOF"
+  ]
+ ]
+}

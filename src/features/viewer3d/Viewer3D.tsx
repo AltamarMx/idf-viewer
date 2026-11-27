@@ -12,6 +12,7 @@ import {
 import {
   type ExplodeMode,
   explodeOffsets,
+  normalArrows,
   offsetOf,
   type PairStatus,
   pairLines,
@@ -153,6 +154,7 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
   const [hiddenKinds, setHiddenKinds] = useState<Set<string>>(new Set());
   const [showPoints, setShowPoints] = useState(true);
   const [showPairs, setShowPairs] = useState(false);
+  const [showNormals, setShowNormals] = useState(false);
   const [hiddenZones, setHiddenZones] = useState<Set<string>>(new Set());
   const [hiddenLevels, setHiddenLevels] = useState<Set<number>>(new Set());
   const [opacity, setOpacity] = useState(1);
@@ -206,6 +208,7 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
   const layersOn =
     hiddenKinds.size > 0 ||
     showPairs ||
+    showNormals ||
     hiddenZones.size > 0 ||
     hiddenLevels.size > 0 ||
     opacity < 1 ||
@@ -314,8 +317,13 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
       return [c[0] + o[0], c[1] + o[1], c[2] + o[2]];
     };
     const stub = Math.max(0.5, Math.max(...geometry.size) * 0.04);
-    viewRef.current?.setPairLines(
-      showPairs
+    // Normals (C8): an arrow from the center of each visible surface to the side it faces.
+    const normals = showNormals
+      ? normalArrows(surfaces, centers, offsets, layerVisible, geometry.size)
+      : [];
+    viewRef.current?.setPairLines([
+      ...normals,
+      ...(showPairs
         ? pairs
             .filter((p) => layerVisible[p.from] || (p.to !== undefined && layerVisible[p.to]))
             .map((p) => {
@@ -328,9 +336,9 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
                   : ([from[0] + n[0] * stub, from[1] + n[1] * stub, from[2] + n[2] * stub] as Vec3);
               return { from, to, color: PAIR_COLORS[p.status] };
             })
-        : [],
-    );
-  }, [showPairs, pairs, centers, offsets, layerVisible, surfaces, geometry]);
+        : []),
+    ]);
+  }, [showPairs, showNormals, pairs, centers, offsets, layerVisible, surfaces, geometry]);
 
   const toggle = (key: string) =>
     setHidden((current) => {
@@ -480,6 +488,16 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
                   : `+${formatNumber(explode)} m`}
             </span>
           </div>
+          <div className="layers-pairs">
+            <label title="An arrow from each surface toward the side it faces (its outside)">
+              <input
+                type="checkbox"
+                checked={showNormals}
+                onChange={(e) => setShowNormals(e.target.checked)}
+              />{' '}
+              Normals (outward side)
+            </label>
+          </div>
           {pairs.length > 0 && (
             <div className="layers-pairs">
               <label>
@@ -560,6 +578,7 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
               onClick={() => {
                 setHiddenKinds(new Set());
                 setShowPairs(false);
+                setShowNormals(false);
                 setHiddenZones(new Set());
                 setHiddenLevels(new Set());
                 setOpacity(1);
@@ -654,6 +673,13 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
               : 'There is no AirflowNetwork:SimulationControl: EnergyPlus does not run the network.'}
           </div>
         )}
+        {mode === 'issues' && (
+          <div className="count legend-note">
+            Problems EnergyPlus reports when it reads the geometry (see the Problems tab). A zone
+            that does not close marks all its surfaces. Turn on Normals in the layers to see which
+            way each surface faces.
+          </div>
+        )}
         {mode === 'openingFactor' && (
           <div className="count legend-note">
             Opening factor written on each AirflowNetwork surface: the most the opening can open.
@@ -684,6 +710,14 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
               {one.afn.viaPartner ? ` · listed on ${one.afn.viaPartner}` : ''}
             </div>
           )}
+          {one.issue?.messages.map((m) => (
+            <div
+              key={m}
+              className={`partner ${one.issue?.severity === 'error' ? 'error' : 'warn'}`}
+            >
+              {m}
+            </div>
+          ))}
           {partner.status === 'ok' && (
             <div className="partner ok">Other side: {partner.name} (points back)</div>
           )}

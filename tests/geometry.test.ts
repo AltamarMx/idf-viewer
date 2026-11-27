@@ -55,6 +55,14 @@ describe.each(cases)('%s', (stem, idf) => {
     let compared = 0;
     // EnergyPlus upper-cases names, except suffixes it adds (e.g. "<FIN> Left").
     const byLower = new Map(Object.entries(oracle.surfaces).map(([k, v]) => [k.toLowerCase(), v]));
+    // Surfaces EnergyPlus changes as it reads them (Defects.idf): it reverses upside-down
+    // roofs and floors and drops coincident or collinear vertices. The viewer draws
+    // them as written and reports them (tests/geometry-checks.test.ts).
+    const fixed = new Set(
+      geometry.issues
+        .filter((i) => ['upsideDown', 'coincident', 'collinear', 'degenerate'].includes(i.check))
+        .map((i) => i.names[0]?.toLowerCase()),
+    );
 
     for (const s of geometry.surfaces) {
       const ref = byLower.get(s.name.toLowerCase());
@@ -62,6 +70,7 @@ describe.each(cases)('%s', (stem, idf) => {
         problems.push(`${s.name}: not in EnergyPlus output`);
         continue;
       }
+      if (fixed.has(s.name.toLowerCase())) continue;
       compared++;
       if (ref.grossArea !== undefined && !relClose(s.area, ref.grossArea)) {
         problems.push(`${s.name}: area ${s.area.toFixed(3)} vs ${ref.grossArea}`);

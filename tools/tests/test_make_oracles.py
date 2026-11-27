@@ -135,3 +135,19 @@ def test_read_eio_cp(tmp_path):
         "AirflowNetwork Model:Wind Pressure Coefficients (dimensionless), S_CP, -0.37,0.60\n"
     )
     assert make_oracles.read_eio_cp(eio) == {"directions": [0.0, 90.0], "coefficients": {"S_CP": [-0.37, 0.6]}}
+
+
+def test_read_err_geometry(tmp_path):
+    err = tmp_path / "eplusout.err"
+    err.write_text(
+        '   ** Warning ** GetVertices: Floor is upside down! Tilt angle=[0.0], should be near 180, Surface="F1", in Zone="Z".\n'
+        "   ** Warning ** GetSurfaceData: InterZone Surface Areas do not match as expected and might not satisfy conservation of energy:\n"
+        "   **   ~~~   **   Area=8.7 in Surface=B, Zone=ZB\n"
+        "   **   ~~~   **   Area=9.0 in Surface=A, Zone=ZA\n"
+        '   ** Severe  ** ProcessSurfaceVertices: Suspected non-planar surface:"W", Max "out of line"=0.01250 at Vertex # 2\n'
+    )
+    assert make_oracles.read_err_geometry(err) == [
+        ["interzoneArea", "A | B"],
+        ["nonPlanarSevere", "W"],
+        ["upsideDown", "F1"],
+    ]

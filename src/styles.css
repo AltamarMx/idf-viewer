@@ -1058,6 +1058,10 @@ td.severity.info {
   color: var(--warn);
 }
 
+.partner.error {
+  color: var(--error);
+}
+
 .viewer-error {
   position: absolute;
   top: 60px;

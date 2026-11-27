@@ -19,11 +19,15 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
 - Problems panel: broken references, duplicate names, field values checked against the IDD of
   the file's version, materials, constructions, schedules and curves that nothing uses, and
   AirflowNetwork input that EnergyPlus rejects or changes (openings on the wrong surface,
-  zones with fewer than two network surfaces, inverted temperature limits...).
+  zones with fewer than two network surfaces, inverted temperature limits...), and geometry
+  problems with EnergyPlus' own tolerances: upside-down roofs and floors, surfaces that are
+  not planar or too small, repeated vertices, interzone pairs that do not match, windows
+  outside their wall and zones that do not close.
 - Site location on a world map drawn in the browser, design days, run periods and holidays,
   and the outputs the file requests.
 - 3D view of the geometry, colored by boundary condition, with layers by zone and floor,
-  transparency, a horizontal cut, floors pulled apart and daylighting reference points.
+  transparency, a horizontal cut, floors pulled apart, daylighting reference points, surface
+  normals and a view of the geometry problems.
 - Constructions: a cross-section of the layers, from outside to inside and to scale, with the
   properties of each material as written in the file, and where each construction is used.
 - Schedules, internal loads and occupancy over the year, per zone, at every timestep.

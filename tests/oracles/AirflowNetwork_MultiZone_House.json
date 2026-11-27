@@ -1148,5 +1148,6 @@
    ]
   }
  },
- "daylightingPoints": {}
+ "daylightingPoints": {},
+ "geometryWarnings": []
 }

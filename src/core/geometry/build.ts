@@ -15,6 +15,7 @@ import type { IdfModel } from '../model/model';
 import { FieldReader, toNumber } from '../model/reader';
 import type { IdfObject } from '../parser/idf';
 import type { Schema } from '../schema/types';
+import { type GeometryIssue, geometryChecks, zonePolygons } from './checks';
 import {
   add,
   azimuthTilt,
@@ -116,6 +117,8 @@ export interface GeometryResult {
   zones: ZoneGeometry[];
   daylightingPoints: DaylightingPoint[];
   warnings: GeometryWarning[];
+  /** Geometry checks (C8, H5). */
+  issues: GeometryIssue[];
 }
 
 const BOUNDARIES = [
@@ -319,6 +322,7 @@ export function buildGeometry(model: IdfModel, schema: Schema | undefined): Geom
       zones: [],
       daylightingPoints: [],
       warnings,
+      issues: [],
     };
   }
   const rules = readRules(model, schema);
@@ -764,12 +768,14 @@ export function buildGeometry(model: IdfModel, schema: Schema | undefined): Geom
     }
   }
 
+  const zoneList = zoneGeometry(model, schema, surfaces);
   return {
     rules,
     surfaces,
-    zones: zoneGeometry(model, schema, surfaces),
+    zones: zoneList,
     daylightingPoints,
     warnings,
+    issues: geometryChecks(surfaces, zoneList),
   };
 }
 
@@ -784,6 +790,7 @@ function zoneGeometry(model: IdfModel, schema: Schema, surfaces: Surface3D[]): Z
     list.push(s);
     byZone.set(key, list);
   }
+  const closing = zonePolygons(surfaces);
   return model.ofClass('zone').map((obj) => {
     const r = new FieldReader(obj, schema.classes.zone);
     const name = r.str('Name');
@@ -791,26 +798,9 @@ function zoneGeometry(model: IdfModel, schema: Schema, surfaces: Surface3D[]): Z
     const floors = list.filter((s) => s.kind === 'floor').reduce((sum, s) => sum + s.area, 0);
     const inputArea = r.num('Floor Area');
     const floorArea = inputArea && inputArea > 0 ? inputArea : floors;
-    const polygons = list.map((s) => s.vertices);
+    // As EnergyPlus: with the other side of "Zone" boundaries and without walls between spaces.
+    const polygons = closing.get(name.toLowerCase())?.polygons ?? [];
     const enclosed = isEnclosed(polygons);
-    const inputVolume = r.num('Volume');
-    let volume = 0;
-    let volumeSource: ZoneGeometry['volumeSource'] = 'default';
-    if (inputVolume && inputVolume > 0) {
-      volume = inputVolume;
-      volumeSource = 'input';
-    } else if (enclosed) {
-      volume = Math.abs(signedVolume(polygons));
-      volumeSource = 'enclosed';
-    } else if (list.length > 0) {
-      const zs = polygons.flat().map((v) => v[2]);
-      volume = floorArea * (Math.max(...zs) - Math.min(...zs));
-      volumeSource = 'estimated';
-    }
-    if (volume <= 0) {
-      volume = 10;
-      volumeSource = 'default';
-    }
     // Ceiling height: area-weighted mean height of roofs/ceilings minus that of
     // floors (vertex averages), or the zone's height when one of them is missing.
     const mean = (kinds: SurfaceKind[]) => {
@@ -829,6 +819,24 @@ function zoneGeometry(model: IdfModel, schema: Schema, surfaces: Surface3D[]): Z
     const bottom = mean(['floor']);
     let height = top !== undefined && bottom !== undefined ? top - bottom : span;
     if (height <= 0) height = span;
+    const inputVolume = r.num('Volume');
+    let volume = 0;
+    let volumeSource: ZoneGeometry['volumeSource'] = 'default';
+    if (inputVolume && inputVolume > 0) {
+      volume = inputVolume;
+      volumeSource = 'input';
+    } else if (enclosed) {
+      volume = Math.abs(signedVolume(polygons));
+      volumeSource = 'enclosed';
+    } else if (list.length > 0) {
+      // Not enclosed: floor area × ceiling height, as EnergyPlus.
+      volume = floorArea * height;
+      volumeSource = 'estimated';
+    }
+    if (volume <= 0) {
+      volume = 10;
+      volumeSource = 'default';
+    }
     const inputHeight = r.num('Ceiling Height');
 
     return {

@@ -114,3 +114,50 @@ export function pairLines(surfaces: SurfaceView[]): PairLine[] {
   });
   return lines;
 }
+
+/**
+ * Arrows along the normal of each visible surface (C8), from its center toward
+ * the side it faces: a shaft and a two-line head. Length grows with the size of
+ * the surface, within limits set by the size of the model.
+ */
+export function normalArrows(
+  surfaces: SurfaceView[],
+  centers: Vec3[],
+  offsets: Vec3[],
+  visible: boolean[],
+  size: Vec3,
+): { from: Vec3; to: Vec3; color: string }[] {
+  const model = Math.max(...size, 1);
+  const color = '#c2185b';
+  const out: { from: Vec3; to: Vec3; color: string }[] = [];
+  surfaces.forEach((s, i) => {
+    if (!visible[i] || s.positions.length < 9) return;
+    const c = centers[i] as Vec3;
+    const o = offsets[i] ?? [0, 0, 0];
+    const from: Vec3 = [c[0] + o[0], c[1] + o[1], c[2] + o[2]];
+    const n = s.normal;
+    const len = Math.min(model * 0.05, Math.max(model * 0.01, 0.3 * Math.sqrt(s.area)));
+    const tip: Vec3 = [from[0] + n[0] * len, from[1] + n[1] * len, from[2] + n[2] * len];
+    // A direction in the plane of the surface for the head: its first edge.
+    const e: Vec3 = [
+      (s.positions[3] as number) - (s.positions[0] as number),
+      (s.positions[4] as number) - (s.positions[1] as number),
+      (s.positions[5] as number) - (s.positions[2] as number),
+    ];
+    const el = Math.hypot(...e) || 1;
+    const h = len * 0.25;
+    for (const side of [1, -1]) {
+      out.push({
+        from: tip,
+        to: [
+          tip[0] - n[0] * h + (side * e[0] * h * 0.6) / el,
+          tip[1] - n[1] * h + (side * e[1] * h * 0.6) / el,
+          tip[2] - n[2] * h + (side * e[2] * h * 0.6) / el,
+        ],
+        color,
+      });
+    }
+    out.push({ from, to: tip, color });
+  });
+  return out;
+}

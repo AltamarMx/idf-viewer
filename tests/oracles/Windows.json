@@ -664,5 +664,6 @@
    ]
   }
  },
- "daylightingPoints": {}
+ "daylightingPoints": {},
+ "geometryWarnings": []
 }

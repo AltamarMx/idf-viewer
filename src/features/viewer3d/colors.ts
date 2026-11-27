@@ -16,7 +16,8 @@ export type ColorMode =
   | 'construction'
   | 'afn'
   | 'openingFactor'
-  | 'cd';
+  | 'cd'
+  | 'issues';
 
 export const COLOR_MODES: { id: ColorMode; label: string; afn?: boolean; spaces?: boolean }[] = [
   { id: 'boundary', label: 'Boundary condition' },
@@ -27,6 +28,15 @@ export const COLOR_MODES: { id: ColorMode; label: string; afn?: boolean; spaces?
   { id: 'afn', label: 'Airflow network role', afn: true },
   { id: 'openingFactor', label: 'Maximum opening factor', afn: true },
   { id: 'cd', label: 'Discharge coefficient (Cd)', afn: true },
+  { id: 'issues', label: 'Geometry problems' },
+];
+
+/** Geometry problems (C8): errors, warnings, and surfaces without problems. */
+export const ISSUE_COLORS: Category[] = [
+  { key: 'error', label: 'Error', color: '#d62728' },
+  { key: 'warning', label: 'Warning', color: '#ff9f1c' },
+  { key: 'info', label: 'Note', color: '#4c9bd6' },
+  { key: 'ok', label: 'No problem', color: '#d9d9d9' },
 ];
 
 /** Modes that only color part of the surfaces: the rest are drawn in neutral gray. */
@@ -227,6 +237,12 @@ export function categorize(
     return { of, legend: AFN_COLORS.filter((c) => present.has(c.key)) };
   }
   if (mode === 'openingFactor' || mode === 'cd') return valueCategories(surfaces, mode);
+  if (mode === 'issues') {
+    const byKey = new Map(ISSUE_COLORS.map((c) => [c.key, c]));
+    const of = surfaces.map((s) => byKey.get(s.issue?.severity ?? 'ok') as Category);
+    const present = new Set(of.map((c) => c.key));
+    return { of, legend: ISSUE_COLORS.filter((c) => present.has(c.key)) };
+  }
   if (mode === 'boundary' || mode === 'type') {
     const of = surfaces.map((s) => {
       if (mode === 'type' || s.kind === 'shading') return typeCategory(s);

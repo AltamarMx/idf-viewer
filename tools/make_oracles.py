@@ -17,7 +17,10 @@ objects, and writes ``tests/oracles/<file stem>.json`` with:
 - wind pressure: the Cp EnergyPlus evaluates from each curve, table or list of
   values at its wind directions (``.eio``);
 - daylighting points: position of each daylighting reference point, from the DXF
-  drawing EnergyPlus writes.
+  drawing EnergyPlus writes;
+- geometry warnings: upside-down or misoriented surfaces, non-planar, very small,
+  coincident or collinear vertices, interzone mismatches, zones not enclosed and
+  windows outside their wall, from eplusout.err (with DisplayExtraWarnings).
 
 With ``--annual`` it runs a whole year (with a weather file from the install; the
 values used do not depend on the weather) and writes ``<stem>.annual.json``:
@@ -60,10 +63,12 @@ DROP_CLASSES = {
     "output:table:summaryreports",
     "output:surfaces:list",
     "output:surfaces:drawing",
+    "output:diagnostics",
 }
 EXTRA_OBJECTS = """
 Output:Surfaces:List, DetailsWithVertices;
 Output:Surfaces:Drawing, DXF;
+Output:Diagnostics, DisplayExtraWarnings;
 Output:SQLite, SimpleAndTabular;
 Output:Table:SummaryReports, InputVerificationandResultsSummary, EnvelopeSummary;
 """
@@ -198,6 +203,53 @@ def read_dxf_daylighting(dxf: Path) -> dict[str, list[float]]:
     return points
 
 
+GEOMETRY_WARNINGS = [
+    # (kind, pattern); the first group is the surface or zone name.
+    ("upsideDown", r'(?:Roof/Ceiling|Floor) is upside down!.*Surface="([^"]+)"'),
+    ("notOriented", r'(?:Roof/Ceiling|Floor) is not oriented correctly!.*Surface="([^"]+)"'),
+    ("nonPlanar", r'Possible non-planar surface:"([^"]+)"'),
+    ("nonPlanarSevere", r'Suspected non-planar surface:"([^"]+)"'),
+    ("smallArea", r"Very small surface area\[[^\]]*\], Surface=(.+)$"),
+    ("coincident", r"possibly coincident\. for Surface=(.+), in Zone="),
+    ("collinear", r'CheckConvexity: Surface="([^"]+)" has \[\d+\] collinear points'),
+    ("notEnclosed", r'CalculateZoneVolume: The Zone="([^"]+)" is not fully enclosed'),
+    ("subsurfaceOutside", r'Surface "[^"]+" overlaps SubSurface "([^"]+)"'),
+]
+INTERZONE_WARNINGS = [
+    ("interzoneArea", "InterZone Surface Areas do not match"),
+    ("interzoneAzimuth", "InterZone Surface Azimuths do not match"),
+    ("interzoneTilt", "InterZone Surface Tilts do not match"),
+]
+
+
+def read_err_geometry(err: Path) -> list[list[str]]:
+    """Geometry warnings of eplusout.err (with Output:Diagnostics, DisplayExtraWarnings)
+    as [kind, name] pairs; interzone mismatches name both surfaces, sorted."""
+    lines = err.read_text(errors="replace").splitlines()
+    found: set[tuple[str, str]] = set()
+    for i, line in enumerate(lines):
+        for kind, pattern in GEOMETRY_WARNINGS:
+            m = re.search(pattern, line)
+            if m:
+                found.add((kind, m.group(1).strip()))
+        if "This surface is now a degenerate surface" in line:
+            for back in reversed(lines[max(0, i - 4) : i]):
+                m = re.search(r"possibly coincident\. for Surface=(.+), in Zone=", back)
+                if m:
+                    found.add(("degenerate", m.group(1).strip()))
+                    break
+        for kind, text in INTERZONE_WARNINGS:
+            if text in line:
+                names = []
+                for follow in lines[i + 1 : i + 3]:
+                    m = re.search(r"in Surface=([^,]+), Zone=", follow)
+                    if m:
+                        names.append(m.group(1).strip())
+                if len(names) == 2:
+                    found.add((kind, " | ".join(sorted(names))))
+    return [list(item) for item in sorted(found)]
+
+
 def read_sql(sql: Path) -> dict:
     db = sqlite3.connect(sql)
     db.row_factory = sqlite3.Row
@@ -289,6 +341,7 @@ def run(idf: Path, energyplus: Path) -> Path:
     sql["site"] = read_eio_site(run_dir / "eplusout.eio")
     sql["windPressure"] = read_eio_cp(run_dir / "eplusout.eio")
     sql["daylightingPoints"] = read_dxf_daylighting(run_dir / "eplusout.dxf")
+    sql["geometryWarnings"] = read_err_geometry(run_dir / "eplusout.err")
     version = re.search(r"EnergyPlus, Version ([\d.]+)", (run_dir / "eplusout.err").read_text(errors="replace"))
     oracle = {
         "source": {"file": idf.name, "energyplus": version.group(1) if version else None},

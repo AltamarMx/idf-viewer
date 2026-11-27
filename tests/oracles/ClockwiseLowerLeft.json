@@ -463,5 +463,11 @@
   ]
  },
  "windPressure": {},
- "daylightingPoints": {}
+ "daylightingPoints": {},
+ "geometryWarnings": [
+  [
+   "notEnclosed",
+   "ZONE TWO"
+  ]
+ ]
 }

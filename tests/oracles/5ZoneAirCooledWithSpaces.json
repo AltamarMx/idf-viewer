@@ -2410,5 +2410,6 @@
   ]
  },
  "windPressure": {},
- "daylightingPoints": {}
+ "daylightingPoints": {},
+ "geometryWarnings": []
 }

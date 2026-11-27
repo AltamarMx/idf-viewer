@@ -586,8 +586,8 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 ### Fase 2c · Construcciones, validación y complementos
 
 - [x] 2c.1 Corte de capas (E1) y uso de cada construcción (E3).
-- [ ] 2c.2 Capas y cortes 3D (C7), diagnóstico visual de geometría (C8) y elementos adicionales (C9). *C7 y C9 hechos; C8 va en la computadora con EnergyPlus.*
-- [ ] 2c.3 Validación contra el IDD (H3), objetos sin uso (H4) y problemas de geometría (H5). *H3 y H4 hechos; H5 va con C8 (2c.2).*
+- [x] 2c.2 Capas y cortes 3D (C7), diagnóstico visual de geometría (C8) y elementos adicionales (C9).
+- [x] 2c.3 Validación contra el IDD (H3), objetos sin uso (H4) y problemas de geometría (H5).
 - [x] 2c.4 Vista de texto sincronizada (B6).
 - [ ] 2c.5 Lectura de epJSON (A5) y apertura desde una URL (A6). *A6 hecho; A5 va en la computadora con EnergyPlus.*
 - [x] 2c.6 Ubicación y días de diseño (D5) y salidas solicitadas (D6).
@@ -652,6 +652,20 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - Privacidad: el navegador descarga el archivo directamente del servidor donde está, sin pasar por ningún servidor del visor. GitHub Pages sí recibe la dirección del archivo (no su contenido), porque va dentro de la dirección de la página.
   - Comprobado con archivos reales: el enlace de GitHub de `1ZoneUncontrolled.idf` de EnergyPlus abre; GitLab no permite que otros sitios lean sus archivos y da el aviso de CORS. La rama de desarrollo de EnergyPlus ya está en la versión 27.1; el visor la abre con el esquema de 26.2 y lo avisa.
   - Código: `src/features/gallery/remote.ts`. Pruebas en `tests/remote.test.ts` y tres en `e2e/smoke.spec.ts`. Playwright no aplica CORS a las respuestas que simula, así que la prueba del error simula una descarga fallida.
+- C8 y H5 (2026-11-27): **diagnóstico de geometría**, con las mismas reglas y tolerancias que EnergyPlus 26.2.
+  - Panel de problemas, categoría Geometry; en el 3D, modo de color "Geometry problems" (error, aviso, sin problema), capa "Normals (outward side)" con una flecha hacia el lado exterior de cada superficie, y los mensajes de la superficie seleccionada en su recuadro.
+  - Núcleo: `src/core/geometry/checks.ts` (`geometryChecks`, `zonePolygons`); `buildGeometry` los deja en `geometry.issues`.
+  - **Comprobado:** `make_oracles.py` guarda los avisos de geometría del `.err` (con `Output:Diagnostics, DisplayExtraWarnings`) y `tests/geometry-checks.test.ts` exige que el visor encuentre exactamente los mismos, ni uno más ni uno menos, en los 8 ejemplos y en los archivos de prueba. Los ejemplos no tienen ninguno, salvo una zona abierta en `ClockwiseLowerLeft.idf`. Archivo de prueba nuevo `tests/fixtures/geometry/Defects.idf`, con un defecto por zona.
+- Reglas de EnergyPlus confirmadas en C8 (con barridos de valores para encontrar cada umbral):
+  - Vértices a menos de 1 cm del siguiente: EnergyPlus quita uno (aviso). Después quita los que están en línea recta con sus vecinos (aviso). Si quedan menos de 3, la superficie es "degenerada" (error severo).
+  - Área menor a 0.001 m²: aviso "Very small surface area" (también en ventanas).
+  - Superficie no plana: distancia de los vértices al plano de Newell que pasa por su promedio (para una esquina movida d en un cuadro, d/4). Más de 0.1 mm: aviso; más de 10 mm: error severo.
+  - Techos y plafones: inclinación mayor a 80° "mal orientado"; mayor a 90° "volteado" (EnergyPlus invierte los vértices). Pisos: menor a 158° "mal orientado"; menor a 90° "volteado". Los muros no se revisan.
+  - Pares interzona: áreas que difieren más del 2 % (es relativo: igual en 9 y en 100 m²). Solo en muros: orientación a más de 1° de opuesta, e inclinaciones que no suman 180° ± 1°. Los pares horizontales (piso y plafón) no se revisan en orientación ni inclinación.
+  - Ventana o puerta que se sale de su superficie base: aviso "Base surface does not surround subsurface". Una ventana fuera del plano de su muro (10 cm) **no** la reporta EnergyPlus; el visor sí, como revisión propia, si pasa de 1 cm.
+  - Zona que no cierra (cada arista debe estar en exactamente dos superficies): aviso, aunque el volumen esté escrito en el objeto Zone. Para decidirlo, EnergyPlus agrega la cara del otro lado de las superficies con frontera "Zone" que apuntan a la zona (así cierran las zonas del edificio de departamentos) e ignora los pares interzona con los dos lados en la misma zona (muros entre espacios de una zona, como en la Zona 3 de `5ZoneAirCooledWithSpaces`).
+  - Volumen de una zona que no cierra: área de piso × altura de plafón (promedio de techos menos promedio de pisos), no la altura total. Antes de calcular el volumen, EnergyPlus invierte techos y pisos volteados. El visor ahora hace las dos cosas.
+  - Sin comprobar: si EnergyPlus revisa también las superficies de sombreado (el visor no las revisa).
 - Reglas usadas en C9 (**confirmadas** el 2026-11-27: los 51 puntos de `HospitalLowEnergy`, la oficina pequeña y `RotatedRelative.idf` coinciden con los que EnergyPlus dibuja en su DXF, a 1 cm):
   - `Daylighting:ReferencePoint` (8.6+, con "Zone or Space Name" desde 9.6) y, antes de 8.6, los dos puntos que traía `Daylighting:Controls`. Un punto en un `Space` se dibuja en la zona de ese espacio.
   - Con "Daylighting Reference Point Coordinate System" Relative (el valor por omisión) el punto se transforma como los vértices de su zona: rotación y origen de la zona y luego el norte del edificio. Con World se usa tal cual.
@@ -724,14 +738,13 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 ## 9. Dónde vamos (2026-11-27, tarde)
 
-**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1, 2a, 2b y 3 terminadas; de la 2c faltan C8/H5 y A5. Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): cierre de las fases 2b y 3, y horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
+**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1, 2a, 2b y 3 terminadas; de la 2c solo falta A5 (epJSON). Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): diagnóstico de geometría (C8/H5), cierre de las fases 2b y 3, y horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
 
 **Fases 2b y 3 cerradas el 2026-11-27** con EnergyPlus 26.2 (ver sus notas): referencias regeneradas, las 3 pruebas que se saltaban ahora comparan, reglas confirmadas o corregidas, y cinco validaciones nuevas del AFN que EnergyPlus exige.
 
 Lo que sigue (EnergyPlus 26.2 ya está en esta computadora):
 
 1. **Lo que queda de la fase 2c** (al terminarlo se cierra la fase):
-   - **Diagnóstico de geometría (C8/H5):** superficies volteadas, no planas o casi sin área, ventanas fuera de su muro, pares interzona que no coinciden y zonas que no cierran, en el 3D y en el panel de problemas. Las tolerancias se comparan con los avisos que EnergyPlus escribe en el `.err`. Es la recomendada para empezar: sigue de la vista explotada y los pares interzona.
    - **Lectura de epJSON (A5):** los archivos de prueba se generan con el convertidor de EnergyPlus (`ConvertInputFormat`).
 2. **Fase 4 (instalable):** no necesita EnergyPlus. Antes de empezar hay que decidir si al instalar se descargan los esquemas de las 27 versiones (unos MB más, una sola vez) o solo los de las versiones que se vayan abriendo.
 

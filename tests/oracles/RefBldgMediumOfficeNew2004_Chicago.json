@@ -5266,5 +5266,6 @@
   ]
  },
  "windPressure": {},
- "daylightingPoints": {}
+ "daylightingPoints": {},
+ "geometryWarnings": []
 }
