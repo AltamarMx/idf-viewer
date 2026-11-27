@@ -138,6 +138,21 @@ test('airflow network: summary and opening card with ZoneLevel values', async ({
   expect(errors).toEqual([]);
 });
 
+test('3D openings: open part at the maximum and on a date and time', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openExample(page, 'Small office with AirflowNetwork');
+  await page.getByRole('tab', { name: '3D' }).click();
+  await page.getByRole('button', { name: 'Openings' }).click();
+  const panel = page.locator('.openings-panel');
+  await expect(panel).toContainText('May open, up to what is drawn: 3');
+  await panel.getByLabel('On a date and time').check();
+  await expect(panel).toContainText('Jul 15 12:00–12:10');
+  await expect(panel.getByRole('button', { name: 'Play the day' })).toBeVisible();
+  await expect(panel).toContainText(/Closed, not drawn: \d/);
+  expect(errors).toEqual([]);
+});
+
 test('infiltration and ventilation: zones, infiltration and wind and stack openings', async ({
   page,
 }) => {

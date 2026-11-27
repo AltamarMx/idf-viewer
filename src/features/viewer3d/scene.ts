@@ -247,6 +247,9 @@ export class SceneView {
     }
     if (this.points) (this.points.material as THREE.Material).clippingPlanes = planes;
     if (this.pairs) (this.pairs.material as THREE.Material).clippingPlanes = planes;
+    if (this.openings)
+      for (const o of [this.openings.mesh, this.openings.edges])
+        (o.material as THREE.Material).clippingPlanes = planes;
     this.requestRender();
   }
 
@@ -309,6 +312,64 @@ export class SceneView {
       this.pairs = new THREE.LineSegments(geometry, material);
       this.pairs.renderOrder = 4;
       this.scene.add(this.pairs);
+    }
+    this.requestRender();
+  }
+
+  private openings?: { mesh: THREE.Mesh; edges: THREE.LineSegments };
+
+  /** Open parts of operable openings, drawn in front of their glass; empty removes them. */
+  setOpenings(quads: { corners: Vec3[]; color: string }[]) {
+    if (this.openings) {
+      for (const o of [this.openings.mesh, this.openings.edges]) {
+        this.scene.remove(o);
+        o.geometry.dispose();
+        (o.material as THREE.Material).dispose();
+      }
+      this.openings = undefined;
+    }
+    if (quads.length > 0) {
+      const positions = new Float32Array(quads.length * 12);
+      const colors = new Float32Array(quads.length * 12);
+      const index: number[] = [];
+      const edges: number[] = [];
+      const color = new THREE.Color();
+      quads.forEach((q, i) => {
+        color.set(q.color);
+        q.corners.forEach((c, k) => {
+          positions.set(c, i * 12 + k * 3);
+          colors.set([color.r, color.g, color.b], i * 12 + k * 3);
+        });
+        const b = i * 4;
+        index.push(b, b + 1, b + 2, b, b + 2, b + 3);
+        edges.push(b, b + 1, b + 1, b + 2, b + 2, b + 3, b + 3, b);
+      });
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      geometry.setIndex(index);
+      const material = new THREE.MeshBasicMaterial({
+        vertexColors: true,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.85,
+        depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -2,
+        polygonOffsetUnits: -2,
+      });
+      material.clippingPlanes = this.cutPlanes;
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.renderOrder = 2;
+      const edgeGeometry = new THREE.BufferGeometry();
+      edgeGeometry.setAttribute('position', geometry.getAttribute('position'));
+      edgeGeometry.setIndex(edges);
+      const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x1b2a1f });
+      edgeMaterial.clippingPlanes = this.cutPlanes;
+      const lines = new THREE.LineSegments(edgeGeometry, edgeMaterial);
+      lines.renderOrder = 2;
+      this.scene.add(mesh, lines);
+      this.openings = { mesh, edges: lines };
     }
     this.requestRender();
   }

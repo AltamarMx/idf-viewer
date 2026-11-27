@@ -12,6 +12,13 @@ import {
 } from './airflow/afn';
 import { type AfnCard, AfnInput, type AfnOverview } from './airflow/card';
 import { type FlowNetwork, flowNetwork } from './airflow/network';
+import {
+  ALWAYS,
+  NOT_EVALUABLE,
+  type OpeningShape,
+  type OpeningsView,
+  type OperableType,
+} from './airflow/openings3d';
 import { type WindView, windView } from './airflow/wind';
 import { type ZoneFlows, zoneFlows } from './airflow/zoneflows';
 import { type ConstructionRow, constructionList } from './constructions/constructions';
@@ -500,6 +507,58 @@ export class Session {
   /** AirflowNetwork summary (L3). */
   afnOverview(): AfnOverview {
     return this.afnInput.overview();
+  }
+
+  /**
+   * Operable AirflowNetwork openings for the 3D view: what part of each opens
+   * and, at every timestep, whether its availability schedule lets it open.
+   */
+  openings(): OpeningsView {
+    const { timestepsPerHour } = this.calendar;
+    const schedules: OpeningsView['schedules'] = [];
+    const byName = new Map<string, number>();
+    const scheduleIndex = (name: string) => {
+      const key = name.toLowerCase();
+      let index = byName.get(key);
+      if (index === undefined) {
+        const values = this.schedules.timesteps(name);
+        if (values) {
+          const available = new Uint8Array(values.length);
+          for (let s = 0; s < values.length; s++) available[s] = (values[s] as number) > 0 ? 1 : 0;
+          index = schedules.push({ name, available }) - 1;
+        } else index = NOT_EVALUABLE;
+        byName.set(key, index);
+      }
+      return index;
+    };
+    const openings: OpeningShape[] = [];
+    for (const link of this.afn.surfaces.values()) {
+      if (link.viaPartner || link.role !== 'operable') continue;
+      const card = this.afnInput.card(link.surface);
+      if (!card || card.surface.id === undefined) continue;
+      const schedule =
+        card.control.find((f) => f.label === 'Venting availability schedule')?.value || undefined;
+      const pivoted = card.component.lvoType?.toLowerCase() === 'horizontallypivoted';
+      const pivot = card.component.fields.find((f) => /Pivoting Axis/.test(f.label))?.value;
+      openings.push({
+        surfaceId: card.surface.id,
+        name: card.surface.name,
+        zone: card.surface.zone,
+        component: link.component,
+        type: link.type as OperableType,
+        controlMode: link.controlMode,
+        ruleKind: card.rule?.kind ?? 'unknown',
+        maxFactor: link.factor,
+        width: card.surface.width,
+        height: card.surface.height,
+        sets: card.component.sets,
+        pivotHeight: pivoted ? Number(pivot) || 0 : undefined,
+        schedule,
+        availability: schedule ? scheduleIndex(schedule) : ALWAYS,
+        occupantControl: card.rule?.occupantControl,
+      });
+    }
+    return { timestepsPerHour, schedules, openings };
   }
 
   /** Opening card of one AirflowNetwork surface (L4, L5). */

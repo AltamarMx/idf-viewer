@@ -27,7 +27,8 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
   and the outputs the file requests.
 - 3D view of the geometry, colored by boundary condition, with layers by zone and floor,
   transparency, a horizontal cut, floors pulled apart, daylighting reference points, surface
-  normals and a view of the geometry problems.
+  normals, a view of the geometry problems and the open part of operable AirflowNetwork
+  openings, at their maximum or on a date and time.
 - Constructions: a cross-section of the layers, from outside to inside and to scale, with the
   properties of each material as written in the file, and where each construction is used.
 - Schedules, internal loads and occupancy over the year, per zone, at every timestep.

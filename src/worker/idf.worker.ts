@@ -83,6 +83,13 @@ const api: WorkerApi = {
     const openable = card?.availability?.openable;
     return card && openable ? transfer(card, [openable.buffer as ArrayBuffer]) : card;
   },
+  async openings() {
+    const view = current().openings();
+    return transfer(
+      view,
+      view.schedules.map((s) => s.available.buffer as ArrayBuffer),
+    );
+  },
   async zoneFlows() {
     return current().zoneFlows();
   },

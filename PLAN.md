@@ -585,6 +585,13 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
     - cualquier valor del horario mayor que cero habilita la apertura completa: con 0.5 abre al factor máximo, no a la mitad;
     - en `Constant` la serie del visor coincide con EnergyPlus en los 35 040 timesteps del año, con cambios fuera de la hora (07:30, 17:45, 10:15, 21:30) y horario de verano;
     - en `Temperature`, EnergyPlus nunca abre fuera de la disponibilidad ni más allá del factor máximo.
+  - **Aperturas en el 3D (2026-11-27):** botón "Openings" en la vista 3D (solo si hay aberturas operables). Dibuja, delante del vidrio, la parte abierta de cada abertura operable del AFN: en verde las de control `Constant` (abren eso cuando están disponibles) y en naranja las demás (pueden abrir hasta eso; cuánto depende de la simulación). Dos modos: a su factor de apertura máximo, o en una fecha y hora (día, hora, y botón para reproducir el día paso a paso), donde las que su horario de disponibilidad (o `NoVent`) tiene cerradas no se dibujan. Al elegir una ventana, el recuadro de la superficie dice su área abierta al máximo. Cómo se dibuja cada tipo, según el código de EnergyPlus (`AirflowNetwork/src/Elements.cpp`):
+    - `DetailedOpening` no pivotado: ancho × factor de ancho y alto × factor de alto, a partir de alto × factor de altura de inicio desde abajo, interpolados entre los juegos. EnergyPlus no usa en qué lugar del ancho queda la abertura; el visor la dibuja desde el borde izquierdo visto desde afuera, como en la ficha;
+    - `DetailedOpening` pivotado horizontalmente: la hoja gira factor × 90° sobre un eje horizontal a la altura de pivote (m desde abajo); arriba del eje sale, abajo entra;
+    - `SimpleOpening`: ancho × factor de apertura, alto completo (EnergyPlus multiplica solo el ancho);
+    - `HorizontalOpening`: EnergyPlus usa área × factor (con un término por la pendiente); el visor lo dibuja como franja de ancho × factor;
+    - una ventana no rectangular se dibuja con el rectángulo equivalente centrado en ella;
+    - con control `Constant`, "abierta" en el 3D coincide con EnergyPlus en los 35 040 timesteps de `Venting.idf`; con `Temperature`, EnergyPlus solo abre cuando el 3D dice "puede abrir".
   - Archivos de prueba: el tragaluz de `Windows.idf` y `Wind.idf` pasó a área de fuga (EnergyPlus no permite ahí ninguna abertura operable); la abertura horizontal ahora es una escotilla entre la Zona 1 y el plenum de `Network.idf`, donde SB12 pasó a grieta. `AfnErrors.idf` conserva el tragaluz con `HorizontalOpening` como un error sembrado más.
 
 ### Fase 2c · Construcciones, validación y complementos
@@ -742,7 +749,7 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 ## 9. Dónde vamos (2026-11-27, tarde)
 
-**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1, 2a, 2b y 3 terminadas; de la 2c solo falta A5 (epJSON). Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): gráfica anual de cuándo puede abrir cada ventana del AFN (notas de la fase 2b), diagnóstico de geometría (C8/H5), cierre de las fases 2b y 3, y horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
+**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1, 2a, 2b y 3 terminadas; de la 2c solo falta A5 (epJSON). Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): aperturas de ventanas en el 3D, al máximo o en una fecha y hora, y gráfica anual de cuándo puede abrir cada ventana del AFN (notas de la fase 2b), diagnóstico de geometría (C8/H5), cierre de las fases 2b y 3, y horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
 
 **Fases 2b y 3 cerradas el 2026-11-27** con EnergyPlus 26.2 (ver sus notas): referencias regeneradas, las 3 pruebas que se saltaban ahora comparan, reglas confirmadas o corregidas, y cinco validaciones nuevas del AFN que EnergyPlus exige.
 

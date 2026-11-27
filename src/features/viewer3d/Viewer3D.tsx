@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { GeometryView, ObjectRef, SurfaceView } from '../../core/session';
+import { type OpeningsView, openPart, partArea } from '../../core/airflow/openings3d';
+import type { CalendarView, GeometryView, ObjectRef, SurfaceView } from '../../core/session';
 import { formatArea, formatInt, formatNumber } from '../../ui/format';
+import { idf } from '../../worker/client';
+import { dayLabel, stepLabel, timeOfStep } from '../charts/time';
 import {
   AFN_MODES,
   type Category,
@@ -20,6 +23,7 @@ import {
   type Vec3,
   zoneCenters,
 } from './explode';
+import { OPENING_COLORS, openingQuads } from './openings';
 import { SceneView, type ViewName } from './scene';
 
 interface Props {
@@ -214,6 +218,46 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
     opacity < 1 ||
     cut !== null ||
     explode > 0;
+  // Open part of operable AirflowNetwork openings, at their maximum or at a timestep.
+  const operable = useMemo(() => surfaces.some((s) => s.afn?.role === 'operable'), [surfaces]);
+  const [openingsPanel, setOpeningsPanel] = useState(false);
+  const [showOpenings, setShowOpenings] = useState(false);
+  const [openings, setOpenings] = useState<OpeningsView | null>(null);
+  const [calendar, setCalendar] = useState<CalendarView | null>(null);
+  const [timeMode, setTimeMode] = useState(false);
+  const [day, setDay] = useState(0);
+  const [slot, setSlot] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a new file needs its own openings
+  useEffect(() => {
+    setOpenings(null);
+    setCalendar(null);
+    setPlaying(false);
+  }, [geometry]);
+  useEffect(() => {
+    if (!showOpenings || openings) return;
+    let live = true;
+    Promise.all([idf.openings(), idf.calendar()]).then(([view, cal]) => {
+      if (!live) return;
+      setOpenings(view);
+      setCalendar(cal);
+      // A summer day at noon to start with.
+      const july = cal.dates.findIndex(([m, d]) => m === 7 && d === 15);
+      setDay(Math.max(0, july));
+      setSlot(12 * view.timestepsPerHour);
+    });
+    return () => {
+      live = false;
+    };
+  }, [showOpenings, openings]);
+  const perDay = 24 * (openings?.timestepsPerHour ?? 1);
+  const step = timeMode && openings ? day * perDay + slot : null;
+  useEffect(() => {
+    if (!playing) return;
+    const timer = setInterval(() => setSlot((s) => (s + 1) % perDay), 120);
+    return () => clearInterval(timer);
+  }, [playing, perDay]);
+
   const selected = useMemo(() => [...highlighted(surfaces, selection)], [surfaces, selection]);
   const partner = useMemo(() => partnerOf(surfaces, selected), [surfaces, selected]);
 
@@ -340,6 +384,22 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
     ]);
   }, [showPairs, showNormals, pairs, centers, offsets, layerVisible, surfaces, geometry]);
 
+  const openingDraw = useMemo(
+    () =>
+      showOpenings && openings
+        ? openingQuads(
+            openings,
+            surfaces,
+            step,
+            (i) => !hidden.has((of[i] as Category).key) && Boolean(layerVisible[i]),
+            offsets,
+          )
+        : null,
+    [showOpenings, openings, surfaces, step, hidden, of, layerVisible, offsets],
+  );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-apply after the scene is rebuilt for new geometry
+  useEffect(() => viewRef.current?.setOpenings(openingDraw?.quads ?? []), [openingDraw, geometry]);
+
   const toggle = (key: string) =>
     setHidden((current) => {
       const next = new Set(current);
@@ -394,11 +454,128 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
           type="button"
           className={`btn small${layersOn ? ' primary' : ''}`}
           aria-expanded={layers}
-          onClick={() => setLayers((v) => !v)}
+          onClick={() => {
+            setLayers((v) => !v);
+            setOpeningsPanel(false);
+          }}
         >
           Layers and cuts
         </button>
+        {operable && (
+          <button
+            type="button"
+            className={`btn small${showOpenings ? ' primary' : ''}`}
+            aria-expanded={openingsPanel}
+            onClick={() => {
+              if (!openingsPanel && !showOpenings) setShowOpenings(true);
+              setOpeningsPanel((v) => !v);
+              setLayers(false);
+            }}
+          >
+            Openings
+          </button>
+        )}
       </div>
+
+      {openingsPanel && (
+        <div className="layers-panel openings-panel">
+          <label>
+            <input
+              type="checkbox"
+              checked={showOpenings}
+              onChange={(e) => {
+                setShowOpenings(e.target.checked);
+                if (!e.target.checked) setPlaying(false);
+              }}
+            />{' '}
+            Draw the open part of operable openings
+          </label>
+          <div className="layers-row">
+            <label>
+              <input
+                type="radio"
+                name="openings-when"
+                checked={!timeMode}
+                onChange={() => {
+                  setTimeMode(false);
+                  setPlaying(false);
+                }}
+              />{' '}
+              At their maximum
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="openings-when"
+                checked={timeMode}
+                onChange={() => setTimeMode(true)}
+              />{' '}
+              On a date and time
+            </label>
+          </div>
+          {showOpenings && !openings && <span className="count">Reading the openings…</span>}
+          {timeMode && openings && calendar && (
+            <>
+              <label className="layers-slider">
+                Day
+                <input
+                  type="range"
+                  aria-label="Day"
+                  min={0}
+                  max={Math.max(0, calendar.dates.length - 1)}
+                  value={day}
+                  onChange={(e) => setDay(Number(e.target.value))}
+                />
+                <span className="count">{dayLabel(day, calendar.dates)}</span>
+              </label>
+              <label className="layers-slider">
+                Time
+                <input
+                  type="range"
+                  aria-label="Time"
+                  min={0}
+                  max={perDay - 1}
+                  value={slot}
+                  onChange={(e) => setSlot(Number(e.target.value))}
+                />
+                <span className="count">{timeOfStep(slot, openings.timestepsPerHour)}</span>
+              </label>
+              <div className="openings-play">
+                <button type="button" className="btn small" onClick={() => setPlaying((v) => !v)}>
+                  {playing ? 'Pause' : 'Play the day'}
+                </button>
+                <span className="count openings-step">
+                  {stepLabel(step ?? 0, calendar.dates, openings.timestepsPerHour)}
+                </span>
+              </div>
+            </>
+          )}
+          {openingDraw && (
+            <ul className="openings-legend">
+              <li>
+                <span className="swatch" style={{ background: OPENING_COLORS.open }} />
+                {timeMode ? 'Open' : 'Opens this much'} (Constant control):{' '}
+                {formatInt(openingDraw.counts.open)}
+              </li>
+              <li>
+                <span className="swatch" style={{ background: OPENING_COLORS.may }} />
+                May open, up to what is drawn: {formatInt(openingDraw.counts.may)}
+              </li>
+              <li>
+                <span className="swatch closed" />
+                Closed, not drawn: {formatInt(openingDraw.counts.closed)}
+              </li>
+            </ul>
+          )}
+          <p className="count openings-note">
+            {timeMode
+              ? 'At this timestep: green openings are open as drawn (Constant control, availability schedule above zero); orange ones may open up to what is drawn, depending on the temperatures of the simulation; the rest are closed by their availability schedule or NoVent control.'
+              : 'Each opening at its maximum opening factor, in front of its glass: width × height factors from the start height (detailed opening), width × opening factor (simple and horizontal openings) or the sash turned by factor × 90° about its pivot axis.'}
+            {!geometry.afn.active &&
+              ' EnergyPlus does not run the AirflowNetwork in this file, so none of them opens in the simulation.'}
+          </p>
+        </div>
+      )}
 
       {layers && (
         <div className="layers-panel">
@@ -710,6 +887,7 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
               {one.afn.viaPartner ? ` · listed on ${one.afn.viaPartner}` : ''}
             </div>
           )}
+          {one.afn?.role === 'operable' && openings && <OpenAreaLine view={openings} id={one.id} />}
           {one.issue?.messages.map((m) => (
             <div
               key={m}
@@ -738,6 +916,23 @@ export default function Viewer3D({ geometry, selection, onSelect, onClear, dark 
           <strong>{selection?.name}</strong>
         </div>
       )}
+    </div>
+  );
+}
+
+/** Open area of the selected opening at its maximum opening factor. */
+function OpenAreaLine({ view, id }: { view: OpeningsView; id: number }) {
+  const shape = view.openings.find((o) => o.surfaceId === id);
+  if (!shape) return null;
+  const area = partArea(openPart(shape, shape.maxFactor));
+  const full =
+    shape.width !== undefined && shape.height !== undefined ? shape.width * shape.height : 0;
+  return (
+    <div className="count">
+      {area === undefined
+        ? `Pivoted sash, turned ${formatNumber(Math.min(1, shape.maxFactor) * 90)}° at its maximum`
+        : `Open at its maximum: ${formatArea(area)}${full ? ` (${formatNumber((100 * area) / full)} % of the opening)` : ''}`}
+      {shape.schedule ? ` · available per ${shape.schedule}` : ''}
     </div>
   );
 }
