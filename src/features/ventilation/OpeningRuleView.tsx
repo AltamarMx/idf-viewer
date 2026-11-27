@@ -46,18 +46,16 @@ function ModulationChart({ rule, dark }: { rule: OpeningRule; dark: boolean }) {
   const { lower = 0, upper = 0, variable, units } = rule;
   const option = useMemo<ChartOption>(() => {
     // Show the whole modulation and a bit beyond the upper limit.
-    const end = rule.invalid ? Math.max(lower, 1) * 1.5 : upper + (upper - lower) * 0.15;
+    const end = upper + (upper - lower) * 0.15;
     const data: [number, number][] = [];
     for (let i = 1; i <= 200; i++) {
       const d = (end * i) / 200;
       data.push([d, Number(modulatedFactor(rule, d).toFixed(4))]);
     }
-    const limits = rule.invalid
-      ? []
-      : [
-          { xAxis: lower, label: { formatter: 'lower limit' } },
-          { xAxis: upper, label: { formatter: 'upper limit' } },
-        ];
+    const limits = [
+      { xAxis: lower, label: { formatter: 'lower limit' } },
+      { xAxis: upper, label: { formatter: 'upper limit' } },
+    ];
     return {
       tooltip: {
         trigger: 'axis',
@@ -102,10 +100,11 @@ function ModulationChart({ rule, dark }: { rule: OpeningRule; dark: boolean }) {
 
   return (
     <>
-      {rule.invalid && (
+      {rule.inputUpper !== undefined && (
         <div className="notice warn">
-          The upper limit ({formatNumber(upper)} {units}) is not above the lower limit (
-          {formatNumber(lower)} {units}): EnergyPlus reports an input error.
+          The upper limit written ({formatNumber(rule.inputUpper)} {units}) is not above the lower
+          limit ({formatNumber(lower)} {units}): EnergyPlus warns and uses {formatNumber(upper)}{' '}
+          {units} instead. The chart uses that value.
         </div>
       )}
       <Chart option={option} height={210} dark={dark} />

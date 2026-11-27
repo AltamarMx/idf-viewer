@@ -201,3 +201,45 @@ describe('site wind profile matches EnergyPlus', () => {
     if (modifier !== undefined) expect(mine.stationFactor).toBeCloseTo(modifier, 2);
   });
 });
+
+/**
+ * The Cp EnergyPlus evaluates from each curve, table or list of values at its
+ * wind directions (.eio). EnergyPlus lists the source as written, without the
+ * node's symmetry, so beyond 180° only nodes that are not symmetric compare.
+ * Files with SurfaceAverageCalculation (Windows.idf) are left out: there
+ * EnergyPlus computes the Cp of each facade (L10, not done yet).
+ */
+describe('Cp sources match EnergyPlus', () => {
+  const ROOT = resolve(__dirname, '..');
+  const cases = [
+    'examples/AirflowNetwork_MultiZone_House.idf',
+    'examples/AirflowNetwork_MultiZone_SmallOffice.idf',
+    'tests/fixtures/ventilation/Wind.idf',
+  ].map((idf) => {
+    const stem = idf.replace(/^.*\//, '').replace(/\.idf$/, '');
+    const oracle = JSON.parse(readFileSync(resolve(ROOT, `tests/oracles/${stem}.json`), 'utf8'));
+    return [stem, idf, oracle.windPressure] as const;
+  });
+
+  it.each(cases)('%s', async (_stem, idf, reference) => {
+    const { nodes } = (await open(idf)).wind();
+    const directions: number[] = reference.directions;
+    const problems: string[] = [];
+    let compared = 0;
+    for (const [name, values] of Object.entries(
+      reference.coefficients as Record<string, number[]>,
+    )) {
+      for (const node of nodes.filter((n) => n.cp.name.toUpperCase() === name)) {
+        directions.forEach((angle, i) => {
+          if (node.symmetric && angle > 180) return;
+          const ours = node.cp.curve.find(([a]) => Math.abs(a - angle) < 1e-6)?.[1];
+          compared++;
+          if (ours === undefined || Math.abs(ours - (values[i] as number)) > 0.006)
+            problems.push(`${node.name} (${name}) at ${angle}°: ${ours} vs ${values[i]}`);
+        });
+      }
+    }
+    expect(compared).toBeGreaterThan(0);
+    expect(problems.slice(0, 12).join('\n')).toBe('');
+  });
+});

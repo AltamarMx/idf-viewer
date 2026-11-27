@@ -63,6 +63,8 @@ export interface WindowRow {
   glazing?: SimpleGlazing;
   frame?: string;
   frameId?: number;
+  /** The frame is named on a simplified Window or GlazedDoor, which EnergyPlus ignores. */
+  frameIgnored?: boolean;
   shading: ShadingControlRef[];
   afn?: AfnSurfaceLink;
 }
@@ -210,6 +212,8 @@ export function windowInventory(
       glazing,
       frame: frame ? reader(frame).str('Name') : frameName || undefined,
       frameId: frame?.id,
+      frameIgnored:
+        Boolean(frameName) && obj.className.toLowerCase() !== 'fenestrationsurface:detailed',
       shading,
       afn: afn.surfaces.get(s.name.toLowerCase()),
     });

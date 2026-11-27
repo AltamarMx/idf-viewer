@@ -243,5 +243,28 @@
     "West (225 to 315 deg)": 0.0
    }
   }
- }
+ },
+ "fenestration": {},
+ "airflow": {},
+ "site": {
+  "Environment:Weather Station": [
+   {
+    "Wind Sensor Height Above Ground {m}": 10.0,
+    "Wind Speed Profile Exponent {}": 0.14,
+    "Wind Speed Profile Boundary Layer Thickness {m}": 270.0,
+    "Air Temperature Sensor Height Above Ground {m}": 1.5,
+    "Wind Speed Modifier Coefficient-Internal": 1.586,
+    "Temperature Modifier Coefficient-Internal": 0.01
+   }
+  ],
+  "Environment:Site Atmospheric Variation": [
+   {
+    "Wind Speed Profile Exponent {}": 0.22,
+    "Wind Speed Profile Boundary Layer Thickness {m}": 370.0,
+    "Air Temperature Gradient Coefficient {K/m}": 0.0065
+   }
+  ]
+ },
+ "windPressure": {},
+ "daylightingPoints": {}
 }

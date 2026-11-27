@@ -632,7 +632,7 @@
     1,                       !- Length {m}
     1;                       !- Height {m}
 
-  ! Roof: skylight with a HorizontalOpening.
+  ! Roof: skylight with a HorizontalOpening (error: it is exposed to outdoors).
   FenestrationSurface:Detailed,
     Skylight,                !- Name
     Window,                  !- Surface Type

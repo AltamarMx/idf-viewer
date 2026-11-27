@@ -1,9 +1,11 @@
 /**
  * Daylighting reference points (C9) and floor levels of the 3D layers (C7).
  */
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { openFile } from '../src/core/session';
-import { diskSchemaLoader, fileBuffer } from './helpers';
+import { diskSchemaLoader, fileBuffer, ROOT } from './helpers';
 
 const loader = diskSchemaLoader();
 
@@ -50,6 +52,36 @@ describe('daylighting reference points', () => {
   it('keeps World points as written', async () => {
     const session = await openFile({ name: 'c.idf', text: OLD_FORMAT('World', 90) }, loader);
     expect(session.geometry.daylightingPoints[0]?.position).toEqual([2, 3, 0.8]);
+  });
+});
+
+/** Positions EnergyPlus draws in its DXF (tools/make_oracles.py). */
+describe('daylighting points match EnergyPlus', () => {
+  const cases = [
+    'examples/HospitalLowEnergy.idf',
+    'examples/AirflowNetwork_MultiZone_SmallOffice.idf',
+    'tests/fixtures/geometry/RotatedRelative.idf',
+  ].map((idf) => {
+    const stem = idf.replace(/^.*\//, '').replace(/\.idf$/, '');
+    const path = resolve(ROOT, `tests/oracles/${stem}.json`);
+    const oracle = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : {};
+    return [stem, idf, (oracle.daylightingPoints ?? {}) as Record<string, number[]>] as const;
+  });
+
+  it.each(cases)('%s', async (_stem, idf, reference) => {
+    expect(Object.keys(reference).length).toBeGreaterThan(0);
+    const session = await openFile({ name: idf, buffer: fileBuffer(idf) }, loader);
+    const ours = new Map(
+      session.geometry.daylightingPoints.map((p) => [p.name.toUpperCase(), p.position]),
+    );
+    const problems: string[] = [];
+    for (const [name, position] of Object.entries(reference)) {
+      const p = ours.get(name);
+      if (!p || p.some((v, i) => Math.abs(v - (position[i] as number)) > 0.01))
+        problems.push(`${name}: ${p?.map((v) => v.toFixed(3))} vs ${position}`);
+    }
+    expect(ours.size).toBe(Object.keys(reference).length);
+    expect(problems.join('\n')).toBe('');
   });
 });
 

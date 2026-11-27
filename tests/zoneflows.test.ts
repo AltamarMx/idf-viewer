@@ -113,6 +113,14 @@ describe('design flows match EnergyPlus', () => {
   it.each(cases)('%s', async (_stem, idf, airflow) => {
     const flows = (await open(idf)).zoneFlows();
     const problems: string[] = [];
+    // EnergyPlus splits an object of a zone with several spaces into one instance
+    // per space ("<space> <object>"), sharing the zone flow by floor area: add
+    // them up per object and zone.
+    type Ref = Record<string, unknown>;
+    const totals = new Map<
+      (typeof flows.rows)[number],
+      { name: string; design: number; refs: Ref[] }
+    >();
     for (const [section, rows] of Object.entries(airflow ?? {})) {
       for (const ref of rows) {
         const key = (pattern: RegExp) => Object.keys(ref).find((k) => pattern.test(k));
@@ -129,12 +137,43 @@ describe('design flows match EnergyPlus', () => {
           problems.push(`${section}: ${name} in ${zone} not found`);
           continue;
         }
-        if (
-          row.design === undefined ||
-          Math.abs(row.design - design) > Math.max(1e-6, 0.005 * design)
-        )
-          problems.push(`${name} in ${zone}: design ${row.design} vs ${design}`);
+        const total = totals.get(row) ?? { name, design: 0, refs: [] };
+        total.design += design;
+        total.refs.push(ref);
+        totals.set(row, total);
       }
+    }
+    const near = (a: number | undefined, b: number) =>
+      a !== undefined && Math.abs(a - b) <= Math.max(1e-6, 0.005 * Math.abs(b));
+    for (const [row, { name, design, refs }] of totals) {
+      // Normalized values and coefficients of objects that are not split by space.
+      const ref = refs.length === 1 ? (refs[0] as Ref) : undefined;
+      if (ref && design > 0) {
+        const value = (pattern: RegExp) => {
+          const k = Object.keys(ref).find((x) => pattern.test(x));
+          return k && typeof ref[k] === 'number' ? (ref[k] as number) : undefined;
+        };
+        const checks: [string, number | undefined, number | undefined][] = [
+          ['ACH', row.ach, value(/^ACH/)],
+          ['per floor area', row.perFloor, value(/Flow Rate\/Floor Area/)],
+          ['per exterior area', row.perExterior, value(/Flow Rate\/Exterior Surface Area/)],
+          ['A', row.coefficients?.a, value(/^Equation A/)],
+          ['B', row.coefficients?.b, value(/^Equation B/)],
+          ['C', row.coefficients?.c, value(/^Equation C/)],
+          ['D', row.coefficients?.d, value(/^Equation D/)],
+        ];
+        for (const [label, ours, theirs] of checks)
+          if (theirs !== undefined && !near(ours, theirs))
+            problems.push(`${name} in ${row.zone}: ${label} ${ours} vs ${theirs}`);
+      }
+      // Effective leakage area and wind and stack open area depend on the
+      // weather: EnergyPlus reports 0 and the viewer shows the formula.
+      if (row.design === undefined && design === 0) continue;
+      if (
+        row.design === undefined ||
+        Math.abs(row.design - design) > Math.max(1e-6, 0.005 * design)
+      )
+        problems.push(`${name} in ${row.zone}: design ${row.design} vs ${design}`);
     }
     expect(problems.slice(0, 15).join('\n'), `${problems.length} differences`).toBe('');
   });

@@ -118,3 +118,20 @@ def test_prepare_annual_input_adds_timestep_outputs_on_request():
 def test_compress_timestep_days():
     day = [0.0] * 45 + [1.0] * 60 + [0.0] * 39  # 6 timesteps per hour
     assert make_oracles.compress(day + day, per_day=144) == {"profiles": [day], "days": [0, 0]}
+
+
+def test_read_dxf_daylighting(tmp_path):
+    dxf = tmp_path / "eplusout.dxf"
+    dxf.write_text(
+        "999\nZONE A:DayRefPt:REF 1\n  0\nCIRCLE\n  8\nZONE_A\n 62\n 10\n 10\n 1.5\n 20\n 2.5\n 30\n 0.8\n 40\n 0.2\n"
+    )
+    assert make_oracles.read_dxf_daylighting(dxf) == {"REF 1": [1.5, 2.5, 0.8]}
+
+
+def test_read_eio_cp(tmp_path):
+    eio = tmp_path / "eplusout.eio"
+    eio.write_text(
+        "AirflowNetwork Model:Wind Direction (degrees),0.00,90.00\n"
+        "AirflowNetwork Model:Wind Pressure Coefficients (dimensionless), S_CP, -0.37,0.60\n"
+    )
+    assert make_oracles.read_eio_cp(eio) == {"directions": [0.0, 90.0], "coefficients": {"S_CP": [-0.37, 0.6]}}

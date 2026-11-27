@@ -980,5 +980,66 @@
     "West (225 to 315 deg)": 0.0
    }
   }
+ },
+ "fenestration": {
+  "Z2 SOUTH WINDOW": {
+   "Construction": "SIMPLE WINDOW",
+   "Construction Assignment Source": "Explicit",
+   "Zone": "ZONE TWO",
+   "Space": "ZONE TWO",
+   "Frame and Divider": "",
+   "Glass Area": 2.4,
+   "Frame Area": 0.0,
+   "Divider Area": 0.0,
+   "Area of One Opening": 2.4,
+   "Area of Multiplied Openings": 2.4,
+   "Glass U-Factor": 2.803,
+   "Glass SHGC": 0.601,
+   "Glass Visible Transmittance": 0.702,
+   "Frame Conductance": "",
+   "Divider Conductance": "",
+   "NFRC Product Type": "",
+   "Assembly U-Factor": "",
+   "Assembly SHGC": "",
+   "Assembly Visible Transmittance": "",
+   "Shade Control": "No",
+   "Parent Surface": "Z2 SOUTH WALL",
+   "Azimuth": 190.0,
+   "Tilt": 90.0,
+   "Cardinal Direction": "S"
+  }
+ },
+ "airflow": {},
+ "site": {
+  "Environment:Weather Station": [
+   {
+    "Wind Sensor Height Above Ground {m}": 10.0,
+    "Wind Speed Profile Exponent {}": 0.14,
+    "Wind Speed Profile Boundary Layer Thickness {m}": 270.0,
+    "Air Temperature Sensor Height Above Ground {m}": 1.5,
+    "Wind Speed Modifier Coefficient-Internal": 1.586,
+    "Temperature Modifier Coefficient-Internal": 0.01
+   }
+  ],
+  "Environment:Site Atmospheric Variation": [
+   {
+    "Wind Speed Profile Exponent {}": 0.22,
+    "Wind Speed Profile Boundary Layer Thickness {m}": 370.0,
+    "Air Temperature Gradient Coefficient {K/m}": 0.0065
+   }
+  ]
+ },
+ "windPressure": {},
+ "daylightingPoints": {
+  "Z2 REF 1": [
+   28.2109,
+   -13.8701,
+   1.4
+  ],
+  "Z2 REF 2": [
+   30.9333,
+   -12.827,
+   1.3
+  ]
  }
 }

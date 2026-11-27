@@ -11,7 +11,8 @@
   surfaces without external node, no `AirflowNetwork:MultiZone:Zone`, a detailed opening
   whose opening factors do not go from 0 to 1 and with Cd 1.3, inverted ΔT limits, zone
   infiltration in a network zone, a surface that does not exist, a triangular operable
-  window and an EMS actuator on an opening. EnergyPlus does not run it; it has no reference.
+  window, an EMS actuator on an opening and a `HorizontalOpening` on the exterior skylight.
+  EnergyPlus does not run it; it has no reference.
 - `Wind.idf`: `tests/fixtures/windows/Windows.idf` with Cp `Input` and one external node
   per facade, each with a different source of Cp: `WindPressureCoefficientValues` (south,
   west, roof), a symmetric `Table:Lookup` with relative angle (east) and a symmetric
@@ -23,8 +24,12 @@
   `Table:OneIndependentVariable` with relative angle.
 - `Network.idf`: `examples/5ZoneAirCooledWithSpaces.idf` (plenum and 5 zones, North Axis 30°)
   with an AirflowNetwork for the flow network diagram: `MultizoneWithoutDistribution` with
-  `SurfaceAverageCalculation`, cracks on the exterior walls, a detailed opening on the front
-  window (opening factor 0.5) and on the interzone wall SB12, a crack on SB32 (listed from
-  Zone 3's side), a zone exhaust fan on BACK-2, a network zone without surfaces (Zone 5), a
-  `ZoneMixing` from Zone 4 to Zone 5 and a `ZoneCrossMixing` between Zone 3 and Zone 5. The
-  exhaust fan has no `Fan:ZoneExhaust`, so EnergyPlus does not run it; it has no reference.
+  `SurfaceAverageCalculation`, cracks on the exterior walls and on the interzone walls SB12
+  and SB32 (SB32 listed from Zone 3's side), a detailed opening on the front window (opening
+  factor 0.5), a 1 × 1 m hatch (a pair of interzone doors) from Zone 1 to the plenum with a
+  `HorizontalOpening`, a crack on a plenum wall, a zone exhaust fan on BACK-2, a network
+  zone without surfaces (Zone 5), a `ZoneMixing` from Zone 4 to Zone 5 and a
+  `ZoneCrossMixing` between Zone 3 and Zone 5. Two mistakes are on purpose and the viewer
+  reports both: the exhaust fan has no `Fan:ZoneExhaust` and Zone 5 has no surfaces in the
+  network, so EnergyPlus does not run it and it has no reference. Without them, EnergyPlus
+  26.2 runs it.

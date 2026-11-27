@@ -1,10 +1,12 @@
 /**
  * Flow network between zones (L11): AirflowNetwork links and zone mixing.
  */
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { FlowNetwork } from '../src/core/airflow/network';
 import { openFile } from '../src/core/session';
-import { diskSchemaLoader, fileBuffer } from './helpers';
+import { diskSchemaLoader, fileBuffer, ROOT } from './helpers';
 
 const loader = diskSchemaLoader();
 const open = async (path: string) =>
@@ -94,9 +96,11 @@ describe('Network.idf', () => {
   it('links interzone surfaces, openings, fans and mixing', async () => {
     const n = await ready;
     expect(describeLinks(n)).toEqual([
+      'PLENUM-1 — Outdoors · South · crack (WALL-1PF)',
+      'PLENUM-1 — Zone 1 · horizontalopening (Hatch-1)',
       'Zone 1 — Outdoors · South · crack (FRONT-1)',
       'Zone 1 — Outdoors · South · detailedopening (WF-1)',
-      'Zone 1 — Zone 2 · detailedopening (SB12)',
+      'Zone 1 — Zone 2 · crack (SB12)',
       'Zone 1 — Zone 4 · crack (SB14)',
       'Zone 2 — Outdoors · East · crack (RIGHT-1)',
       'Zone 2 — Zone 3 · crack (SB32)',
@@ -123,11 +127,27 @@ describe('Network.idf', () => {
     expect(link('crossmixing')?.objects[0]?.design).toBeCloseTo(0.1);
   });
 
-  it('warns about a network zone without surfaces and lists the zones left out', async () => {
+  it('warns about a network zone without surfaces', async () => {
     const n = await ready;
     expect(n.warnings.map((w) => w.message)).toEqual([
       'Zone 5 has an AirflowNetwork:MultiZone:Zone but no surface in the network.',
     ]);
+    expect(n.zonesOutside).toEqual([]);
+  });
+
+  it('lists the zones left out of the network', async () => {
+    // The same file without the plenum's part of the network.
+    const path = 'tests/fixtures/ventilation/Network.idf';
+    const text = readFileSync(resolve(ROOT, path), 'utf8')
+      .split(/(?<=;)/)
+      .filter(
+        (o) =>
+          !/^\s*(?:!.*\n\s*)*AirflowNetwork:MultiZone:(?:Zone,\s*PLENUM-1|Surface,\s*(?:Hatch-1|WALL-1PF),)/.test(
+            o,
+          ),
+      )
+      .join('');
+    const n = (await openFile({ name: 'NoPlenum.idf', text }, loader)).network();
     expect(n.zonesOutside).toEqual(['PLENUM-1']);
   });
 });

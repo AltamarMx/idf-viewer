@@ -1254,5 +1254,174 @@
     "West (225 to 315 deg)": 0.0
    }
   }
+ },
+ "fenestration": {
+  "ZN001:WALL001:WIN001": {
+   "Construction": "ELECTRO-CON-LIGHT",
+   "Construction Assignment Source": "Explicit",
+   "Zone": "WEST ZONE",
+   "Space": "WEST ZONE",
+   "Frame and Divider": "TESTFRAMEANDDIVIDER",
+   "Glass Area": 9.72,
+   "Frame Area": 0.71,
+   "Divider Area": 0.28,
+   "Area of One Opening": 10.71,
+   "Area of Multiplied Openings": 10.71,
+   "Glass U-Factor": 2.621,
+   "Glass SHGC": 0.71,
+   "Glass Visible Transmittance": 0.746,
+   "Frame Conductance": 5.0,
+   "Divider Conductance": 5.0,
+   "NFRC Product Type": "CurtainWall",
+   "Assembly U-Factor": 2.754,
+   "Assembly SHGC": 0.622,
+   "Assembly Visible Transmittance": 0.645,
+   "Shade Control": "Yes",
+   "Parent Surface": "ZN001:WALL001",
+   "Azimuth": 180.0,
+   "Tilt": 90.0,
+   "Cardinal Direction": "S"
+  },
+  "ZN003:WALL002:WIN001": {
+   "Construction": "ELECTRO-CON-LIGHT",
+   "Construction Assignment Source": "Explicit",
+   "Zone": "NORTH ZONE",
+   "Space": "NORTH ZONE",
+   "Frame and Divider": "TESTFRAMEANDDIVIDER",
+   "Glass Area": 9.72,
+   "Frame Area": 0.71,
+   "Divider Area": 0.28,
+   "Area of One Opening": 10.71,
+   "Area of Multiplied Openings": 10.71,
+   "Glass U-Factor": 2.621,
+   "Glass SHGC": 0.71,
+   "Glass Visible Transmittance": 0.746,
+   "Frame Conductance": 5.0,
+   "Divider Conductance": 5.0,
+   "NFRC Product Type": "CurtainWall",
+   "Assembly U-Factor": 2.754,
+   "Assembly SHGC": 0.622,
+   "Assembly Visible Transmittance": 0.645,
+   "Shade Control": "No",
+   "Parent Surface": "ZN003:WALL002",
+   "Azimuth": 0.0,
+   "Tilt": 90.0,
+   "Cardinal Direction": "N"
+  }
+ },
+ "airflow": {},
+ "site": {
+  "Environment:Weather Station": [
+   {
+    "Wind Sensor Height Above Ground {m}": 10.0,
+    "Wind Speed Profile Exponent {}": 0.14,
+    "Wind Speed Profile Boundary Layer Thickness {m}": 270.0,
+    "Air Temperature Sensor Height Above Ground {m}": 1.5,
+    "Wind Speed Modifier Coefficient-Internal": 1.586,
+    "Temperature Modifier Coefficient-Internal": 0.01
+   }
+  ],
+  "Environment:Site Atmospheric Variation": [
+   {
+    "Wind Speed Profile Exponent {}": 0.22,
+    "Wind Speed Profile Boundary Layer Thickness {m}": 370.0,
+    "Air Temperature Gradient Coefficient {K/m}": 0.0065
+   }
+  ]
+ },
+ "windPressure": {
+  "directions": [
+   0.0,
+   30.0,
+   60.0,
+   90.0,
+   120.0,
+   150.0,
+   180.0,
+   210.0,
+   240.0,
+   270.0,
+   300.0,
+   330.0
+  ],
+  "coefficients": {
+   "NFACADE_WPCVALUE": [
+    0.6,
+    0.48,
+    0.04,
+    -0.56,
+    -0.56,
+    -0.42,
+    -0.37,
+    -0.42,
+    -0.56,
+    -0.56,
+    0.04,
+    0.48
+   ],
+   "EFACADE_WPCVALUE": [
+    -0.56,
+    0.04,
+    0.48,
+    0.6,
+    0.48,
+    0.04,
+    -0.56,
+    -0.56,
+    -0.42,
+    -0.37,
+    -0.42,
+    -0.56
+   ],
+   "SFACADE_WPCVALUE": [
+    -0.37,
+    -0.42,
+    -0.56,
+    -0.56,
+    0.04,
+    0.48,
+    0.6,
+    0.48,
+    0.04,
+    -0.56,
+    -0.56,
+    -0.42
+   ],
+   "WFACADE_WPCVALUE": [
+    -0.56,
+    -0.56,
+    -0.42,
+    -0.37,
+    -0.42,
+    -0.56,
+    -0.56,
+    0.04,
+    0.48,
+    0.6,
+    0.48,
+    0.04
+   ],
+   "HORIZONTAL_WPCVALUE": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "daylightingPoints": {
+  "WEST ZONE_DAYLREFPT1": [
+   3.048,
+   3.048,
+   0.9
+  ]
  }
 }

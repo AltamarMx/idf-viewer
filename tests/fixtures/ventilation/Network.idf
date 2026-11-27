@@ -965,6 +965,31 @@
     30.5,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     30.5,0.0,2.4;  !- X,Y,Z ==> Vertex 4 {m}
 
+! Hatch between Zone 1 and the plenum (HorizontalOpening in the AirflowNetwork).
+  FenestrationSurface:Detailed,
+    Hatch-1,                  !- Name
+    DOOR,                    !- Surface Type
+    CLNG-1,                  !- Construction Name
+    C1-1,                  !- Building Surface Name
+    Hatch-1P,                 !- Outside Boundary Condition Object
+    0.0,                     !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    1,                       !- Multiplier
+    4,                       !- Number of Vertices
+    14,2,2.4, 14,1,2.4, 15,1,2.4, 15,2,2.4;
+
+  FenestrationSurface:Detailed,
+    Hatch-1P,                  !- Name
+    DOOR,                    !- Surface Type
+    CLNG-1,                  !- Construction Name
+    C1-1P,                  !- Building Surface Name
+    Hatch-1,                 !- Outside Boundary Condition Object
+    0.0,                     !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    1,                       !- Multiplier
+    4,                       !- Number of Vertices
+    15,2,2.4, 15,1,2.4, 14,1,2.4, 14,2,2.4;
+
   FenestrationSurface:Detailed,
     WF-1,                    !- Name
     WINDOW,                  !- Surface Type
@@ -4026,6 +4051,10 @@
     Zone 4,                  !- Zone Name
     NoVent;                  !- Ventilation Control Mode
 
+  AirflowNetwork:MultiZone:Zone,
+    PLENUM-1,                !- Zone Name
+    NoVent;                  !- Ventilation Control Mode
+
 ! In the network, but none of its surfaces are.
   AirflowNetwork:MultiZone:Zone,
     Zone 5,                  !- Zone Name
@@ -4066,6 +4095,26 @@
     Zone 3 Exhaust Fan,      !- Name
     0.01,                    !- Air Mass Flow Coefficient When the Zone Exhaust Fan is Off at Reference Conditions {kg/s}
     0.667;                   !- Air Mass Flow Exponent When the Zone Exhaust Fan is Off {dimensionless}
+
+  AirflowNetwork:MultiZone:Component:HorizontalOpening,
+    RoofHatch,               !- Name
+    0.001,                   !- Air Mass Flow Coefficient When Opening is Closed {kg/s-m}
+    0.65,                    !- Air Mass Flow Exponent When Opening is Closed {dimensionless}
+    90,                      !- Sloping Plane Angle {deg}
+    0.6;                     !- Discharge Coefficient {dimensionless}
+
+! The hatch in the ceiling of Zone 1, to the plenum: a HorizontalOpening between two zones.
+  AirflowNetwork:MultiZone:Surface,
+    Hatch-1,                 !- Surface Name
+    RoofHatch,               !- Leakage Component Name
+    ,                        !- External Node Name
+    0.4;                     !- Window/Door Opening Factor, or Crack Factor {dimensionless}
+
+  AirflowNetwork:MultiZone:Surface,
+    WALL-1PF,                !- Surface Name
+    WallCrack,               !- Leakage Component Name
+    ,                        !- External Node Name
+    1.0;                     !- Window/Door Opening Factor, or Crack Factor {dimensionless}
 
   AirflowNetwork:MultiZone:Surface,
     FRONT-1,                 !- Surface Name
@@ -4112,7 +4161,7 @@
 ! Interzone: one object covers both sides (SB12 in Zone 1, SB21 in Zone 2).
   AirflowNetwork:MultiZone:Surface,
     SB12,                    !- Surface Name
-    PivotOpening,            !- Leakage Component Name
+    WallCrack,               !- Leakage Component Name
     ,                        !- External Node Name
     1.0;                     !- Window/Door Opening Factor, or Crack Factor {dimensionless}
 

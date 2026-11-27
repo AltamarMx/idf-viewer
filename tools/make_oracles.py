@@ -14,6 +14,10 @@ objects, and writes ``tests/oracles/<file stem>.json`` with:
 - airflow: the "... Airflow Stats Nominal" tables of the .eio file (infiltration,
   ventilation, mixing): design flow, flow per floor and exterior area, ACH and
   coefficients of each object in each zone.
+- wind pressure: the Cp EnergyPlus evaluates from each curve, table or list of
+  values at its wind directions (``.eio``);
+- daylighting points: position of each daylighting reference point, from the DXF
+  drawing EnergyPlus writes.
 
 With ``--annual`` it runs a whole year (with a weather file from the install; the
 values used do not depend on the weather) and writes ``<stem>.annual.json``:
@@ -51,9 +55,15 @@ RUNS = Path(__file__).resolve().parent / ".runs"
 OUT = ROOT / "tests" / "oracles"
 
 # Unique output objects replaced in the copy, and the ones added instead.
-DROP_CLASSES = {"output:sqlite", "output:table:summaryreports", "output:surfaces:list"}
+DROP_CLASSES = {
+    "output:sqlite",
+    "output:table:summaryreports",
+    "output:surfaces:list",
+    "output:surfaces:drawing",
+}
 EXTRA_OBJECTS = """
 Output:Surfaces:List, DetailsWithVertices;
+Output:Surfaces:Drawing, DXF;
 Output:SQLite, SimpleAndTabular;
 Output:Table:SummaryReports, InputVerificationandResultsSummary, EnvelopeSummary;
 """
@@ -155,6 +165,39 @@ def read_eio_site(eio: Path) -> dict[str, list[dict]]:
     )
 
 
+def read_eio_cp(eio: Path) -> dict:
+    """Wind directions and the Cp EnergyPlus evaluates from each curve, table or
+    WindPressureCoefficientValues at them ("AirflowNetwork Model:Wind ..." lines)."""
+    directions: list[float] = []
+    coefficients: dict[str, list[float]] = {}
+    for line in eio.read_text(errors="replace").splitlines():
+        cells = [c.strip() for c in line.split(",")]
+        if cells[0] == "AirflowNetwork Model:Wind Direction (degrees)":
+            directions = [float(c) for c in cells[1:] if c]
+        elif cells[0] == "AirflowNetwork Model:Wind Pressure Coefficients (dimensionless)":
+            coefficients[cells[1]] = [float(c) for c in cells[2:] if c]
+    return {"directions": directions, "coefficients": coefficients} if coefficients else {}
+
+
+def read_dxf_daylighting(dxf: Path) -> dict[str, list[float]]:
+    """Daylighting reference points as EnergyPlus draws them in the DXF: a CIRCLE
+    after a "999" comment "<zone>:DayRefPt:<point name>", in world coordinates."""
+    if not dxf.exists():
+        return {}
+    lines = [line.strip() for line in dxf.read_text(errors="replace").splitlines()]
+    points: dict[str, list[float]] = {}
+    for i, line in enumerate(lines[:-1]):
+        if line != "999" or ":DayRefPt:" not in lines[i + 1]:
+            continue
+        name = lines[i + 1].split(":DayRefPt:", 1)[1]
+        j = i + 2
+        while j < len(lines) and lines[j] != "CIRCLE":
+            j += 1
+        codes = dict(zip(lines[j + 1 : j + 13 : 2], lines[j + 2 : j + 14 : 2]))
+        points[name] = [float(codes["10"]), float(codes["20"]), float(codes["30"])]
+    return points
+
+
 def read_sql(sql: Path) -> dict:
     db = sqlite3.connect(sql)
     db.row_factory = sqlite3.Row
@@ -244,6 +287,8 @@ def run(idf: Path, energyplus: Path) -> Path:
         sql["surfaces"].setdefault(name, {}).update(vertices)
     sql["airflow"] = read_eio_airflow(run_dir / "eplusout.eio")
     sql["site"] = read_eio_site(run_dir / "eplusout.eio")
+    sql["windPressure"] = read_eio_cp(run_dir / "eplusout.eio")
+    sql["daylightingPoints"] = read_dxf_daylighting(run_dir / "eplusout.dxf")
     version = re.search(r"EnergyPlus, Version ([\d.]+)", (run_dir / "eplusout.err").read_text(errors="replace"))
     oracle = {
         "source": {"file": idf.name, "energyplus": version.group(1) if version else None},

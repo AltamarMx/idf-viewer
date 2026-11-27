@@ -514,10 +514,10 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
 - las validaciones detectan los errores sembrados en los archivos de prueba;
 - funciona con la sintaxis AFN de 8.x y de 9.0+.
 
-**Avance de la fase 2b (se completa al cerrar la fase):**
+**Notas de la fase 2b** (cerrada el 2026-11-27; las reglas se comprobaron con EnergyPlus 26.2, ver "Cierre" al final):
 - 2b.2: pestaña nueva **Windows** con el inventario de ventanas y puertas: tipo, zona, superficie anfitriona, orientación, ancho × alto, antepecho y dintel (medidos desde el punto más bajo del muro), área sin marco, área de marco, multiplicadores, área total, construcción, U/SHGC/VT de `WindowMaterial:SimpleGlazingSystem`, marco, control de sombreado y su papel en el AFN (componente, factor de apertura, Cd y modo de control). Se filtra por tipo, zona, orientación y papel en el AFN; el botón "3D" lleva a la ventana en la vista 3D.
 - En 3D hay tres modos nuevos de color cuando el archivo tiene AFN: papel en el AFN (abertura detallada, simple u horizontal; grieta o área de fuga; extractor; flujo especificado; ventana fija), factor de apertura máximo y Cd.
-- Reglas usadas (de la documentación de EnergyPlus, pendientes de confirmar con referencias):
+- Reglas usadas (de la documentación de EnergyPlus; lo que se pudo comprobar está en "Cierre"):
   - el Cd de un `DetailedOpening` se interpola linealmente entre sus juegos de factor de apertura; el visor lo muestra en el factor de apertura de la superficie;
   - con `ZoneLevel` (valor por omisión en la superficie) manda el modo de `AirflowNetwork:MultiZone:Zone`, cuyo valor por omisión es `NoVent`;
   - en superficies interzona solo se declara un lado del par en `AirflowNetwork:MultiZone:Surface` y el otro lado comparte el componente;
@@ -528,7 +528,7 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - el resumen del AFN: control, origen de los Cp, zonas con su modo de ventilación, superficies, componentes, nodos externos y condiciones de referencia de grietas;
   - la ficha de cada superficie, con superficie AFN, control de ventilación, componente y nodo externo con su tabla de Cp. Cada valor indica si viene de la superficie o de la zona, si es el valor por omisión del IDD y si el modo de control lo usa;
   - en un `DetailedOpening`, la tabla de juegos de factor de apertura, el dibujo del área abierta en cada juego y en el factor máximo, y la gráfica de Cd y de Cd × área abierta contra el factor de apertura.
-- Reglas usadas en 2b.3 (de la documentación de EnergyPlus, pendientes de confirmar):
+- Reglas usadas en 2b.3 (de la documentación de EnergyPlus; ver "Cierre"):
   - con `ZoneLevel` se toman de `AirflowNetwork:MultiZone:Zone` el modo, el horario de setpoint, el factor mínimo, los límites de ΔT y Δh, el horario de disponibilidad y el control por ocupantes; el factor de apertura sigue siendo el de la superficie;
   - en un par interzona, la zona que manda es la del lado declarado en el AFN;
   - qué valores usa cada modo: `Temperature` usa setpoint, factor mínimo y ΔT; `Enthalpy` usa setpoint, factor mínimo y Δh; `Constant` y los adaptativos solo la disponibilidad; `NoVent` ninguno;
@@ -537,18 +537,18 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - una abertura no rectangular usa un rectángulo equivalente de la misma área: `PolygonHeight` (alto del polígono), `BaseSurfaceAspectRatio` o `UserDefinedAspectRatio`;
   - el tipo de edificio, el eje largo y la relación de anchos solo se usan cuando EnergyPlus calcula los Cp (`SurfaceAverageCalculation`).
 - 2b.4: la ficha de cada abertura operable dice, en orden, qué condiciones deben cumplirse para que abra según su modo de control. También dice cuántas horas del año está disponible (su horario evaluado con el evaluador de la fase 2a) y, con `Temperature` o `Enthalpy`, grafica el factor de apertura contra ΔT o Δh entre los dos límites. La gráfica de juegos de factor de apertura (L5) ahora explica cada línea, llama "área efectiva" a Cd × área abierta y dice qué porcentaje del área efectiva queda a media apertura.
-- Reglas usadas en 2b.4 (de la documentación de EnergyPlus, pendientes de confirmar):
+- Reglas usadas en 2b.4 (de la documentación de EnergyPlus; ver "Cierre"):
   - `Temperature`: abre si hay disponibilidad, si la zona está más caliente que el exterior y si está por arriba del setpoint; con ΔT ≤ límite inferior abre al factor máximo, con ΔT ≥ límite superior al factor máximo × factor mínimo, y entre ambos cambia en línea recta. `Enthalpy` es igual con Δh y la entalpía. Los modos "Adjacent" comparan con la zona vecina;
   - `Constant`: abre al factor máximo siempre que haya disponibilidad;
   - `ASHRAE55Adaptive` y `CEN15251Adaptive`: abren al factor máximo cuando la temperatura operativa supera la temperatura de confort adaptativo y la zona está más caliente que el exterior;
   - `NoVent`: siempre cerrada;
-  - si el límite superior no es mayor que el inferior, EnergyPlus marca error de entrada.
+  - ~~si el límite superior no es mayor que el inferior, EnergyPlus marca error de entrada~~: **corregido al cerrar la fase**, EnergyPlus avisa y usa 100 °C (ΔT) o 300000 J/kg (Δh).
 - 2b.5: tercera sección de la pestaña Ventilation, **Infiltration and ventilation**:
   - tabla de zonas con volumen, área exterior, área de ventanas, infiltración de diseño (m³/s y ACH), ventilación (ACH), área de aberturas por viento y tiro térmico, y su relación con el AFN (grietas y áreas de fuga);
   - infiltración por objeto: método, caudal de diseño, ACH, caudal por m² de piso y de área exterior, horario y modelo de coeficientes (constante, DOE-2, BLAST o propio). `EffectiveLeakageArea` y `FlowCoefficient` se muestran con su fórmula, porque dependen del clima;
   - `ZoneVentilation:DesignFlowRate` con sus límites (solo los que no están en su valor por omisión), `ZoneVentilation:WindandStackOpenArea` con su área comparada con las ventanas de la zona, `ZoneMixing`, `ZoneCrossMixing`, `ZoneAirBalance:OutdoorAir` y `ZoneThermalChimney`.
 - La asignación de objetos a zonas (`Zone`, `ZoneList`, `Space`, `SpaceList`) se movió a un módulo común (`src/core/model/targets.ts`) que usan cargas e infiltración; las cargas siguen coincidiendo con EnergyPlus.
-- Reglas usadas en 2b.5 (de la documentación de EnergyPlus, pendientes de confirmar):
+- Reglas usadas en 2b.5 (**confirmadas** con las tablas "Airflow Stats Nominal" de EnergyPlus):
   - `Flow/ExteriorArea` usa el área bruta de muros, techos y pisos con frontera `Outdoors`; `Flow/ExteriorWallArea`, solo los muros;
   - `AirChanges/Hour` = ACH × volumen / 3600; un `Space` usa la parte del volumen de su zona proporcional a su área de piso;
   - un objeto asignado a una `ZoneList` aplica su caudal completo a cada zona;
@@ -562,7 +562,26 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - las referencias AFN rotas (superficie, componente o nodo que no existen) ya las marcaba la revisión general de referencias (H1).
 - Archivo de prueba con errores a propósito: `tests/fixtures/ventilation/AfnErrors.idf`. Ningún ejemplo ni archivo de prueba correcto produce problemas de ventilación.
 - Corrección: los números distintos de cero menores que 0.01 se muestran con dos cifras significativas (antes, un Cd de 0.001 aparecía como 0).
-- **Pendiente:** `make_oracles.py` ya pide la tabla "Exterior Fenestration" de EnergyPlus y la prueba que la compara está lista, pero falta correrlo con EnergyPlus 26.2, que no está instalado en esta computadora.
+- **Cierre (2026-11-27), con EnergyPlus 26.2:**
+  - Se regeneraron las referencias de los 8 ejemplos y de los archivos de prueba. Las 3 pruebas que se saltaban ahora comparan y pasan: tabla "Exterior Fenestration" (ventana por ventana), caudales de diseño y perfil de viento del sitio.
+  - **Marcos:** EnergyPlus solo aplica `WindowProperty:FrameAndDivider` a `FenestrationSurface:Detailed`. En los objetos simplificados `Window` y `GlazedDoor` lo ignora **sin avisar** (área de marco 0). El visor ya no les suma marco, lo marca "(ignored)" en el inventario y da un aviso en el panel de problemas (Geometry).
+  - **Caudales (2b.5) confirmados:** caudal de diseño, ACH, caudal por m² de piso y de área exterior y coeficientes A–D (constante, DOE-2 y BLAST) coinciden objeto por objeto. Un objeto asignado a una zona con varios `Space` se reparte en EnergyPlus entre los espacios en proporción a su área de piso (se reporta como "<espacio> <objeto>"); la suma es el caudal de la zona que muestra el visor. `ZoneInfiltration:EffectiveLeakageArea`, `FlowCoefficient` y `ZoneVentilation:WindandStackOpenArea` no tienen caudal nominal: EnergyPlus reporta 0 y el visor muestra la fórmula.
+  - **Validaciones nuevas (L12), cada una vista en EnergyPlus:**
+    - error: `HorizontalOpening` en una superficie al exterior ("must be located between two thermal zones");
+    - error: `SimpleOpening` a menos de 10° de la horizontal; con `DetailedOpening` es solo aviso (EnergyPlus dice que el flujo queda en un solo sentido);
+    - error: una abertura (`DetailedOpening`, `SimpleOpening`, `HorizontalOpening`) en algo que no es ventana, puerta, puerta de vidrio o frontera de aire (`Construction:AirBoundary`), por ejemplo un muro o un plafón;
+    - error: zona del AFN con menos de dos superficies en la red (cada lado de una superficie interzona cuenta para su zona);
+    - error: `AirflowNetwork:MultiZone:Component:ZoneExhaustFan` sin un `Fan:ZoneExhaust` del mismo nombre;
+    - estas reglas solo se revisan si el AFN está activo, igual que EnergyPlus. Ningún ejemplo las dispara.
+  - **Límites de ΔT y Δh invertidos:** no es error. EnergyPlus avisa y cambia el límite superior a 100 °C (ΔT) o 300000 J/kg (Δh), tanto en la superficie como en `AirflowNetwork:MultiZone:Zone`. El visor ahora lo marca como aviso y la gráfica de la regla usa el valor corregido.
+  - **Reglas de apertura (2b.3, 2b.4) confirmadas** con un año a paso de tiempo de una variante de `Windows.idf` (no se guarda como referencia):
+    - `Temperature`: abre si hay disponibilidad, si la zona está más caliente que el exterior y si está arriba del setpoint; el factor es el máximo hasta el límite inferior de ΔT, el máximo × factor mínimo desde el superior, y en línea recta entre ambos. Coincide en el 98 % de los subpasos del año, incluidos unos 7 000 con apertura modulada; las diferencias están junto a los umbrales o equivalen a un desfase de unos 0.7 °C (EnergyPlus decide con la temperatura de la zona del subpaso anterior);
+    - `ZoneLevel` toma de `AirflowNetwork:MultiZone:Zone` el modo, el setpoint, el factor mínimo, los límites y la disponibilidad, y conserva el factor de apertura de la superficie;
+    - `Constant` con disponibilidad en blanco: abierta al factor máximo los 35 040 pasos del año (en blanco = siempre disponible);
+    - un `AirflowNetwork:MultiZone:Surface` cubre los dos lados de un par interzona (EnergyPlus cuenta la escotilla de `Network.idf` como superficie de las dos zonas).
+    - Ojo al leer resultados de EnergyPlus: las variables del AFN se calculan en cada subpaso de HVAC y la salida "Timestep" es su promedio, así que una ventana que abre o cierra a mitad del paso aparece con factores intermedios (0.4 = promedio de 0.8 y 0).
+  - Sin comprobar contra EnergyPlus (no hay salida que los muestre): la interpolación del Cd y del área abierta de un `DetailedOpening` entre sus juegos, el rectángulo equivalente de aberturas no rectangulares, qué zona manda en un par interzona y los modos `Enthalpy` y adaptativos. Siguen como dice la documentación.
+  - Archivos de prueba: el tragaluz de `Windows.idf` y `Wind.idf` pasó a área de fuga (EnergyPlus no permite ahí ninguna abertura operable); la abertura horizontal ahora es una escotilla entre la Zona 1 y el plenum de `Network.idf`, donde SB12 pasó a grieta. `AfnErrors.idf` conserva el tragaluz con `HorizontalOpening` como un error sembrado más.
 
 ### Fase 2c · Construcciones, validación y complementos
 
@@ -633,18 +652,18 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - Privacidad: el navegador descarga el archivo directamente del servidor donde está, sin pasar por ningún servidor del visor. GitHub Pages sí recibe la dirección del archivo (no su contenido), porque va dentro de la dirección de la página.
   - Comprobado con archivos reales: el enlace de GitHub de `1ZoneUncontrolled.idf` de EnergyPlus abre; GitLab no permite que otros sitios lean sus archivos y da el aviso de CORS. La rama de desarrollo de EnergyPlus ya está en la versión 27.1; el visor la abre con el esquema de 26.2 y lo avisa.
   - Código: `src/features/gallery/remote.ts`. Pruebas en `tests/remote.test.ts` y tres en `e2e/smoke.spec.ts`. Playwright no aplica CORS a las respuestas que simula, así que la prueba del error simula una descarga fallida.
-- Reglas usadas en C9 (de la documentación de EnergyPlus; **pendientes de confirmar** con EnergyPlus):
+- Reglas usadas en C9 (**confirmadas** el 2026-11-27: los 51 puntos de `HospitalLowEnergy`, la oficina pequeña y `RotatedRelative.idf` coinciden con los que EnergyPlus dibuja en su DXF, a 1 cm):
   - `Daylighting:ReferencePoint` (8.6+, con "Zone or Space Name" desde 9.6) y, antes de 8.6, los dos puntos que traía `Daylighting:Controls`. Un punto en un `Space` se dibuja en la zona de ese espacio.
   - Con "Daylighting Reference Point Coordinate System" Relative (el valor por omisión) el punto se transforma como los vértices de su zona: rotación y origen de la zona y luego el norte del edificio. Con World se usa tal cual.
   - Z en blanco usa el valor por omisión del IDD (0.8 m).
-  - Para confirmarlo: agregar a `make_oracles.py` la posición de los puntos que EnergyPlus reporta y compararla con `HospitalLowEnergy.idf` y la oficina pequeña.
+  - `make_oracles.py` lee la posición de cada punto del DXF que escribe EnergyPlus (un círculo con el nombre del punto en un comentario). `RotatedRelative.idf` tiene ahora dos puntos en su zona girada (−20°, origen (30, 0, 0.5), norte del edificio 30°), uno con Z en blanco: EnergyPlus lo pone a 0.5 + 0.8 m.
 
 ### Fase 3 · Extras de ventilación
 
 - [x] 3.1 Gráfica polar de Cp (L9), con la sintaxis de 8.x y de 9.0+.
 - [x] 3.2 Red de flujo entre zonas (L11).
 
-**Avance de la fase 3 (se completa al cerrar la fase):**
+**Notas de la fase 3** (cerrada el 2026-11-27 junto con la 2b):
 - 3.1: sección nueva **Wind** en Ventilation.
   - Tabla de nodos externos con altura, viento local entre viento del clima, de dónde salen los Cp, tipo de ángulo, simetría y superficies que usan cada nodo. Al hacer clic en un nodo se ve su gráfica polar; "Compare all nodes" los encima.
   - Gráfica polar: Cp contra dirección del viento, con los valores de entrada como puntos, el círculo Cp = 0 punteado y, en ángulo absoluto, una línea hacia donde mira cada fachada. La misma gráfica aparece en la ficha de cada abertura.
@@ -653,13 +672,18 @@ Cada fase termina con una publicación en https://altamarmx.github.io/idf-viewer
   - Con `SurfaceAverageCalculation` (como en tu archivo) dice que EnergyPlus calcula los Cp y que el visor todavía no reproduce ese cálculo (L10, a futuro).
 - Sintaxis cubiertas: 8.0–8.7 (el nodo nombra un `WindPressureCoefficientValues`; el arreglo de direcciones también está en `AirflowNetwork:SimulationControl`), 8.8+ (valores, curva o tabla, con simetría y ángulo relativo), `Table:OneIndependentVariable` (hasta 9.1) y `Table:Lookup` (9.2+). Curvas dibujadas: `Curve:Linear`, `Quadratic`, `Cubic`, `Quartic` y `Exponent`; otras se nombran pero no se dibujan. Tablas que leen un archivo externo no se dibujan.
 - `make_oracles.py` ahora también guarda las tablas "Environment:Site Atmospheric Variation" y "Environment:Weather Station" del `.eio`; la prueba "site wind profile matches EnergyPlus" las compara cuando existan.
-- Reglas usadas en 3.1 (de la documentación de EnergyPlus, pendientes de confirmar):
+- Reglas usadas en 3.1 (**confirmadas** el 2026-11-27 con EnergyPlus 26.2; ver abajo):
   - Viento local: V(z) = V<sub>clima</sub> · (δ<sub>est</sub>/z<sub>est</sub>)^α<sub>est</sub> · (z/δ)^α; cero en z ≤ 0. Estación por omisión: 10 m, α 0.14, δ 270 m.
   - Terreno: Country 0.14/270 m, Suburbs 0.22/370 m, City 0.33/460 m, Ocean 0.10/210 m, Urban 0.22/370 m.
   - `Site:HeightVariation` reemplaza solo los campos que escribe; un campo en blanco antes del último escrito toma el valor por omisión del IDD (0.22 y 370 m). **Se confirma con el `.eio` de `Wind.idf`.**
   - `WindPressureCoefficientValues`: interpolación lineal entre direcciones y, después de la última, de regreso a la primera en 360°.
   - Simétrico: de 180° a 360° se usa el valor de 360° − ángulo. Relativo: el ángulo se mide desde la normal de la fachada.
   - Ángulo absoluto: dirección de donde viene el viento, en sentido horario desde el norte, igual que en el archivo de clima.
+- Cómo se confirmaron:
+  - El perfil del sitio (exponente, capa límite, altura y coeficientes de la estación) coincide con las tablas del `.eio` en los 8 ejemplos y en `Wind.idf`, incluido `Site:HeightVariation` que solo da el exponente.
+  - Cada curva, tabla o lista de Cp evaluada en las direcciones de EnergyPlus coincide con la que reporta el `.eio` ("AirflowNetwork Model:Wind Pressure Coefficients"), incluidos los límites de salida de la curva y la extrapolación constante de la tabla. EnergyPlus lista la fuente sin la simetría del nodo.
+  - Simetría, ángulo relativo e interpolación: con un año de `Wind.idf` a paso de tiempo, el Cp que usó EnergyPlus (presión de viento del nodo ÷ ½ ρ V², con V el viento local a la altura del nodo) coincide **exactamente** con las reglas del visor en los 4 nodos de fachada, en 32 000 pasos. Sin la simetría el error sería de 0.12 a 0.17. La interpolación es directa sobre las direcciones dadas (no remuestrea a 30°, aunque el `.eio` las liste cada 30°).
+  - Con `SurfaceAverageCalculation`, el `.eio` trae los Cp que EnergyPlus calcula para cada fachada (`!WPCTABLE1`…); quedan en la referencia de `Windows.idf` para cuando se haga L10.
 - 3.2: sección nueva **Network** en Ventilation (entre "Airflow network" e "Infiltration and ventilation"). Funciona también sin AirflowNetwork: entonces muestra solo `ZoneMixing` y `ZoneCrossMixing`.
   - Diagrama (gráfica `graph` de ECharts) con las zonas en su posición en planta, norte arriba, y cada nivel de piso en una columna aparte ("Level 0.0 m", "Level 3.0 m"…). Los nodos exteriores van alrededor, hacia donde miran sus superficies; los de techo, arriba. Zonas sin geometría: en círculo. Zoom y arrastre; las etiquetas que se enciman se ocultan.
   - Una conexión por par de nodos y tipo de componente, con los colores de AirflowNetwork del 3D. Flecha en extractores (`exhaustfan`) y en `ZoneMixing` (de la zona fuente a la que recibe); doble flecha en `ZoneCrossMixing`; las mezclas van en línea punteada. El grosor crece con el número de superficies.
@@ -698,21 +722,18 @@ En este orden: archivos recientes (K6), y luego, según interés, B9, C10, L10, 
 
 - …
 
-## 9. Dónde vamos (2026-11-27)
+## 9. Dónde vamos (2026-11-27, tarde)
 
-**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1 y 2a terminadas; 2b, 2c y 3 hechas salvo lo que necesita EnergyPlus. Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
+**Publicado** en https://altamarmx.github.io/idf-viewer/: fases 0, 1, 2a, 2b y 3 terminadas; de la 2c faltan C8/H5 y A5. Pestañas: Summary, 3D, Table, Text, Constructions, Ventilation, Schedules, Loads y Problems. Lo último (2026-11-27): cierre de las fases 2b y 3, y horarios y cargas por timestep, graficados en escalones (corrección en las notas de la fase 2a). Antes (2026-11-24): vista explotada por zonas y pares interzona en el 3D, y apertura desde una URL (A6).
 
-**Todo lo que falta de las fases 2b, 2c y 3 necesita EnergyPlus 26.2**, que no está en la computadora donde se trabajó hasta el 2026-11-26. En la computadora que lo tiene, en este orden:
+**Fases 2b y 3 cerradas el 2026-11-27** con EnergyPlus 26.2 (ver sus notas): referencias regeneradas, las 3 pruebas que se saltaban ahora comparan, reglas confirmadas o corregidas, y cinco validaciones nuevas del AFN que EnergyPlus exige.
 
-1. **Cierre de la fase 2b** (2b.2 a 2b.6 hechas y publicadas) y de la fase 3 (3.1 y 3.2 hechas):
-   1. `uv run tools/make_oracles.py` (sin `--annual`) para regenerar las referencias de los 8 ejemplos y de `tests/fixtures/geometry`, `windows` y `ventilation`. Ahora guardan además la tabla "Exterior Fenestration" y, del `.eio`, las tablas "Airflow Stats Nominal" y las del perfil de viento.
-   2. `npm test`: las 3 pruebas que hoy se saltan ("matches the EnergyPlus fenestration table", "design flows match EnergyPlus" y "site wind profile matches EnergyPlus") pasarán a comparar. Si algo no coincide, corregir la regla y anotarla.
-   3. Confirmar o corregir las reglas marcadas como "pendientes de confirmar" en el avance de las fases 2b, 2c (puntos de iluminación natural, C9) y 3, y pasarlas a sus notas de fase. Para C9 hay que agregar a `make_oracles.py` la posición de los puntos que reporta EnergyPlus.
-   4. Revisar que el README siga al día, commit, push y revisar que GitHub Actions pase y el sitio quede publicado.
-2. **Lo que queda de la fase 2c** (al terminarlo se cierra la fase):
+Lo que sigue (EnergyPlus 26.2 ya está en esta computadora):
+
+1. **Lo que queda de la fase 2c** (al terminarlo se cierra la fase):
    - **Diagnóstico de geometría (C8/H5):** superficies volteadas, no planas o casi sin área, ventanas fuera de su muro, pares interzona que no coinciden y zonas que no cierran, en el 3D y en el panel de problemas. Las tolerancias se comparan con los avisos que EnergyPlus escribe en el `.err`. Es la recomendada para empezar: sigue de la vista explotada y los pares interzona.
    - **Lectura de epJSON (A5):** los archivos de prueba se generan con el convertidor de EnergyPlus (`ConvertInputFormat`).
-3. **Fase 4 (instalable):** no necesita EnergyPlus. Antes de empezar hay que decidir si al instalar se descargan los esquemas de las 27 versiones (unos MB más, una sola vez) o solo los de las versiones que se vayan abriendo.
+2. **Fase 4 (instalable):** no necesita EnergyPlus. Antes de empezar hay que decidir si al instalar se descargan los esquemas de las 27 versiones (unos MB más, una sola vez) o solo los de las versiones que se vayan abriendo.
 
 **Pendiente menor:** la rama de desarrollo de EnergyPlus ya está en la versión 27.1. Hoy el visor la abre con el esquema de 26.2 y lo avisa. Cuando salga la 27.1 oficial, instalarla y correr `tools/fetch_idds.py` y `tools/idd2json.py`.
 

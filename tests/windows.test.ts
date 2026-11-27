@@ -67,9 +67,13 @@ describe('Windows.idf (26.2)', () => {
       expect.closeTo(2.5),
     ]);
 
+    // EnergyPlus ignores the frame of a simplified Window (checked with 26.2).
     const west = rows.get('Win:West') as WindowRow;
     expect(west.multiplier).toBe(3);
-    expect(west.totalArea).toBeCloseTo(1.1 * 1.1 * 3);
+    expect(west.frame).toBe('FRAME 5CM');
+    expect(west.frameIgnored).toBe(true);
+    expect(west.frameArea).toBe(0);
+    expect(west.totalArea).toBeCloseTo(1 * 1 * 3);
 
     const door = rows.get('GlassDoor:North') as WindowRow;
     expect(door.sill).toBeCloseTo(0);
@@ -121,7 +125,8 @@ describe('Windows.idf (26.2)', () => {
       'Constant',
     ]);
     expect(afn('Door:West')).toEqual(['ela', 'leakage', 1, 1, 'NoVent']);
-    expect(afn('Skylight')).toEqual(['horizontalopening', 'operable', 0.4, 0.6, 'Constant']);
+    // No operable opening is allowed on an exterior skylight: it only leaks.
+    expect(afn('Skylight')).toEqual(['ela', 'leakage', 0.4, 1, 'Constant']);
     expect(afn('Win:West')).toBeUndefined();
     expect(session.afn.surfaces.get('zn001:wall001')?.type).toBe('crack');
   });

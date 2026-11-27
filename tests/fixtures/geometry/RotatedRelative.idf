@@ -548,3 +548,10 @@
   Shading:Building, Building Wall, 90, 90, 50, 0, 0, 10, 4;
   Shading:Site:Detailed, Site Canopy, , 4, 0,-20,6, 0,-25,6, 10,-25,6, 10,-20,6;
   Shading:Building:Detailed, Building Canopy, , 4, 30,-2,4, 30,-4,4, 36,-4,4, 36,-2,4;
+
+! ---- Daylighting reference points in the rotated zone (relative coordinates); the second
+! ---- leaves Z blank, so it takes the IDD default.
+  Daylighting:Controls, Z2 Daylighting, ZONE TWO, SplitFlux, , Continuous, 0.3, 0.2, , 1, ,
+    , , , Z2 Ref 1, 0.6, 500, Z2 Ref 2, 0.3, 300;
+  Daylighting:ReferencePoint, Z2 Ref 1, ZONE TWO, 2, 1.5, 0.9;
+  Daylighting:ReferencePoint, Z2 Ref 2, ZONE TWO, 4.5, 3, ;

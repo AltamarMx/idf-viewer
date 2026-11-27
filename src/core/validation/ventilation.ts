@@ -24,6 +24,13 @@ const ZONE_FLOW_CLASSES = [
 ];
 
 const OPENINGS = new Set(['detailedopening', 'simpleopening', 'horizontalopening']);
+/** Subsurfaces that can carry an opening (besides surfaces with an air boundary). */
+const OPENING_HOSTS = new Set(['window', 'door', 'glassdoor']);
+const LABEL: Record<string, string> = {
+  detailedopening: 'DetailedOpening',
+  simpleopening: 'SimpleOpening',
+  horizontalopening: 'HorizontalOpening',
+};
 
 export function ventilationProblems(
   model: IdfModel,
@@ -185,6 +192,90 @@ export function ventilationProblems(
     }
   }
 
+  // Rules EnergyPlus checks when it reads the network (confirmed with EnergyPlus 26.2).
+  if (afn.active) {
+    const airBoundaries = new Set(
+      model.ofClass('construction:airboundary').map((o) => (o.fields[0] ?? '').toLowerCase()),
+    );
+    const boundaryOf = (name: string): string | undefined => {
+      const s = surfaces.get(name.toLowerCase());
+      if (!s) return undefined;
+      if (s.boundary) return s.boundary;
+      return s.base ? boundaryOf(s.base) : undefined;
+    };
+    for (const link of listed) {
+      const s = surfaces.get(link.surface.toLowerCase());
+      if (!s || !OPENINGS.has(link.type)) continue;
+      const obj = model.objects[link.objectId] as IdfObject;
+      const label = LABEL[link.type];
+      const airBoundary = airBoundaries.has((s.construction ?? '').toLowerCase());
+      if (!OPENING_HOSTS.has(s.kind) && !airBoundary) {
+        add(
+          'error',
+          `${link.surface} is a ${s.kind}: a ${label} must be on a window, door, glass door or air boundary.`,
+          obj,
+          'Leakage Component Name',
+        );
+        continue;
+      }
+      const boundary = boundaryOf(link.surface)?.toLowerCase();
+      if (link.type === 'horizontalopening' && boundary === 'outdoors')
+        add(
+          'error',
+          `${link.surface} is exposed to outdoors: a HorizontalOpening must be between two zones.`,
+          obj,
+          'Leakage Component Name',
+        );
+      const horizontal = s.tilt < 10 || s.tilt > 170;
+      if (horizontal && link.type === 'simpleopening')
+        add(
+          'error',
+          `${link.surface} is within 10° of horizontal: EnergyPlus does not allow a SimpleOpening there.`,
+          obj,
+          'Leakage Component Name',
+        );
+      if (horizontal && link.type === 'detailedopening')
+        add(
+          'warning',
+          `${link.surface} is within 10° of horizontal: EnergyPlus models a DetailedOpening there poorly, with one-way airflow only.`,
+          obj,
+          'Leakage Component Name',
+        );
+    }
+
+    // Every zone of the network needs at least two surfaces in it (each side of
+    // an interzone surface counts for its zone).
+    const perZone = new Map<string, number>();
+    for (const name of afn.surfaces.keys()) {
+      const zone = surfaces.get(name)?.zone?.toLowerCase();
+      if (zone) perZone.set(zone, (perZone.get(zone) ?? 0) + 1);
+    }
+    for (const [zone, obj] of afnZones) {
+      const count = perZone.get(zone) ?? 0;
+      if (count >= 2) continue;
+      add(
+        'error',
+        `${reader(obj).str('Zone Name')} has ${count === 0 ? 'no surface' : 'only one surface'} in the AirflowNetwork: EnergyPlus needs at least two.`,
+        obj,
+        'Zone Name',
+      );
+    }
+
+    // A zone exhaust fan component is the AirflowNetwork side of a Fan:ZoneExhaust.
+    const fans = new Set(
+      model.ofClass('fan:zoneexhaust').map((o) => (o.fields[0] ?? '').toLowerCase()),
+    );
+    for (const obj of model.ofClass('airflownetwork:multizone:component:zoneexhaustfan')) {
+      const name = obj.fields[0] ?? '';
+      if (!fans.has(name.toLowerCase()))
+        add(
+          'error',
+          `${name}: there is no Fan:ZoneExhaust with this name; EnergyPlus needs one for the exhaust fan component.`,
+          obj,
+        );
+    }
+  }
+
   // Surfaces.
   const cpInput =
     control !== undefined &&
@@ -255,8 +346,8 @@ function checkLimits(
     const hi = r.numOr(up, 0);
     if (hi <= lo)
       add(
-        'error',
-        `${obj.fields[0] ?? ''}: the ${label} upper limit (${hi}) must be greater than the lower limit (${lo}).`,
+        'warning',
+        `${obj.fields[0] ?? ''}: the ${label} upper limit (${hi}) is not greater than the lower limit (${lo}); EnergyPlus resets it to ${label === 'ΔT' ? '100' : '300000'}.`,
         obj,
         up,
       );

@@ -632,7 +632,7 @@
     1,                       !- Length {m}
     1;                       !- Height {m}
 
-  ! Roof: skylight with a HorizontalOpening.
+  ! Roof: skylight (in the AirflowNetwork, an effective leakage area).
   FenestrationSurface:Detailed,
     Skylight,                !- Name
     Window,                  !- Surface Type
@@ -735,12 +735,15 @@
     1.0,                     !- Height Factor for Opening Factor 3 {dimensionless}
     0.0;                     !- Start Height Factor for Opening Factor 3 {dimensionless}
 
-  AirflowNetwork:MultiZone:Component:HorizontalOpening,
-    RoofHatch,               !- Name
-    0.001,                   !- Air Mass Flow Coefficient When Opening is Closed {kg/s-m}
-    0.65,                    !- Air Mass Flow Exponent When Opening is Closed {dimensionless}
-    90,                      !- Sloping Plane Angle {deg}
-    0.6;                     !- Discharge Coefficient {dimensionless}
+  ! EnergyPlus allows no operable opening within 10 degrees of horizontal on an
+  ! exterior surface (a HorizontalOpening must be between two zones), so the
+  ! skylight only leaks.
+  AirflowNetwork:MultiZone:Surface:EffectiveLeakageArea,
+    SkylightLeak,            !- Name
+    0.002,                   !- Effective Leakage Area {m2}
+    1.0,                     !- Discharge Coefficient {dimensionless}
+    4.0,                     !- Reference Pressure Difference {Pa}
+    0.65;                    !- Air Mass Flow Exponent {dimensionless}
 
   AirflowNetwork:MultiZone:Surface,
     Zn001:Wall001,           !- Surface Name
@@ -776,7 +779,7 @@
 
   AirflowNetwork:MultiZone:Surface,
     Skylight,                !- Surface Name
-    RoofHatch,               !- Leakage Component Name
+    SkylightLeak,            !- Leakage Component Name
     ,                        !- External Node Name
     0.4,                     !- Window/Door Opening Factor, or Crack Factor {dimensionless}
     Constant;                !- Ventilation Control Mode

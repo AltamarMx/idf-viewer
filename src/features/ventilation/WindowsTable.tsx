@@ -194,7 +194,20 @@ const COLUMNS: Column[] = [
     label: 'Frame and divider',
     width: 150,
     sort: (r) => r.frame,
-    render: (r, { select }) => ref(r.frame, r.frameId, select),
+    render: (r, { select }) => (
+      <>
+        {ref(r.frame, r.frameId, select)}
+        {r.frameIgnored && (
+          <span
+            className="count"
+            title="EnergyPlus ignores the frame of a simplified Window or GlazedDoor"
+          >
+            {' '}
+            (ignored)
+          </span>
+        )}
+      </>
+    ),
   },
   {
     key: 'shading',

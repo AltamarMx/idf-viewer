@@ -533,10 +533,20 @@ export function buildGeometry(model: IdfModel, schema: Schema | undefined): Geom
     const r = reader(obj);
     frameWidth.set(r.str('Name').toLowerCase(), r.num('Frame Width') ?? 0);
   }
+  // EnergyPlus 26.2 applies the frame only to FenestrationSurface:Detailed; the
+  // simplified Window and GlazedDoor objects ignore it without a warning.
   for (const s of subByName.values()) {
     const obj = model.objects[s.id] as IdfObject;
-    const fw = frameWidth.get(reader(obj).str('Frame and Divider Name').toLowerCase()) ?? 0;
+    const frameName = reader(obj).str('Frame and Divider Name');
+    const fw = frameWidth.get(frameName.toLowerCase()) ?? 0;
     if (fw <= 0 || s.vertices.length < 3) continue;
+    if (obj.className.toLowerCase() !== 'fenestrationsurface:detailed') {
+      warnings.push({
+        objectId: obj.id,
+        message: `${s.name} is a ${obj.className} object: EnergyPlus ignores its frame (${frameName}). Only FenestrationSurface:Detailed windows get a frame.`,
+      });
+      continue;
+    }
     const w = length(sub(s.vertices[2] as Vec3, s.vertices[1] as Vec3));
     const h = w > 0 ? s.area / w : 0;
     s.frameArea = (w + 2 * fw) * (h + 2 * fw) - w * h;

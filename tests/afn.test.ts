@@ -111,11 +111,15 @@ describe('Windows.idf', () => {
   it('computes the open area of simple and horizontal openings', async () => {
     const session = await ready;
     expect(session.afnCard('Win:South')?.component.openArea).toBeCloseTo(6 * 0.5);
-    expect(session.afnCard('Skylight')?.component).toMatchObject({
-      openArea: expect.closeTo(9 * 0.4),
-      effectiveArea: expect.closeTo(9 * 0.4 * 0.6),
-    });
     expect(session.afnCard('Door:West')?.control).toEqual([]);
+    // A HorizontalOpening must be between two zones: the 1 × 1 m hatch from Zone 1
+    // to the plenum in Network.idf.
+    const path = 'tests/fixtures/ventilation/Network.idf';
+    const network = await openFile({ name: path, buffer: fileBuffer(path) }, loader);
+    expect(network.afnCard('Hatch-1')?.component).toMatchObject({
+      openArea: expect.closeTo(1 * 0.4),
+      effectiveArea: expect.closeTo(1 * 0.4 * 0.6),
+    });
   });
 });
 
@@ -137,8 +141,10 @@ describe('opening rules (L6)', () => {
     expect(
       openingRule({ ...rule, mode: 'Enthalpy', deltaT: [0, 100], deltaH: [10, 5] }),
     ).toMatchObject({
+      // EnergyPlus warns and uses 300000 J/kg when the upper limit is not above the lower one.
       variable: 'Δh',
-      invalid: true,
+      upper: 300000,
+      inputUpper: 5,
     });
     expect(openingRule({ ...rule, mode: 'NoVent', deltaT: [0, 100], deltaH: [0, 1] }).kind).toBe(
       'closed',

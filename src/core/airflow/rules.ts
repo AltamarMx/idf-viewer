@@ -25,8 +25,12 @@ export interface OpeningRule {
   minFactor: number;
   lower?: number;
   upper?: number;
-  /** The upper limit is not above the lower limit: EnergyPlus reports an input error. */
-  invalid?: boolean;
+  /**
+   * The upper limit was not above the lower limit: EnergyPlus warns and resets
+   * it to 100 °C (ΔT) or 300000 J/kg (Δh). `upper` is then the reset value and
+   * this is the value written in the IDF.
+   */
+  inputUpper?: number;
   /** What must be true for the opening to open, in order. */
   conditions: string[];
 }
@@ -41,6 +45,9 @@ export interface RuleInput {
   availabilitySchedule?: string;
   occupantControl?: string;
 }
+
+/** Upper limit EnergyPlus uses when the one written is not above the lower limit (checked with 26.2). */
+export const UPPER_RESET = { ΔT: 100, Δh: 300000 } as const;
 
 /** Opening factor of a modulated rule at an indoor–outdoor difference d (d > 0). */
 export function modulatedFactor(rule: OpeningRule, d: number): number {
@@ -67,15 +74,16 @@ export function openingRule(input: RuleInput): OpeningRule {
       ]
     : [];
   const modulated = (variable: 'ΔT' | 'Δh', limits: [number, number], first: string[]) => {
-    const [lower, upper] = limits;
+    const [lower, written] = limits;
+    const reset = written <= lower;
     return {
       ...base,
       kind: 'modulated' as const,
       variable,
       units: variable === 'ΔT' ? '°C' : 'J/kg',
       lower,
-      upper,
-      invalid: upper <= lower,
+      upper: reset ? UPPER_RESET[variable] : written,
+      inputUpper: reset ? written : undefined,
       conditions: [available, ...first, ...occupant],
     };
   };

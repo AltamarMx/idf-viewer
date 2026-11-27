@@ -17,14 +17,16 @@ It runs entirely in your browser: **your file is never uploaded to any server**.
 - Explorer of classes and objects, with cross-references between objects, and the file as
   written, with syntax colors, in sync with the inspector.
 - Problems panel: broken references, duplicate names, field values checked against the IDD of
-  the file's version, and materials, constructions, schedules and curves that nothing uses.
+  the file's version, materials, constructions, schedules and curves that nothing uses, and
+  AirflowNetwork input that EnergyPlus rejects or changes (openings on the wrong surface,
+  zones with fewer than two network surfaces, inverted temperature limits...).
 - Site location on a world map drawn in the browser, design days, run periods and holidays,
   and the outputs the file requests.
 - 3D view of the geometry, colored by boundary condition, with layers by zone and floor,
   transparency, a horizontal cut, floors pulled apart and daylighting reference points.
 - Constructions: a cross-section of the layers, from outside to inside and to scale, with the
   properties of each material as written in the file, and where each construction is used.
-- Schedules, internal loads and occupancy over the year, per zone.
+- Schedules, internal loads and occupancy over the year, per zone, at every timestep.
 - Windows, natural ventilation, AirflowNetwork and infiltration settings, wind pressure
   coefficients, the site wind profile and a diagram of the flow network between zones
   (AirflowNetwork connections and zone mixing).
